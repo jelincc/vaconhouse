@@ -905,7 +905,14 @@ function openDetail(i){
 }
 
 try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
-document.getElementById('logout').addEventListener('click', () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} });
+document.getElementById('logout').addEventListener('click', e => {
+  try { localStorage.removeItem('vh-admin-session'); } catch(err){}
+  if (!/github\.io$/.test(location.hostname) && location.protocol !== 'file:'){
+    e.preventDefault();
+    const url = 'https://claude.ai/artifact/MUjspop1MX7VVdLF5dKjuF';
+    try { window.top.location.href = url; } catch(err){ window.open(url, '_top'); }
+  }
+});
 document.querySelectorAll('.nav a:not(.on)').forEach(a => a.addEventListener('click', e => { e.preventDefault(); toast(`${a.textContent.trim()} 화면은 준비 중이에요`); }));
 render();
 addEventListener('resize', () => { if (S.view === 'timeline') renderView(); });

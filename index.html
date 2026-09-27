@@ -173,7 +173,7 @@ $('f').addEventListener('submit', e => {
   go.innerHTML = '<span class="spin" aria-hidden="true"></span>로그인 중';
   setTimeout(() => {
     try { $('save').checked ? localStorage.setItem('vh-admin-id', uid.value.trim()) : localStorage.removeItem('vh-admin-id'); } catch(e){}
-    if (pw.value.length < 4){
+    if (!(uid.value.trim() === '11' && pw.value === '11')){
       go.innerHTML = '로그인';
       $('alert').hidden = false;
       $('pwBox').classList.add('err');
@@ -182,7 +182,13 @@ $('f').addEventListener('submit', e => {
       return;
     }
     try { localStorage.setItem('vh-admin-session', uid.value.trim()); } catch(e){}
-    location.href = 'admin/reservations.html';
+    const onClaude = /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname) || location.protocol === 'blob:' || location.origin === 'null';
+    if (onClaude){
+      const url = 'https://claude.ai/artifact/Kju1TBbegoa8vCD14axR2k';
+      try { window.top.location.href = url; } catch(e){ window.open(url, '_top'); }
+    } else {
+      location.href = 'admin/reservations.html';
+    }
   }, 900);
 });
 sync();
