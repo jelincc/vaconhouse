@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>VACON house 관리자 로그인</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root,:root[data-theme="dark"]{
+  color-scheme:light;
+  --bg:#FFFFFF; --surface:#FFFFFF; --field:#FFFFFF; --field-hover:#F6F7F8; --line:#E6E8EA; --line-2:#D5D8DC;
+  --ink:#1A1A1E; --ink-2:#575F6C; --ink-3:#768091; --ink-4:#AFB5BE;
+  --accent:#FF6D12; --accent-soft:#FBF4EF;
+  --btn:#1A1A1E; --btn-ink:#FFFFFF; --btn-hover:#3E434B; --btn-dis:#E6E8EA; --btn-dis-ink:#AFB5BE; --focus:#1A1A1E;
+  --danger:#E8322F; --danger-soft:#FAE6E6;
+  --font:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --logo:"Cormorant","Cormorant Garamond",Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;padding-inline:16px}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.stage{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-block:48px 32px;gap:28px}
+.card{width:100%;max-width:400px;display:flex;flex-direction:column;gap:44px}
+
+.logo{display:flex;flex-direction:column;align-items:center;gap:14px}
+.wordmark{font-family:var(--logo);font-weight:500;font-size:44px;line-height:1;letter-spacing:.01em;color:var(--ink);display:flex;align-items:baseline;gap:8px}
+.wordmark span{font-size:24px;font-weight:500;color:var(--ink-2);letter-spacing:0}
+.tag{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--ink-3)}
+
+form{display:flex;flex-direction:column;gap:20px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:14px;font-weight:600;color:var(--ink-2)}
+.inp{position:relative;display:flex;align-items:center}
+.inp input{width:100%;height:56px;border:0;border-radius:14px;background:var(--field);padding:0 18px;font-size:16px;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2);transition:box-shadow .15s,background .15s}
+.inp input::placeholder{color:var(--ink-4)}
+.inp input:hover{background:var(--field-hover)}
+.inp input:focus{outline:none;background:var(--surface);box-shadow:inset 0 0 0 2px var(--focus)}
+.inp.err input{box-shadow:inset 0 0 0 2px var(--danger);background:var(--surface)}
+.inp.pw input{padding-right:84px}
+.inp .clear,.inp .eye{position:absolute;border:0;background:transparent;cursor:pointer;color:var(--ink-3);border-radius:8px;display:grid;place-items:center}
+.inp .clear{right:12px;width:28px;height:28px}
+.inp.pw .clear{right:50px}
+.inp .eye{right:10px;width:36px;height:36px}
+.inp .clear:hover,.inp .eye:hover{color:var(--ink);background:var(--field-hover)}
+.inp .clear svg,.inp .eye svg{width:20px;height:20px}
+.hint{font-size:13px;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+.hint.caps{color:var(--accent);font-weight:500}
+
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);cursor:pointer;user-select:none}
+.chk input{position:absolute;opacity:0;pointer-events:none}
+.box{width:22px;height:22px;border-radius:7px;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line-2);display:grid;place-items:center;transition:background .15s}
+.box svg{width:14px;height:14px;opacity:0;color:#fff}
+.chk input:checked + .box{background:var(--btn);box-shadow:none}
+.chk input:checked + .box svg{color:var(--btn-ink)}
+.chk input:checked + .box svg{opacity:1}
+.chk input:focus-visible + .box{outline:2px solid var(--accent);outline-offset:2px}
+.link{font-size:14px;color:var(--ink-3);background:none;border:0;cursor:pointer;padding:4px 2px;border-radius:6px}
+.link:hover{color:var(--ink);text-decoration:underline}
+
+.alert{display:flex;gap:10px;align-items:flex-start;background:var(--danger-soft);color:var(--danger);border-radius:14px;padding:14px 16px;font-size:14px;font-weight:500}
+.alert svg{width:18px;height:18px;flex:none;margin-top:2px}
+
+.submit{height:58px;border:0;border-radius:16px;background:var(--btn);color:var(--btn-ink);font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s,transform .05s;margin-top:4px}
+.submit:hover:not(:disabled){background:var(--btn-hover)}
+.submit:active:not(:disabled){transform:scale(.99)}
+.submit:disabled{background:var(--btn-dis);color:var(--btn-dis-ink);cursor:not-allowed}
+.spin{width:20px;height:20px;border-radius:50%;border:2.5px solid color-mix(in srgb,var(--btn-ink) 35%,transparent);border-top-color:var(--btn-ink);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.help{border-top:1px solid var(--line);padding-top:24px;text-align:center;font-size:14px;color:var(--ink-3);display:flex;flex-direction:column;gap:4px}
+.help b{color:var(--ink-2);font-weight:600}
+.foot{font-size:13px;color:var(--ink-4);display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+
+@media (max-width:520px){.wordmark{font-size:38px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:2s!important}}
+</style>
+</head>
+<body>
+
+
+<main class="stage">
+  <section class="card" aria-labelledby="ttl">
+    <div class="logo">
+      <div class="wordmark" id="ttl" aria-label="VACON house">VACON<span>house</span></div>
+      <span class="tag">ADMIN</span>
+    </div>
+
+    <form id="f" novalidate>
+      <div id="alert" class="alert" role="alert" hidden>
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 5.8v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="13.9" r="1" fill="currentColor"/></svg>
+        <span>아이디 또는 비밀번호가 맞지 않아요. 다시 확인해 주세요.</span>
+      </div>
+
+      <div class="field">
+        <label for="uid">아이디</label>
+        <div class="inp" id="uidBox">
+          <input id="uid" name="uid" autocomplete="username" placeholder="아이디를 입력해 주세요" value="">
+          <button type="button" class="clear" id="uidClear" aria-label="아이디 지우기" hidden><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8" opacity=".35"/><path d="M7.2 7.2l5.6 5.6M12.8 7.2l-5.6 5.6" stroke="var(--surface)" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="pw">비밀번호</label>
+        <div class="inp pw" id="pwBox">
+          <input id="pw" name="pw" type="password" autocomplete="current-password" placeholder="비밀번호를 입력해 주세요">
+          <button type="button" class="clear" id="pwClear" aria-label="비밀번호 지우기" hidden><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8" opacity=".35"/><path d="M7.2 7.2l5.6 5.6M12.8 7.2l-5.6 5.6" stroke="var(--surface)" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+          <button type="button" class="eye" id="eye" aria-label="비밀번호 보기" aria-pressed="false">
+            <svg id="eyeOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg id="eyeOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M3 3l18 18"/><path d="M10.6 5.6A10 10 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-3.2 3.9M6.4 6.9A16.6 16.6 0 0 0 2.5 12S6 18.5 12 18.5a9.6 9.6 0 0 0 4.1-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </div>
+        <div class="hint caps" id="caps" hidden>Caps Lock이 켜져 있어요</div>
+      </div>
+
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="save" checked><span class="box"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7.2l2.6 2.6L11 4.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>아이디 저장</label>
+        <button type="button" class="link" id="forgot">비밀번호를 잊으셨나요?</button>
+      </div>
+
+      <button type="submit" class="submit" id="go" disabled>로그인</button>
+    </form>
+
+    <div class="help" id="help">
+      <span>계정 발급이나 비밀번호 초기화는</span>
+      <span><b>운영 관리자</b>에게 요청해 주세요.</span>
+    </div>
+  </section>
+  <footer class="foot"><span>© 2026 VACON house</span><a href="corp/" style="color:inherit">기업 고객 관리자이신가요?</a></footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const uid = $('uid'), pw = $('pw'), go = $('go');
+try { const s = localStorage.getItem('vh-admin-id'); if (s) uid.value = s; } catch(e){}
+
+function sync(){
+  go.disabled = !(uid.value.trim() && pw.value);
+  $('uidClear').hidden = !uid.value;
+  $('pwClear').hidden = !pw.value;
+}
+function clearErr(){ $('alert').hidden = true; $('uidBox').classList.remove('err'); $('pwBox').classList.remove('err'); }
+[uid, pw].forEach(el => el.addEventListener('input', () => { clearErr(); sync(); }));
+$('uidClear').onclick = () => { uid.value = ''; sync(); uid.focus(); };
+$('pwClear').onclick = () => { pw.value = ''; sync(); pw.focus(); };
+$('eye').onclick = () => {
+  const show = pw.type === 'password';
+  pw.type = show ? 'text' : 'password';
+  $('eye').setAttribute('aria-pressed', show);
+  $('eye').setAttribute('aria-label', show ? '비밀번호 숨기기' : '비밀번호 보기');
+  $('eyeOn').hidden = show; $('eyeOff').hidden = !show;
+};
+pw.addEventListener('keyup', e => { if (e.getModifierState) $('caps').hidden = !e.getModifierState('CapsLock'); });
+pw.addEventListener('blur', () => $('caps').hidden = true);
+$('forgot').onclick = () => {
+  const h = $('help'); h.animate([{color:'var(--ink)'},{color:'var(--ink-3)'}], {duration:1400});
+};
+
+$('f').addEventListener('submit', e => {
+  e.preventDefault();
+  if (go.disabled) return;
+  go.disabled = true;
+  go.innerHTML = '<span class="spin" aria-hidden="true"></span>로그인 중';
+  setTimeout(() => {
+    try { $('save').checked ? localStorage.setItem('vh-admin-id', uid.value.trim()) : localStorage.removeItem('vh-admin-id'); } catch(e){}
+    if (pw.value.length < 4){
+      go.innerHTML = '로그인';
+      $('alert').hidden = false;
+      $('pwBox').classList.add('err');
+      pw.select(); pw.focus();
+      sync();
+      return;
+    }
+    try { localStorage.setItem('vh-admin-session', uid.value.trim()); } catch(e){}
+    location.href = 'admin/reservations.html';
+  }, 900);
+});
+sync();
+(uid.value ? pw : uid).focus();
+</script>
+
+</body>
+</html>
