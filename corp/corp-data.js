@@ -44,7 +44,7 @@ function nights(){
   const booked = L.filter(r => cst(r) === '예정').reduce((a, r) => a + r.out - r.in, 0);
   return {used, booked, left: COMPANY.contract - used - booked};
 }
-const booked = (villa, off, except) => R.some(r => r !== except && r.villa === villa && r.base !== '취소' && r.in <= off && off < r.out);
+const booked = (villa, off, except) => R.some(r => r !== except && r.villa === villa && r.base !== '취소' && r.in <= off && off < r.out) || BLOCKS.some(x => x.villa === villa && x.in <= off && off < x.out);
 function bookCorp(emp, villa, inOff, outOff, adults){
   const iso = o => { const d = dOf(o); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
   const r = addBooking([villa, emp.name, emp.email, emp.phone.replace(/-/g,''), iso(inOff), iso(outOff), adults, 0, 0, '확정', '기업숙박권', `2026-09-28 ${new Date().toTimeString().slice(0,5)}`, '', {corp:true}]);

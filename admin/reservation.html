@@ -54,6 +54,24 @@
 .stnow .big{font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
 .stnow .big i{width:10px;height:10px;border-radius:50%}
 .hint{font-size:12.5px;color:var(--ink-3);margin-top:8px}
+.mscrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:45;display:grid;place-items:center;padding:16px}
+.dlg{background:#fff;border-radius:24px;width:min(540px,100%);box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 32px)}
+.dlg .h{padding:24px 24px 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.dlg h3{margin:0;font-size:21px;font-weight:700;letter-spacing:-.02em}
+.dlg .h p{margin:6px 0 0;font-size:14px;color:var(--ink-3)}
+.dlg .b{padding:14px 24px 6px;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.dlg .f{padding:14px 20px 20px;display:flex;gap:8px}
+.dlg .x{all:unset;cursor:pointer;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--ink-3)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl > label{font-size:13px;color:var(--ink-3);font-weight:500}
+.fl .inp{height:44px}
+.err{font-size:13px;color:var(--danger-ink)}
+.segb{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}
+.segb button{flex:1;border:0;background:transparent;height:36px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:14px}
+.segb button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.sugg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sugg button{border:0;background:#fff;border-radius:999px;height:30px;padding:0 12px;font-size:13px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
 @media (max-width:1180px){.grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}.pair{grid-template-columns:1fr}}
 </style>
 </head>
@@ -63,20 +81,23 @@
   <main class="main"><div class="wrap" id="wrap"></div></main>
 </div>
 <script src="data.js"></script>
+<script src="cases.js" defer></script>
 <script>
 const id = +(new URLSearchParams(location.search).get('id') ?? 42);
 const r = R[id] || R[42];
 let edit = null;
 const $ = x => document.getElementById(x);
-const STATES = [['확정','예약 확정'],['변경요청','변경 요청'],['취소요청','취소 요청'],['이용완료','이용 완료'],['취소','예약 취소']];
+const STATES = [['확정','예약 확정'],['이용완료','이용 완료'],['노쇼','노쇼']];
 
 function render(){
   const v = vById[r.villa], p = price(r), is = issues(r);
-  const [sec, pri] = nextStep(r);
+  let [sec, pri] = nextStep(r);
   const cur = st(r);
-  const inline = {conflict:'conflictOk', notify:'resend', pay:'paid', clean:'clean', sync:'resync', dup:'dupOk', unseen:'seen'};
+  const closed = ['이용 완료','예약 취소','노쇼'].includes(cur);
+  const moveFirst = is.includes('conflict');
+  const inline = {notify:'resend', pay:'paid', clean:'clean', sync:'resync', dup:'dupOk', unseen:'seen'};
   $('wrap').innerHTML = `
-    <a class="back" href="reservations.html#board">${ICON.back}예약 관리</a>
+    <a class="back" href="./#board">${ICON.back}예약 관리</a>
     <div class="head">
       <div>
         <div class="lbls">${stHTML(r)}${is.filter(k => k !== 'cancel' && k !== 'change').map(k => BD(ISSUE[k].lb, ISSUE[k].c, k === 'conflict' ? 'fill' : '')).join('')}</div>
@@ -84,8 +105,8 @@ function render(){
         <p>${vFull(r.villa)} · <span class="num">${mdw(r.in)} – ${mdw(r.out)}</span> · ${r.out - r.in}박</p>
       </div>
       <div class="acts">
-        ${sec ? `<button class="btn" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
-        ${pri ? `<button class="btn ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : ''}
+        ${moveFirst ? `<button class="btn" data-do="conflictOk">이미 해결했어요</button><button class="btn primary" data-move>다른 날짜·숙소로 옮기기</button>` : `${sec ? `<button class="btn" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
+        ${pri ? `<button class="btn ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : ''}`}
       </div>
     </div>
 
@@ -101,7 +122,7 @@ function render(){
     <div class="grid">
       <div class="col">
         <div class="pair">
-          <section class="card"><h3>숙소 및 이용 일정 <button class="tbtn" data-soon>변경</button></h3>
+          <section class="card"><h3>숙소 및 이용 일정 ${closed ? '' : '<button class="tbtn" data-move>변경</button>'}</h3>
             <dl class="kv">
               <dt>숙소</dt><dd>${vFull(r.villa)}</dd>
               <dt>운영</dt><dd>${v.type} · 최대 ${v.cap}인</dd>
@@ -109,7 +130,7 @@ function render(){
               <dt>체크아웃</dt><dd class="num">${mdw(r.out)} 11:00</dd>
               <dt>객실 준비</dt><dd>${r.flags.includes('clean') ? '<span class="bad">청소 완료 확인 전</span>' : st(r) === '이용 완료' ? '<span class="mut">퇴실 완료</span>' : '확인됨'}</dd>
             </dl></section>
-          <section class="card" id="guest"><h3>예약자·동반 인원 ${edit === 'guest' ? '' : '<button class="tbtn" data-edit="guest">수정</button>'}</h3>
+          <section class="card" id="guest"><h3>예약자·동반 인원 ${edit === 'guest' || closed ? '' : '<button class="tbtn" data-edit="guest">수정</button>'}</h3>
             ${edit === 'guest' ? `<div class="form">
                 <label for="fPhone">연락처</label><input class="inp num" id="fPhone" value="${esc(phoneOk(r) ? fmtPhone(r.phoneRaw) : r.phoneRaw)}">
                 <label>인원</label><div class="frow">${[['adults','성인'],['kids','아동'],['infants','유아']].map(([k, lb]) => `<span><small>${lb}</small><span class="stepper"><button data-step="${k}:-1">−</button><span id="n_${k}">${r[k]}</span><button data-step="${k}:1">+</button></span></span>`).join('')}</div>
@@ -147,8 +168,10 @@ function render(){
       <div class="col">
         <section class="card"><h3>예약 상태</h3>
           <div class="stnow"><span class="big"><i style="background:${cur === '취소 요청' ? 'var(--danger)' : cur === '변경 요청' ? 'var(--accent)' : ST_DOT[cur]}"></i>${cur}</span></div>
-          <div style="display:flex;gap:8px"><select class="fsel" id="stSel" style="flex:1;height:40px">${STATES.map(([k, lb]) => `<option value="${k}" ${r.base === k || (k === '확정' && cur === '예약 확정') ? 'selected' : ''}>${lb}</option>`).join('')}</select><button class="btn" id="stSave">변경</button></div>
-          <div class="hint">바꾸면 고객 알림과 변경 이력이 함께 남아요.</div></section>
+          ${cur === '예약 취소' ? `<div class="hint">취소된 예약이에요. ${PAY_LB[r.pay] || ''}</div>` : cur === '이용 완료' && r.base !== '이용완료' && r.out < 0 ? '<div class="hint">이용이 끝난 예약은 상태와 정보를 바꿀 수 없어요. 메모는 남길 수 있어요.</div>' : `
+          <div style="display:flex;gap:8px"><select class="fsel" id="stSel" style="flex:1;height:40px">${STATES.map(([k, lb]) => { const off = (k === '이용완료' || k === '노쇼') && r.in > 0; return `<option value="${k}" ${off ? 'disabled' : ''} ${r.base === k || (k === '확정' && !['이용완료','노쇼'].includes(r.base)) ? 'selected' : ''}>${lb}${off ? ' · 체크인 이후 가능' : ''}</option>`; }).join('')}</select><button class="btn" id="stSave">변경</button></div>
+          <div class="hint">바꾸면 변경 이력이 남아요. 노쇼는 체크인 날 이후에만 고를 수 있어요.</div>
+          <button class="btn danger-weak" data-cancel style="width:100%;margin-top:12px">예약 취소</button>`}</section>
         <section class="card"><h3>관리자 메모</h3>
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
           <textarea class="inp" id="memoIn" placeholder="운영팀에 남길 메모. 예약 검색에도 걸려요."></textarea>
@@ -166,7 +189,8 @@ $('wrap').addEventListener('click', e => {
   const t = e.target;
   const d = t.closest('[data-do]'); if (d){ const m = runAct(r, d.dataset.do); render(); toast(m); return; }
   const ed = t.closest('[data-edit]'); if (ed){ edit = ed.dataset.edit || null; render(); return; }
-  if (t.closest('[data-soon]')){ toast('일정·숙소 변경은 공실 확인 화면과 함께 준비 중이에요', false); return; }
+  if (t.closest('[data-move]')) return openMove();
+  if (t.closest('[data-cancel]')) return openCancel();
   const stp = t.closest('[data-step]'); if (stp){ const [k, dv] = stp.dataset.step.split(':'); const el = $('n_' + k); el.textContent = Math.max(k === 'adults' ? 1 : 0, +el.textContent + +dv); return; }
   if (t.id === 'saveGuest'){
     const ph = $('fPhone').value.trim(), nA = +$('n_adults').textContent, nK = +$('n_kids').textContent, nI = +$('n_infants').textContent, pet = $('fPet').checked;
@@ -179,10 +203,97 @@ $('wrap').addEventListener('click', e => {
     render(); return;
   }
   if (t.id === 'saveNote'){ const v = $('fNote').value.trim(); if (v !== r.note){ log(r, `특이사항 수정 · ${v || '삭제'}`); r.note = v; save(r); toast('특이사항을 저장했어요'); } edit = null; render(); return; }
-  if (t.id === 'stSave'){ const v = $('stSel').value; if (v !== r.base){ const before = st(r); r.base = v; if (v === '취소') r.pay = '환불대기'; log(r, `상태 변경 · ${before} → ${st(r)}`); save(r); toast(`예약 상태를 '${st(r)}'(으)로 바꿨어요`); } render(); return; }
+  if (t.id === 'stSave'){ const v = $('stSel').value; if (v !== r.base && !(v === '확정' && st(r) === '예약 확정')){ const before = st(r); r.base = v; log(r, `상태 변경 · ${before} → ${st(r)}`); save(r); toast(`예약 상태를 '${st(r)}'(으)로 바꿨어요`); } render(); return; }
   if (t.id === 'memoAdd'){ const v = $('memoIn').value.trim(); if (!v) return; r.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); log(r, '관리자 메모 추가'); save(r); render(); toast('메모를 남겼어요'); }
 });
+
+/* ---------- 일정·숙소 변경 ---------- */
+const XI = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="18" height="18"><path d="M5 5l10 10M15 5L5 15"/></svg>';
+function dlg(html){ const b = document.createElement('div'); b.className = 'mscrim'; b.innerHTML = `<div class="dlg" role="dialog">${html}</div>`; document.body.appendChild(b); b.addEventListener('click', e => { if (e.target === b || e.target.closest('[data-x]')) b.remove(); }); return b; }
+function openMove(){
+  const chan = r.ch === '에어비앤비' || r.ch === '네이버';
+  const F = {villa:r.villa, a:r.in, b:r.out};
+  const box = dlg(`<div class="h"><div><h3>일정·숙소 변경</h3><p>${esc(r.name)}님 · 지금 ${vFull(r.villa)} ${md(r.in)} – ${md(r.out)}</p></div><button class="x" data-x aria-label="닫기">${XI}</button></div>
+    <div class="b">
+      ${chan ? `<div class="callout orange"><div class="tx"><b>${r.ch} 예약은 날짜를 ${r.ch}에서 바꿔야 해요</b><span>여기서 날짜를 바꾸면 채널과 어긋나요. 같은 날짜 안에서 숙소만 옮길 수 있어요.</span></div></div>` : ''}
+      <div class="fl"><label>숙소</label><select class="inp" id="mV">${VILLAS.map(v => `<option value="${v.id}" ${v.id === r.villa ? 'selected' : ''}>${v.region} ${v.name} · 최대 ${v.cap}인</option>`).join('')}</select></div>
+      <div class="fg"><div class="fl"><label>체크인</label><input class="inp" type="date" id="mA" value="${isoOf(r.in)}" ${chan ? 'disabled' : ''}></div><div class="fl"><label>체크아웃</label><input class="inp" type="date" id="mB" value="${isoOf(r.out)}" ${chan ? 'disabled' : ''}></div></div>
+      <div id="mCheck"></div>
+      <label class="tgl" style="color:var(--ink)"><input type="checkbox" id="mNotify" ${phoneOk(r) ? 'checked' : 'disabled'}>고객에게 변경 알림톡 보내기${phoneOk(r) ? '' : ' (연락처 불완전)'}</label>
+    </div>
+    <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl primary" id="mGo">바꾸기</button></div>`);
+  const q = s => box.querySelector(s);
+  function check(){
+    F.villa = q('#mV').value; F.a = chan ? r.in : offOf(q('#mA').value); F.b = chan ? r.out : offOf(q('#mB').value);
+    const same = F.villa === r.villa && F.a === r.in && F.b === r.out;
+    const n = F.b - F.a, v = vById[F.villa];
+    const c = clashes(F.villa, F.a, F.b, r);
+    const over = r.adults + r.kids + r.infants > v.cap;
+    const oldP = price(r).sub, newP = price({...r, villa:F.villa, in:F.a, out:F.b}).sub;
+    let h = '';
+    if (n <= 0) h = '<div class="err">체크아웃은 체크인 다음 날 이후여야 해요</div>';
+    else if (F.a < 0) h = '<div class="err">지난 날짜로는 옮길 수 없어요</div>';
+    else if (c.res.length || c.blk.length){
+      const alt = VILLAS.filter(x => x.id !== F.villa && freeFor(x.id, F.a, F.b, r) && x.cap >= r.adults + r.kids);
+      h = `<div class="callout red"><div class="tx"><b>이 날짜엔 옮길 수 없어요</b><span>${c.res.map(x => `${esc(x.name)}(${CH[x.ch].lb}) ${md(x.in)} – ${md(x.out)}`).concat(c.blk.map(x => `판매 막기 ${md(x.in)} – ${md(x.out)}`)).join(', ')}과 겹쳐요.</span>${alt.length ? `<div class="sugg">${alt.map(x => `<button data-alt="${x.id}">${x.region} ${x.name}</button>`).join('')}</div>` : ''}</div></div>`;
+    } else if (over) h = `<div class="err">${v.name}은 최대 ${v.cap}인이라 ${r.adults + r.kids + r.infants}명이 묵을 수 없어요</div>`;
+    else if (!same) h = `<div class="callout" style="background:var(--ok-soft)"><div class="tx"><b>옮길 수 있어요</b><span>${vFull(F.villa)} ${mdw(F.a)} – ${mdw(F.b)} · ${n}박${r.pay === '기업숙박권' ? '' : newP !== oldP ? ` · 금액 ${won(oldP)} → ${won(newP)} (${newP > oldP ? '추가 결제 ' + won(newP - oldP) : '차액 환불 ' + won(oldP - newP)})` : ' · 금액 변동 없음'}</span></div></div>`;
+    const ok = !same && n > 0 && F.a >= 0 && !c.res.length && !c.blk.length && !over;
+    q('#mCheck').innerHTML = h; q('#mGo').disabled = !ok; q('#mGo').style.opacity = ok ? 1 : .35;
+  }
+  box.addEventListener('change', check); box.addEventListener('input', check);
+  box.addEventListener('click', e => {
+    const a = e.target.closest('[data-alt]'); if (a){ q('#mV').value = a.dataset.alt; return check(); }
+    if (e.target.id === 'mGo' && !e.target.disabled){
+      const before = `${vFull(r.villa)} ${md(r.in)} – ${md(r.out)}`;
+      r.villa = F.villa; r.in = F.a; r.out = F.b;
+      log(r, `일정·숙소 변경 · ${before} → ${vFull(r.villa)} ${md(r.in)} – ${md(r.out)}`);
+      if (q('#mNotify').checked) r.notices.push({t:'예약 변경 알림톡', m:nowStamp(), ok:true});
+      save(r); refreshConflicts(); box.remove(); render(); toast('예약을 옮겼어요' + (issues(r).includes('conflict') ? '' : '. 충돌도 풀렸어요'));
+    }
+  });
+  check();
+}
+
+/* ---------- 예약 취소 · 환불 ---------- */
+function openCancel(){
+  const chan = r.ch === '에어비앤비' || r.ch === '네이버', corp = r.pay === '기업숙박권';
+  let reason = '고객 요청';
+  const box = dlg(`<div class="h"><div><h3>예약을 취소할까요?</h3><p>${esc(r.name)}님 · ${vFull(r.villa)} ${mdw(r.in)} – ${mdw(r.out)}</p></div><button class="x" data-x aria-label="닫기">${XI}</button></div>
+    <div class="b">
+      <div class="fl"><label>취소 사유</label><div class="segb">${['고객 요청','숙소 사정','중복 예약','기타'].map(x => `<button data-rs="${x}" class="${x === reason ? 'on' : ''}">${x}</button>`).join('')}</div></div>
+      <div id="xRefund"></div>
+      <label class="tgl" style="color:var(--ink)"><input type="checkbox" id="xNotify" ${phoneOk(r) ? 'checked' : 'disabled'}>고객에게 취소 알림톡 보내기${phoneOk(r) ? '' : ' (연락처 불완전)'}</label>
+    </div>
+    <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl danger" id="xGo">예약 취소</button></div>`);
+  const q = s => box.querySelector(s);
+  function draw(){
+    const f = refundOf(r), full = reason !== '고객 요청' && reason !== '기타';
+    const amt = full ? f.paid : f.amount;
+    q('#xRefund').innerHTML = corp ? `<div class="callout"><div class="tx"><b>숙박권 ${r.out - r.in}박이 회사 잔여로 돌아가요</b><span>기업 숙박권 예약은 금액 환불 없이 숙박권만 반환돼요.</span></div></div>`
+      : chan ? `<div class="callout orange"><div class="tx"><b>환불은 ${r.ch}에서 처리돼요</b><span>${r.ch}에서 먼저 취소해 주세요. 여기서는 취소 기록만 남기고 달력을 열어요.</span></div></div>`
+      : `<div class="callout ${amt ? '' : 'orange'}"><div class="tx"><b>환불 금액 ${won(amt)}${full ? ' · 전액' : f.rate < 1 && f.rate > 0 ? ' · 50%' : f.rate === 0 ? ' · 환불 없음' : ' · 전액'}</b><span>결제 ${won(f.paid)} · 입실 ${f.days}일 전 · ${full ? `${reason}로 취소하면 규정과 관계없이 전액 환불해요` : POLICY}</span></div></div>`;
+    box._amt = amt;
+  }
+  box.addEventListener('click', e => {
+    const rs = e.target.closest('[data-rs]'); if (rs){ reason = rs.dataset.rs; box.querySelectorAll('[data-rs]').forEach(b => b.classList.toggle('on', b === rs)); return draw(); }
+    if (e.target.id === 'xGo'){
+      r.base = '취소'; r.pay = corp || chan ? r.pay : box._amt ? '환불대기' : r.pay;
+      r.flags = r.flags.filter(x => x !== 'conflict');
+      log(r, `관리자 취소 · ${reason}${corp ? ` · 숙박권 ${r.out - r.in}박 반환` : chan ? ` · ${r.ch}에서 환불` : ` · 환불 ${won(box._amt)}`}`);
+      if (q('#xNotify').checked) r.notices.push({t:'예약 취소 알림톡', m:nowStamp(), ok:true});
+      save(r); refreshConflicts(); box.remove(); render(); toast('예약을 취소했어요');
+    }
+  });
+  draw();
+}
+
+const HP = Object.fromEntries(location.hash.slice(1).split('&').filter(Boolean).map(x => x.split('=').map(decodeURIComponent)));
+if (HP.act === 'edit') edit = 'guest';
 render();
+if (HP.act === 'move') openMove();
+if (HP.act === 'cancel') openCancel();
+if (HP.act === 'status'){ const s = document.getElementById('stSel'); if (s){ s.value = '노쇼'; s.focus(); s.closest('.card').classList.add('flash'); } }
 </script>
 </body>
 </html>

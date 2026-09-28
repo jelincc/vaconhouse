@@ -99,13 +99,14 @@ tr.flash td{animation:bg 1.6s ease}
 <body>
 <header class="bar-top">
   <a href="./" id="logo"></a><span class="biz">BUSINESS</span><span class="co" id="co"></span>
-  <div class="me"><span id="adm"></span><a href="../index.html" id="out">로그아웃</a></div>
+  <div class="me"><span id="adm"></span><a href="../" id="out">로그아웃</a></div>
 </header>
 <main class="wrap" id="wrap"></main>
 <div id="layer"></div>
 
 <script src="../admin/data.js"></script>
 <script src="corp-data.js"></script>
+<script src="../admin/cases.js" defer></script>
 <script>
 const $ = id => document.getElementById(id);
 $('logo').innerHTML = LOGO; $('co').textContent = COMPANY.name; $('adm').textContent = COMPANY.admin;
@@ -115,7 +116,8 @@ const dd = o => mdw(o);
 const upOf = e => corpRes().filter(r => r.email === e.email && cst(r) === '예정');
 
 function page(){
-  const N = nights();
+  const N0 = nights();
+  const N = PR.low != null ? {left:+PR.low, booked:Math.min(N0.booked, COMPANY.contract - +PR.low), used:COMPANY.contract - +PR.low - Math.min(N0.booked, COMPANY.contract - +PR.low)} : N0;
   const req = EMP.filter(e => e.req);
   const joined = EMP.filter(e => e.joined).length, perm = EMP.filter(e => e.perm).length;
   const up = corpRes().filter(r => cst(r) === '예정' || cst(r) === '이용 중').sort((a, b) => a.in - b.in);
@@ -127,13 +129,15 @@ function page(){
     <div class="meter"><i style="width:${pct(N.used)};background:var(--ink)"></i><i style="width:${pct(N.booked)};background:var(--accent)"></i></div>
     <div class="mleg"><span><i style="background:var(--ink)"></i>사용 <b>${N.used}박</b></span><span><i style="background:var(--accent)"></i>예약됨 <b>${N.booked}박</b></span><span><i style="background:var(--surface-3)"></i>남음 <b>${N.left}박</b></span></div>
     <div class="hq">계약 ${COMPANY.contract}박 · ${COMPANY.until}까지 · 숙박권 지급과 계약 조건은 베이컨하우스 본사에서 관리해요</div>
+    ${N.left <= 0 ? `<div class="callout red" style="margin-top:14px"><div class="tx"><b>회사 숙박권을 모두 썼어요</b><span>직원들은 이제 회사 숙박권으로 새 예약을 할 수 없어요. 이미 한 예약은 그대로 유지돼요. 추가 숙박권은 베이컨하우스 본사 담당자에게 문의해 주세요.</span></div></div>`
+      : N.left <= 10 ? `<div class="callout orange" style="margin-top:14px"><div class="tx"><b>숙박권이 ${N.left}박 남았어요</b><span>남은 박수보다 긴 예약은 직원 앱에서 막혀요. 추가 숙박권은 베이컨하우스 본사 담당자에게 문의해 주세요.</span></div></div>` : ''}
   </section>
 
   <section class="flow" aria-label="직원이 회사 숙박권을 쓰기까지">
     <button class="step" data-go="emp:미가입"><span class="who">직원</span><span class="no">1</span><b>앱 가입</b><span>기존 베이컨하우스 앱에 가입해요</span><span class="k">${joined}명 가입 · 미가입 ${EMP.length - joined}명</span></button>
     <button class="step ${req.length ? 'hot' : ''}" data-go="req"><span class="who">관리자</span><span class="no">2</span><b>소속 확인</b><span>회사 직원이 맞는지 확인해요</span><span class="k">${req.length ? `확인 요청 ${req.length}건` : '확인할 요청이 없어요'}</span></button>
     <button class="step" data-go="emp:이용 가능"><span class="who">관리자</span><span class="no">3</span><b>이용 권한 부여</b><span>권한을 켜면 앱에 회사 숙박권이 보여요</span><span class="k">${perm}명 이용 가능</span></button>
-    <a class="step" href="../app/corp.html"><span class="who">직원</span><span class="no">4</span><b>앱에서 직접 예약</b><span>승인 없이 바로 확정돼요</span><span class="k">다가오는 예약 ${up.length}건 · 직원 앱 보기 ›</span></a>
+    <a class="step" href="../app/corp"><span class="who">직원</span><span class="no">4</span><b>앱에서 직접 예약</b><span>승인 없이 바로 확정돼요</span><span class="k">다가오는 예약 ${up.length}건 · 직원 앱 보기 ›</span></a>
   </section>
 
   ${req.length ? `<section class="req" id="reqBox">
@@ -267,8 +271,14 @@ function openAdd(){
     toast(`${u.name}님을 등록했어요${g ? '. 이용 권한도 줬어요' : ''}`);
   });
 }
-const H = location.hash.slice(1); if (H === 'res') S.tab = 'res';
+const H = location.hash.slice(1);
+const PR = Object.fromEntries(H.split('&').filter(Boolean).map(x => { const [k, ...v] = x.split('='); return [k, decodeURIComponent(v.join('='))]; }));
+if ('res' in PR) S.tab = 'res';
+if (PR.f){ if (S.tab === 'res') S.rf = PR.f; else S.ef = PR.f; }
 render();
+if ('req' in PR){ const b = $('reqBox'); if (b) setTimeout(() => { b.scrollIntoView({block:'center'}); b.classList.add('flash'); }, 50); }
+if ('add' in PR){ openAdd(); if (PR.q != null){ $('aq').value = PR.q; $('aq').dispatchEvent(new Event('input')); } }
+if (PR.off){ const i = EMP.findIndex(e => e.name === PR.off && e.perm); if (i >= 0) openRemove(i); }
 </script>
 </body>
 </html>

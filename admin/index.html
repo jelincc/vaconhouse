@@ -3,5 +3,833 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>VACON house 관리자</title><meta http-equiv="refresh" content="0; url=reservations.html"></head><body></body></html>
+<link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
+<title>VACON house 예약 관리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="admin.css">
+<style>
+/* TDS Tab */
+.tabs{display:flex;gap:28px;border-bottom:1px solid var(--line);margin-top:-4px}
+.tabs button{all:unset;cursor:pointer;padding:12px 2px 13px;font-size:16px;font-weight:600;color:var(--ink-3);position:relative;display:flex;align-items:center;gap:6px}
+.tabs button:hover{color:var(--ink-2)}
+.tabs button.on{color:var(--ink)}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);border-radius:2px}
+.tabs .n{font-size:12px;font-weight:700;background:var(--accent);color:#fff;border-radius:10px;padding:0 7px;line-height:18px}
+
+/* ===== 오늘 할 일 ===== */
+.hero h2{margin:4px 0 0;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
+.hero h2 em{font-style:normal;color:var(--accent)}
+.hero p{margin:6px 0 0;color:var(--ink-3);font-size:14.5px}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.sp{all:unset;cursor:pointer;padding:18px 22px;display:flex;align-items:center;gap:14px;border-right:1px solid var(--line)}
+.sp:last-child{border-right:0}
+.sp:hover{background:var(--surface-2)}
+.sp .tx{display:flex;flex-direction:column;flex:1;min-width:0}
+.sp .lb{font-size:14px;color:var(--ink-2);font-weight:500}
+.sp .v{font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.25}
+.sp .v small{font-size:15px;font-weight:600;margin-left:2px}
+.sp .s{font-size:13px;color:var(--ink-3)}
+.sp.zero .v{color:var(--ink-4)}
+.twin{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+.lr .cnt2{font-size:15px;font-weight:700;white-space:nowrap}
+.lr .cnt2.red{color:var(--danger-ink)}
+.lr .chev{width:16px;height:16px;color:var(--ink-4);flex:none}
+.okline{display:flex;gap:10px;align-items:center;padding:12px 8px 2px;margin-top:6px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+.okline svg{width:18px;height:18px;color:var(--ok);flex:none}
+.newbox{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:6px 8px 16px;border-bottom:1px solid var(--line);margin-bottom:6px;border-radius:12px 12px 0 0}
+.newbox:hover .big span{color:var(--ink)}
+.newbox .big{display:flex;align-items:baseline;gap:8px}
+.newbox .big b{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.newbox .big span{color:var(--ink-3);font-size:14px}
+.bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:12px 0 10px;gap:2px}
+.bar i{display:block;height:100%}
+.chs{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.chs span{display:inline-flex;align-items:center;gap:6px}
+.chs span i{width:8px;height:8px;border-radius:2px}
+.chs b{font-weight:700;color:var(--ink)}
+.foot{font-size:13px;color:var(--ink-3)}
+.foot a{color:var(--ink-2);font-weight:600;text-decoration:none}
+.foot a:hover{text-decoration:underline}
+
+/* 오늘의 운영 (강조) */
+.ops{background:#1A1A1E;color:#fff;border-radius:24px;padding:22px 24px 24px}
+.ops-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.ops-h h3{margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em}
+.ops-h span{font-size:13.5px;color:rgba(255,255,255,.55)}
+.ops-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.op{all:unset;box-sizing:border-box;cursor:pointer;background:rgba(255,255,255,.06);border-radius:18px;padding:18px 18px 16px;display:flex;flex-direction:column;min-width:0;transition:background .15s}
+.op:hover{background:rgba(255,255,255,.11)}
+.op-l{font-size:14.5px;color:rgba(255,255,255,.72);font-weight:500}
+.op-v{font-size:44px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-top:6px}
+.op-v small{font-size:18px;font-weight:600;margin-left:3px;color:rgba(255,255,255,.72)}
+.op.zero .op-v{color:rgba(255,255,255,.35)}
+.op-s{font-size:13px;color:rgba(255,255,255,.5);margin-top:2px}
+.op-list{display:flex;flex-direction:column;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);min-height:74px}
+.op-p{display:flex;align-items:center;gap:7px;font-size:13.5px;color:rgba(255,255,255,.88);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.op-p i{width:7px;height:7px;border-radius:2px;flex:none}
+.op-p em{font-style:normal;color:rgba(255,255,255,.5);margin-left:auto;padding-left:6px;flex:none}
+.op-p.none{color:rgba(255,255,255,.45)}
+.lr.zero .tx b{color:var(--ink-3);font-weight:500}
+.lr.zero .ico{opacity:.45}
+.lr.zero .cnt2{color:var(--ink-4);font-weight:500}
+.chline{font-size:14px;color:var(--ink-2);margin-top:2px}
+.chline b{color:var(--ink);font-weight:700}
+.chline .z{color:var(--ink-4)}
+/* ===== workspace ===== */
+.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{border:0;background:var(--surface-2);border-radius:10px;height:36px;padding:0 12px 0 36px;min-width:280px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23768091' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+.search::placeholder{color:var(--ink-4)}
+.fsep{width:1px;height:20px;background:var(--line-2);margin:0 4px}
+.reset{border:0;background:none;color:var(--ink-3);font-size:13px;font-weight:600}
+.reset:hover{color:var(--ink)}
+.dd{position:relative}
+.ddpanel{position:absolute;top:calc(100% + 6px);left:0;z-index:30;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px;min-width:240px}
+.ddpanel label{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;font-size:14px;cursor:pointer}
+.ddpanel label:hover{background:var(--surface-2)}
+.ddpanel .grp{font-size:12px;color:var(--ink-3);padding:8px 10px 2px;font-weight:600}
+.ddpanel .sw2{width:9px;height:9px;border-radius:3px;margin-left:auto}
+.ddfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 4px 2px;border-top:1px solid var(--line);margin-top:6px}
+.fsel.on{background:var(--ink);color:#fff}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.datebar{display:flex;align-items:center;gap:6px}
+.datebar .range{font-weight:700;font-size:15px;min-width:200px;text-align:center}
+.icbtn{border:0;background:var(--surface-2);width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-2)}
+.icbtn:hover{background:var(--surface-3)}
+.icbtn svg{width:16px;height:16px}
+.panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
+
+/* board */
+.tlwrap{overflow:auto;position:relative}
+.tl{--w:120px;--name:200px;position:relative;min-width:max-content}
+.tl-head{display:flex;position:sticky;top:0;z-index:6;background:#fff;border-bottom:1px solid var(--line)}
+.tl-corner{width:var(--name);flex:none;position:sticky;left:0;z-index:7;background:#fff;border-right:1px solid var(--line);padding:10px 18px;font-size:13px;color:var(--ink-3);display:flex;align-items:flex-end}
+.tl-day{width:var(--w);flex:none;padding:9px 10px 8px;border-left:1px solid var(--line);font-size:12px;color:var(--ink-3);display:flex;flex-direction:column;line-height:1.3}
+.tl-day b{font-size:16px;color:var(--ink);font-weight:700}
+.tl-day.sun,.tl-day.sun b{color:var(--danger-ink)}
+.tl-day.today{background:var(--accent-soft)}
+.tl-day.today b,.tl-day.today .wd{color:var(--accent)}
+.tl-day .io{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.tl-day .io em{font-style:normal;color:var(--ink);font-weight:700}
+.tl-grp{display:flex;background:#FAFAFB;border-bottom:1px solid var(--line)}
+.tl-grp button{all:unset;cursor:pointer;position:sticky;left:0;display:flex;gap:8px;align-items:center;padding:7px 18px;font-size:13px;font-weight:700;width:var(--name);box-sizing:border-box;background:#FAFAFB;z-index:4}
+.tl-grp button span{color:var(--ink-3);font-weight:500}
+.tl-grp .car{display:inline-flex;width:14px;height:14px;color:var(--ink-3);transition:transform .15s;transform:rotate(90deg)}
+.tl-grp .car svg{width:14px;height:14px}
+.tl-grp.shut .car{transform:rotate(0)}
+.tl-row{display:flex;border-bottom:1px solid var(--line)}
+.tl-row:last-child{border-bottom:0}
+.tl-name{width:var(--name);flex:none;position:sticky;left:0;z-index:4;background:#fff;border-right:1px solid var(--line);padding:8px 18px;display:flex;flex-direction:column;justify-content:center}
+.tl-name b{font-weight:600;font-size:14.5px}
+.tl-name small{font-size:12px;color:var(--ink-3)}
+.tl-track{position:relative;flex:none;background-image:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--w) - 1px),var(--line) calc(var(--w) - 1px),var(--line) var(--w))}
+.tl-todaycol{position:absolute;top:0;bottom:0;background:rgba(255,109,18,.05);pointer-events:none}
+.tl-now{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);pointer-events:none;z-index:2;border-radius:1px}
+.blk{all:unset;cursor:pointer;position:absolute;height:34px;border-radius:9px;box-sizing:border-box;padding:0 8px 0 12px;display:flex;align-items:center;gap:6px;font-size:13px;overflow:hidden;white-space:nowrap;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)}
+.blk::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--chc)}
+.blk:hover{box-shadow:inset 0 0 0 1px var(--ink-3),0 4px 12px rgba(26,26,30,.1);z-index:3}
+.blk .nm{font-weight:600;flex:none}
+.blk .mt{color:var(--ink-3);font-size:12px;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.blk .lbs{display:flex;gap:4px;margin-left:auto;padding-left:4px;flex:none}
+.blk .dt{width:7px;height:7px;border-radius:50%;flex:none;margin-left:auto}
+.blk.s-이용중{background:#EDEEF0;box-shadow:none}
+.blk.s-이용완료{background:var(--surface-2);box-shadow:none;color:var(--ink-4)}
+.blk.s-이용완료 .mt{color:var(--ink-4)}
+.blk.s-이용완료::before{opacity:.35}
+.blk.s-취소요청{background:var(--danger-soft);box-shadow:inset 0 0 0 1.5px var(--danger)}
+.blk.s-변경요청{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.blk.s-예약취소{color:var(--ink-4);text-decoration:line-through;box-shadow:inset 0 0 0 1px var(--line)}
+.blk.cf{box-shadow:inset 0 0 0 2px var(--danger)}
+.blk.clipl{border-top-left-radius:0;border-bottom-left-radius:0}
+.blk.clipr{border-top-right-radius:0;border-bottom-right-radius:0}
+.blk.nw .nm::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:4px;vertical-align:5px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:14px 18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2);align-items:center}
+.legend .grp2{display:inline-flex;gap:12px;align-items:center;padding-right:16px;border-right:1px solid var(--line)}
+.legend .grp2:last-of-type{border-right:0}
+.legend .it2{display:inline-flex;gap:6px;align-items:center}
+.legend i.c{width:4px;height:14px;border-radius:2px}
+.legend .sw{width:22px;height:14px;border-radius:4px;display:inline-block;box-shadow:inset 0 0 0 1px var(--line-2);background:#fff}
+.legend .t{color:var(--ink-3)}
+
+/* 판매 막기 · 빈 칸 메뉴 */
+.bk{all:unset;cursor:pointer;position:absolute;height:34px;border-radius:9px;box-sizing:border-box;display:flex;align-items:center;gap:6px;padding:0 10px;font-size:12.5px;font-weight:600;color:var(--ink-2);background:repeating-linear-gradient(135deg,#EFF0F2 0 6px,#fff 6px 12px);box-shadow:inset 0 0 0 1px var(--line-2);overflow:hidden;white-space:nowrap}
+.bk:hover{box-shadow:inset 0 0 0 1px var(--ink-3)}
+.tl-track{cursor:cell}
+.pop{position:fixed;z-index:60;background:#fff;border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--line);padding:6px;min-width:230px}
+.pop .ph{padding:8px 10px 6px;font-size:12.5px;color:var(--ink-3);font-weight:600}
+.pop button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:10px;font-size:14.5px;font-weight:500}
+.pop button:hover{background:var(--surface-2)}
+.pop button svg{width:18px;height:18px;color:var(--ink-3)}
+.mscrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:45;display:grid;place-items:center;padding:16px}
+.dlg{background:#fff;border-radius:24px;width:min(560px,100%);box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 32px)}
+.dlg .h{padding:24px 24px 6px;display:flex;justify-content:space-between;align-items:flex-start}
+.dlg h3{margin:0;font-size:21px;font-weight:700;letter-spacing:-.02em}
+.dlg .h p{margin:6px 0 0;font-size:14px;color:var(--ink-3)}
+.dlg .b{padding:14px 24px 6px;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.dlg .f{padding:14px 20px 20px;display:flex;gap:8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl > label{font-size:13px;color:var(--ink-3);font-weight:500}
+.fl .inp,.fl select.inp{height:44px}
+.err{font-size:12.5px;color:var(--danger-ink)}
+.segb{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}
+.segb button{flex:1;border:0;background:transparent;height:36px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:14px}
+.segb button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.stp{display:inline-flex;align-items:center;background:var(--surface-2);border-radius:10px;height:44px}
+.stp button{border:0;background:none;width:40px;height:44px;font-size:18px;color:var(--ink-2)}
+.stp span{min-width:26px;text-align:center;font-weight:700}
+.sugg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sugg button{border:0;background:#fff;border-radius:999px;height:30px;padding:0 12px;font-size:13px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
+.chc{display:flex;flex-direction:column;gap:10px}
+.chcard{border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.chcard .tx{flex:1;display:flex;flex-direction:column;gap:2px}
+.chcard .tx b{font-size:15px;display:flex;gap:6px;align-items:center}
+.chcard .tx span{font-size:13px;color:var(--ink-3)}
+.chdot{width:10px;height:10px;border-radius:3px;margin-top:6px;flex:none}
+.setrow{display:flex;gap:12px;align-items:flex-start;background:var(--surface-2);border-radius:16px;padding:14px 16px}
+.setrow .tx{flex:1}
+.setrow b{font-size:14.5px;display:block}
+.setrow span{font-size:13px;color:var(--ink-2)}
+/* month */
+.month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.month .wd{padding:10px 12px;font-size:13px;color:var(--ink-3);border-bottom:1px solid var(--line);font-weight:600}
+.month .wd:first-child{color:var(--danger-ink)}
+.mc{min-height:136px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 10px 8px;display:flex;flex-direction:column;gap:3px;font-size:12.5px;min-width:0}
+.mc:nth-child(7n){border-right:0}
+.mc .top2{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.mc .d{font-weight:700;font-size:14px}
+.mc .io{color:var(--ink-3);font-size:11.5px}
+.mc.out .d{color:var(--ink-4)}
+.mc.today{background:var(--accent-soft)}
+.mc.today .d{color:#fff;background:var(--accent);border-radius:8px;padding:0 7px}
+.mc .it{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;white-space:nowrap;overflow:hidden;border-radius:6px;padding:2px 4px;min-width:0}
+.mc .it:hover{background:var(--surface-2)}
+.mc .it i{width:7px;height:7px;border-radius:50%;flex:none;box-sizing:border-box}
+.mc .it.o{color:var(--ink-3)}
+.mc .it.o i{background:transparent!important;border:1.5px solid var(--vc)}
+.mc .it .vn{font-weight:600}
+.mc .it.o .vn{font-weight:500}
+.mc .it .nm2{color:var(--ink-3);overflow:hidden;text-overflow:ellipsis}
+.mc .more{all:unset;cursor:pointer;color:var(--ink-3);font-size:12px;padding:2px 4px;font-weight:600}
+.subnote{padding:12px 18px;font-size:13px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.subnote .lg{display:inline-flex;gap:14px;flex-wrap:wrap}
+.subnote .lg span{display:inline-flex;gap:6px;align-items:center;color:var(--ink-2)}
+.subnote .lg i{width:8px;height:8px;border-radius:50%}
+
+/* list */
+.listbar{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.fchip{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:999px;height:32px;padding:0 6px 0 14px;font-size:13.5px;font-weight:600}
+.fchip button{all:unset;cursor:pointer;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.2);font-size:10px}
+table{width:100%;border-collapse:collapse}
+th{font-size:13px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fff}
+td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:14px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:#FAFAFB}
+td .sub{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
+td.v b{font-weight:600}
+.lbl{display:flex;gap:4px;flex-wrap:wrap}
+.empty{padding:56px;text-align:center;color:var(--ink-3)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(26,26,30,.32);z-index:40}
+.drawer{position:fixed;top:12px;right:12px;bottom:12px;width:min(460px,calc(100% - 24px));background:#fff;z-index:41;box-shadow:var(--shadow);display:flex;flex-direction:column;border-radius:24px;overflow:hidden}
+.dr-head{padding:22px 24px 18px;display:flex;flex-direction:column;gap:6px}
+.dr-head .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.dr-head h3{margin:0;font-size:22px;font-weight:700;letter-spacing:-.03em}
+.dr-head .when{color:var(--ink-2);font-size:15px}
+.x{all:unset;cursor:pointer;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--ink-3)}
+.x:hover{background:var(--surface-2)}
+.x svg{width:18px;height:18px}
+.dr-body{padding:0 24px 18px;overflow:auto;display:flex;flex-direction:column;gap:18px;flex:1}
+.dr-foot{padding:12px 20px 20px;display:flex;gap:8px}
+.dr-link{display:flex;justify-content:center;padding:4px 0}
+.dr-link svg{width:14px;height:14px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fact{background:var(--surface-2);border-radius:14px;padding:12px 14px}
+.fact small{display:block;font-size:12px;color:var(--ink-3)}
+.fact b{font-size:15px;font-weight:600}
+
+/* improvement panel */
+.anp{position:fixed;top:12px;right:12px;bottom:12px;width:420px;background:#fff;z-index:35;display:flex;flex-direction:column;border-radius:24px;box-shadow:var(--shadow)}
+.anp-h{padding:22px 24px 12px}
+.anp-h h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;justify-content:space-between;align-items:center}
+.anp-h p{margin:6px 0 0;font-size:13.5px;color:var(--ink-3)}
+.anp-b{overflow:auto;padding:4px 16px 20px;display:flex;flex-direction:column;gap:8px}
+.an{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;background:var(--surface-2)}
+.an:hover,.an.on{background:var(--surface-3)}
+.an h5{margin:0;font-size:15px;font-weight:700;letter-spacing:-.01em;display:flex;gap:8px;align-items:center}
+.an h5 .n{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center;flex:none}
+.an p{margin:0;font-size:13px;line-height:1.55;color:var(--ink-2);display:grid;grid-template-columns:34px 1fr;gap:6px}
+.an p em{font-style:normal;font-weight:700;font-size:12px;color:var(--ink-3)}
+.an p.tb em{color:var(--accent)}
+body.anno .main{margin-right:432px}
+
+@media (max-width:1280px){.ops-g{grid-template-columns:1fr 1fr}.twin{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.sp:nth-child(2){border-right:0}.sp:nth-child(-n+2){border-bottom:1px solid var(--line)}body.anno .main{margin-right:0}}
+@media (max-width:860px){.tabs{gap:18px;overflow-x:auto}.tabs button{font-size:15px}.search{min-width:0;width:100%}.tl{--name:140px}.anp{left:12px;width:auto}.facts{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side"></aside>
+  <main class="main">
+    <div class="pagehead">
+      <div><h1>예약 관리</h1><p>9월 28일 월요일 · 오전 10:24 기준</p></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn line" id="annoBtn">개선 포인트</button>
+        <button class="btn line" id="syncBtn">채널 동기화</button>
+        <button class="btn primary" id="addBtn">예약 등록</button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-t="today">오늘 할 일 <span class="n" id="tabN"></span></button>
+      <button data-t="board">예약 보드</button>
+      <button data-t="list">예약 목록</button>
+      <button data-t="month">월간 달력</button>
+    </nav>
+    <div id="pane" style="display:flex;flex-direction:column;gap:16px"></div>
+  </main>
+</div>
+<aside class="anp" id="anp" hidden>
+  <div class="anp-h"><h3>개선 포인트 <button class="x" id="anpX" aria-label="닫기"></button></h3>
+    <p>지금 쓰는 예약관리 화면의 문제와 이 시안에서 푼 방식이에요. 누르면 해당 화면으로 이동해요.</p></div>
+  <div class="anp-b" id="anpB"></div>
+</aside>
+<div id="layer"></div>
+
+<script src="data.js"></script>
+<script src="cases.js" defer></script>
+<script>
+const $ = id => document.getElementById(id);
+const XI = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>';
+$('anpX').innerHTML = XI;
+
+/* ---------- dashboard definitions (spec: 신규·처리 대기 / 오늘의 운영 / 확인·조치 필요) ---------- */
+const has = k => r => issues(r).includes(k);
+const COND = {
+  new:      {lb:'신규 예약', f:r => r.isNew},
+  unseen:   {lb:'미확인 예약', f:has('unseen')},
+  block:    {lb:'판매 막기', f:r => false},
+  cancel:   {lb:'신규 취소 요청', f:has('cancel')},
+  change:   {lb:'신규 일정 변경 요청', f:has('change')},
+  in:       {lb:'오늘 체크인', f:r => ACTIVE(r) && r.in === 0},
+  out:      {lb:'오늘 체크아웃', f:r => ACTIVE(r) && r.out === 0},
+  stay:     {lb:'현재 투숙 중', f:r => ACTIVE(r) && st(r) === '이용 중'},
+  sameday:  {lb:'오늘 접수된 당일 예약', f:r => ACTIVE(r) && r.in === 0 && r.created.startsWith('2026-09-28')},
+  pay:      {lb:'결제 미완료', f:has('pay')},
+  conflict: {lb:'예약 충돌·중복 가능성', f:r => has('conflict')(r) || has('dup')(r)},
+  missing:  {lb:'예약 정보 누락', f:has('missing')},
+  sync:     {lb:'숙소 미배정·채널 연동 오류', f:r => has('sync')(r) || (r.flags.includes('syncdate') && r.out >= 0 && ACTIVE(r))},
+  notify:   {lb:'고객 알림 발송 실패', f:has('notify')},
+  clean:    {lb:'청소·객실 준비 미확인', f:has('clean')},
+};
+const pick = k => R.filter(COND[k].f);
+function reason(k){
+  const L = pick(k);
+  switch(k){
+    case 'unseen': return `채널에서 들어와 아직 확인하지 않았어요 · 가장 빠른 입실 ${mdw(Math.min(...L.map(r => r.in)))}`;
+    case 'cancel': return L.map(r => `${r.name} · ${md(r.in)} 입실 · ${r.reqAt} 요청`).join(', ');
+    case 'change': return L.map(r => `${r.name} · ${r.note}`).join(', ');
+    case 'pay': return L.map(r => `${r.name} · ${md(r.in)} 입실 · 무통장 입금 대기`).join(', ');
+    case 'conflict': { const c = L.filter(has('conflict')), d = L.filter(has('dup')); return [c.length ? `${vById[c[0].villa].name} ${md(Math.max(...c.map(r => r.in)))} 두 예약이 겹쳐요` : '', d.length ? `${d[0].name}님 4분 사이 취소 후 재예약` : ''].filter(Boolean).join(' · '); }
+    case 'missing': return L.map(r => `${r.name}님 연락처가 '${r.phoneRaw}'뿐이에요`).join(', ');
+    case 'sync': { const s = L.filter(has('sync')).length, d = L.length - s; return [s ? `에어비앤비 변경 ${s}건 미반영` : '', d ? `신청일 덮어쓰기 ${d}건` : ''].filter(Boolean).join(' · '); }
+    case 'notify': return L.map(r => `${r.name} · ${r.in === 1 ? '내일' : md(r.in)} 입실 안내`).join(', ');
+    case 'clean': return L.map(r => `${vFull(r.villa)} · ${r.in === 1 ? '내일' : md(r.in)} 입실`).join(', ');
+  }
+  return '';
+}
+const SEV = {conflict:'red', notify:'red', cancel:'red', change:'orange', pay:'orange', missing:'orange', sync:'orange', clean:'orange', unseen:'orange'};
+const ICK = {conflict:'conflict', notify:'bell', cancel:'cancel', change:'calendar', pay:'card', missing:'info', sync:'sync', clean:'clean', unseen:'unseen'};
+const needCount = () => R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
+
+/* ---------- state ---------- */
+const S = { tab:'today', span:'w1', offset:-1, moff:0, openDay:null, collapsed:new Set(), key:null, period:'upcoming', dd:null,
+  f:{q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false},
+  cols:{no:false, created:false, email:false} };
+try {
+  const sv = JSON.parse(localStorage.getItem('vh-res-f4') || 'null');
+  if (sv){ S.f.regions = new Set(sv.regions); S.f.villas = new Set(sv.villas); S.f.types = new Set(sv.types); S.f.channels = new Set(sv.channels); S.f.status = sv.status; S.f.withCancel = sv.withCancel; S.span = sv.span || 'w1'; S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; }
+} catch(e){}
+function persist(){ try { localStorage.setItem('vh-res-f4', JSON.stringify({regions:[...S.f.regions], villas:[...S.f.villas], types:[...S.f.types], channels:[...S.f.channels], status:S.f.status, withCancel:S.f.withCancel, span:S.span})); } catch(e){} }
+const villaOn = v => (!S.f.regions.size || S.f.regions.has(v.region)) && (!S.f.types.size || S.f.types.has(v.type)) && (!S.f.villas.size || S.f.villas.has(v.id));
+function matchQ(r){
+  const q = S.f.q.trim().toLowerCase(); if (!q) return true;
+  const dq = q.replace(/\D/g, '');
+  return [r.name, r.raw, vFull(r.villa), r.email, r.id, r.note, ...r.memos.map(m => m.t)].join(' ').toLowerCase().includes(q) || (dq.length >= 3 && r.phoneRaw.replace(/\D/g, '').includes(dq));
+}
+function resOn(r){
+  if (!villaOn(vById[r.villa])) return false;
+  if (S.f.channels.size && !S.f.channels.has(r.ch)) return false;
+  if (!S.f.withCancel && r.base === '취소' && S.f.status !== '예약 취소') return false;
+  if (S.f.status !== '전체' && st(r) !== S.f.status) return false;
+  return matchQ(r);
+}
+
+/* ---------- 오늘 할 일 ---------- */
+function paneToday(){
+  const n = needCount();
+  const fresh = pick('new');
+  const ins = pick('in'), outs = pick('out'), stay = pick('stay'), same = pick('sameday');
+  const tmr = R.filter(r => ACTIVE(r) && r.in === 1);
+  const who = (L, tm) => L.slice(0, 3).map(r => `<span class="op-p"><i style="background:${vById[r.villa].c}"></i>${vById[r.villa].name} · ${esc(r.name)}<em>${tm(r)}</em></span>`).join('') + (L.length > 3 ? `<span class="op-p none">외 ${L.length - 3}건</span>` : '');
+  const op = (k, lb, L, sub, tm, empty) => `<button class="op ${L.length ? '' : 'zero'}" data-k="${k}"><span class="op-l">${lb}</span><span class="op-v num">${L.length}<small>건</small></span><span class="op-s">${sub}</span><span class="op-list">${L.length ? who(L, tm) : `<span class="op-p none">${empty}</span>`}</span></button>`;
+  const row = k => { const c = pick(k).length, col = c ? (SEV[k] || '') : '';
+    return `<button class="lr ${c ? '' : 'zero'}" data-k="${k}"><span class="ico ${col}">${ICON[ICK[k]]}</span><span class="tx"><b>${COND[k].lb}${c && col === 'red' ? ' ' + BD('긴급','red','xs') : ''}</b><small>${c ? esc(reason(k)) : '이상 없어요'}</small></span><span class="cnt2 ${col === 'red' ? 'red' : ''} num">${c}건</span><span class="chev">${ICON.chev}</span></button>`; };
+  const chAll = Object.keys(CH).map(c => [c, fresh.filter(r => r.ch === c).length]);
+  return `
+    <div class="hero">
+      <h2>${n ? `확인이 필요한 예약이 <em>${n}건</em> 있어요` : '지금 처리할 예약이 없어요'}</h2>
+      <p>빨간 항목은 고객에게 바로 영향이 가요. 모든 항목은 누르면 해당 조건의 예약 목록으로 이동해요.</p>
+    </div>
+    <section class="ops" id="opsCard">
+      <div class="ops-h"><h3>오늘의 운영</h3><span>9월 28일 월요일 · 오전 10:24</span></div>
+      <div class="ops-g">
+        ${op('in', '오늘 체크인', ins, '15:00부터 입실', r => '15:00', tmr.length ? `오늘은 없어요 · 내일 ${tmr.map(r => `${vById[r.villa].name} ${esc(r.name)}`).join(', ')}` : '오늘은 없어요')}
+        ${op('out', '오늘 체크아웃', outs, '11:00까지 퇴실', r => st(r) === '이용 완료' ? '퇴실 완료' : '11:00', '오늘은 없어요')}
+        ${op('stay', '현재 투숙 중', stay, `${VILLAS.length}채 중 ${new Set(stay.map(r => r.villa)).size}채 사용 중`, r => `${r.adults + r.kids + r.infants}명`, '비어 있어요')}
+        ${op('sameday', '오늘 접수된 당일 예약', same, '오늘 접수 · 오늘 입실', r => CH[r.ch].lb, '오늘은 없어요')}
+      </div>
+    </section>
+    <div class="twin">
+      <section class="card" id="newCard"><h3>신규·처리 대기 <span class="r mut" style="font-size:13px;font-weight:500">어제 18시 이후</span></h3>
+        <button class="newbox" data-k="new">
+          <div class="big"><b class="num">${fresh.length}건</b><span>신규 예약 ›</span></div>
+          <div class="bar">${chAll.filter(x => x[1]).map(([c, k]) => `<i style="flex:${k};background:${CH[c].c}"></i>`).join('')}</div>
+          <div class="chline">${chAll.map(([c, k]) => `<span class="${k ? '' : 'z'}">${CH[c].lb} <b class="${k ? '' : 'z'}">${k}건</b></span>`).join(' · ')}</div>
+        </button>
+        ${['unseen','cancel','change'].map(row).join('')}
+      </section>
+      <section class="card" id="actCard"><h3>확인·조치 필요</h3>${['conflict','notify','pay','missing','sync','clean'].map(row).join('')}</section>
+    </div>
+    <div class="foot">기간별 예약 수, 취소율, 가동률은 <a href="stats">통계·매출</a>에서 볼 수 있어요.</div>`;
+}
+
+/* ---------- filters ---------- */
+function ddMulti(key, label, groups){
+  const set = S.f[key];
+  return `<div class="dd"><button class="fsel ${set.size ? 'on' : ''}" data-dd="${key}">${set.size ? `${label} ${set.size}` : `${label} 전체`} ▾</button>
+    ${S.dd === key ? `<div class="ddpanel">${groups.map(([g, items]) => (g ? `<div class="grp">${g}</div>` : '') + items.map(([v, t, c]) => `<label><input type="checkbox" data-set="${key}" value="${v}" ${set.has(v) ? 'checked' : ''}> ${t}${c ? `<i class="sw2" style="background:${c}"></i>` : ''}</label>`).join('')).join('')}
+      <div class="ddfoot"><button class="btn sm" data-clear="${key}">전체 해제</button><button class="btn sm primary" data-dd="${key}">적용</button></div></div>` : ''}</div>`;
+}
+function fbarHTML(){
+  const dirty = S.f.q || S.f.regions.size || S.f.villas.size || S.f.types.size || S.f.channels.size || S.f.status !== '전체' || S.f.withCancel;
+  return `<div class="fbar" id="fbar">
+    <input class="search" id="q" placeholder="예약자, 연락처, 이메일, 메모, 예약번호" value="${esc(S.f.q)}">
+    ${ddMulti('regions','지역',[['', REGIONS.map(r => [r, r])]])}
+    ${ddMulti('villas','숙소', REGIONS.map(rg => [rg, VILLAS.filter(v => v.region === rg).map(v => [v.id, v.name, v.c])]))}
+    ${ddMulti('types','운영 유형',[['', TYPES.map(t => [t, t])]])}
+    <select class="fsel" id="fStatus" aria-label="예약 상태"><option value="전체">상태 전체</option>${['예약 확정','이용 중','이용 완료','취소 요청','변경 요청','예약 취소'].map(s => `<option ${S.f.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+    <span class="fsep"></span>
+    ${Object.keys(CH).map(c => `<button class="chip ${S.f.channels.has(c) ? 'on' : ''}" data-ch="${c}"><i style="background:${CH[c].c}"></i>${CH[c].lb}</button>`).join('')}
+    <span class="fsep"></span>
+    <label class="tgl"><input type="checkbox" id="wc" ${S.f.withCancel ? 'checked' : ''}>취소 포함</label>
+    ${dirty ? '<button class="reset" data-reset>초기화</button>' : ''}
+  </div>`;
+}
+
+/* ---------- board ---------- */
+const SPAN = {d1:{n:1,min:600,lb:'일간'}, w1:{n:7,min:132,lb:'주간'}, w2:{n:14,min:94,lb:'2주'}, m:{n:31,min:50,lb:'월간'}};
+const rangeLabel = () => S.tab === 'month' ? `${dOf(S.moff).getFullYear()}년 ${dOf(S.moff).getMonth()+1}월` : SPAN[S.span].n === 1 ? mdw(S.offset) : `${mdw(S.offset)} – ${mdw(S.offset + SPAN[S.span].n - 1)}`;
+function blockHTML(r, start, n, w, lane){
+  const a = Math.max(r.in + 0.5, start), b = Math.min(r.out + 0.5, start + n);
+  if (b <= a) return '';
+  const left = (a - start) * w + 2, width = (b - a) * w - 4;
+  const is = issues(r).filter(k => !['syncdate','unseen','cancel','change'].includes(k));
+  const lbs = [];
+  if (r.base === '취소요청') lbs.push(BD('취소 요청','red','xs'));
+  if (r.base === '변경요청') lbs.push(BD('변경 요청','orange','xs'));
+  is.forEach(k => lbs.push(BD(k === 'conflict' ? '충돌' : ISSUE[k].lb, ISSUE[k].c, 'xs' + (k === 'conflict' ? ' fill' : ''))));
+  const room = width - 24 - r.name.length * 13;
+  const need = lbs.slice(0, 2).reduce((a, l) => a + l.replace(/<[^>]+>/g, '').length * 11 + 14, 0);
+  const showLbs = lbs.length && room > need;
+  const showMeta = room - (showLbs ? need : 0) > 90;
+  const dot = !showLbs && lbs.length ? `<span class="dt" style="background:${is.some(k => ISSUE[k].c === 'red') || r.base === '취소요청' ? 'var(--danger)' : 'var(--accent)'}"></span>` : '';
+  const title = `${r.name} · ${vFull(r.villa)} · ${mdw(r.in)} – ${mdw(r.out)} ${r.out - r.in}박 · ${CH[r.ch].lb} · ${st(r)}${r.note ? ' · ' + r.note : ''}`;
+  return `<button class="blk s-${st(r).replace(' ', '')} ${is.includes('conflict') ? 'cf' : ''} ${r.isNew && !r.seen ? 'nw' : ''} ${r.in + .5 < start ? 'clipl' : ''} ${r.out + .5 > start + n ? 'clipr' : ''}" style="--chc:${CH[r.ch].c};left:${left}px;width:${width}px;top:${8 + lane * 40}px" data-r="${r.idx}" title="${esc(title)}">
+    <span class="nm">${esc(width < 64 ? r.name.slice(0, 2) : r.name)}</span>
+    ${showMeta ? `<span class="mt">${md(r.in)}–${md(r.out)} · ${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}${room > 260 ? ' · ' + CH[r.ch].lb : ''}</span>` : ''}${r.note && r.base !== '변경요청' ? `<span class="mt" title="${esc(r.note)}" style="flex:none">✎</span>` : ''}
+    ${showLbs ? `<span class="lbs">${lbs.slice(0, 2).join('')}</span>` : dot}
+  </button>`;
+}
+function toolbar(){
+  return `<div class="toolbar">
+    ${S.tab === 'board' ? `<div class="seg">${Object.entries(SPAN).map(([k, v]) => `<button data-s="${k}" class="${S.span === k ? 'on' : ''}">${v.lb}</button>`).join('')}</div>` : '<span></span>'}
+    <div class="datebar"><button class="icbtn" id="prev" aria-label="이전">${ICON.back}</button><span class="range num">${rangeLabel()}</span><button class="icbtn" id="next" aria-label="다음">${ICON.chev}</button><button class="btn sm" id="todayBtn">오늘</button></div>
+  </div>`;
+}
+function paneBoard(){
+  const {n, min} = SPAN[S.span];
+  const avail = Math.max(600, document.querySelector('.main').clientWidth - 64 - 202);
+  const w = Math.max(min, Math.floor(avail / n)); S.w = w;
+  const start = S.offset, days = [...Array(n)].map((_, i) => start + i);
+  const vis = VILLAS.filter(villaOn), rs = R.filter(resOn);
+  let h = `<div class="tl" style="--w:${w}px"><div class="tl-head"><div class="tl-corner">숙소 ${vis.length}채</div>
+    ${days.map(o => { const d = dOf(o);
+      const ci = rs.filter(r => r.in === o && ACTIVE(r)).length, co = rs.filter(r => r.out === o && ACTIVE(r)).length;
+      return `<div class="tl-day ${d.getDay() === 0 ? 'sun' : ''} ${o === 0 ? 'today' : ''}">${S.span === 'm' ? `<span class="wd">${WD[d.getDay()]}</span><b>${d.getDate()}</b>` :
+        `<span class="wd">${d.getMonth() + 1}월 ${WD[d.getDay()]}${o === 0 ? ' · 오늘' : ''}</span><b>${d.getDate()}</b><span class="io">${ci || co ? `입실 <em>${ci}</em> · 퇴실 <em>${co}</em>` : '&nbsp;'}</span>`}</div>`; }).join('')}</div>`;
+  REGIONS.forEach(rg => {
+    const vv = vis.filter(v => v.region === rg); if (!vv.length) return;
+    const shut = S.collapsed.has(rg);
+    h += `<div class="tl-grp ${shut ? 'shut' : ''}"><button data-grp="${rg}" aria-expanded="${!shut}"><span class="car">${ICON.chev}</span>${rg} <span>${vv.length}채</span></button><div style="width:${n * w}px"></div></div>`;
+    if (shut) return;
+    vv.forEach(v => {
+      const mine = rs.filter(r => r.villa === v.id).sort((a, b) => (ACTIVE(b) - ACTIVE(a)) || a.in - b.in);
+      const lanes = [];
+      const placed = mine.map(r => { let l = lanes.findIndex(end => end <= r.in); if (l < 0){ l = lanes.length; lanes.push(r.out); } else lanes[l] = r.out; return [r, l]; });
+      if (BLOCKS.some(x => x.villa === v.id && x.in < start + n && x.out > start) && !lanes.length) lanes.push(-99);
+      const ht = Math.max(1, lanes.length) * 40 + 10;
+      h += `<div class="tl-row"><div class="tl-name" style="height:${ht}px"><b>${v.name}</b><small>${v.type} · 최대 ${v.cap}인</small></div>
+        <div class="tl-track" data-v="${v.id}" style="width:${n * w}px;height:${ht}px">
+          ${BLOCKS.map((x, bi) => [x, bi]).filter(([x]) => x.villa === v.id && x.in < start + n && x.out > start).map(([x, bi]) => { const a = Math.max(x.in + .5, start), b = Math.min(x.out + .5, start + n); return `<button class="bk" data-blk="${bi}" style="left:${(a - start) * w + 2}px;width:${(b - a) * w - 4}px;top:8px" title="${esc(x.reason)} · ${esc(x.note || '')}">판매 막기 · ${esc(x.reason)}</button>`; }).join('')}
+          ${days.includes(0) ? `<div class="tl-todaycol" style="left:${(0 - start) * w}px;width:${w}px"></div><div class="tl-now" style="left:${(0 - start) * w + w * .43}px"></div>` : ''}
+          ${placed.map(([r, l]) => blockHTML(r, start, n, w, l)).join('')}
+        </div></div>`;
+    });
+  });
+  h += '</div>';
+  return `${toolbar()}${fbarHTML()}
+    <div class="panel" id="boardPanel"><div class="tlwrap">${h}</div>
+    <div class="legend">
+      <span class="grp2"><span class="t">막대 색은 예약 경로</span>${Object.keys(CH).map(c => `<span class="it2"><i class="c" style="background:${CH[c].c}"></i>${CH[c].lb}</span>`).join('')}</span>
+      <span class="grp2"><span class="it2"><i class="sw"></i>예약 확정</span><span class="it2"><i class="sw" style="background:#EDEEF0;box-shadow:none"></i>이용 중</span><span class="it2"><i class="sw" style="background:var(--surface-2);box-shadow:none"></i>이용 완료</span></span>
+      <span class="grp2"><span class="t">라벨은 확인 필요</span>${BD('충돌','red','xs fill')}${BD('취소 요청','red','xs')}${BD('변경 요청','orange','xs')}<span class="it2"><i style="width:6px;height:6px;border-radius:50%;background:var(--accent)"></i>미확인 신규</span></span>
+      <span class="grp2"><span class="it2"><i class="sw" style="background:repeating-linear-gradient(135deg,#EFF0F2 0 4px,#fff 4px 8px)"></i>판매 막기</span><span class="it2">✎ 특이사항</span></span>
+      <span class="t" style="margin-left:auto">빈 칸을 누르면 예약 등록·판매 막기 · 체크인 15:00 → 체크아웃 11:00</span>
+    </div></div>`;
+}
+
+/* ---------- month ---------- */
+function paneMonth(){
+  const base = dOf(S.moff), first = new Date(base.getFullYear(), base.getMonth(), 1);
+  const s0 = new Date(first); s0.setDate(1 - first.getDay());
+  const rs = R.filter(r => resOn(r) && ACTIVE(r));
+  let cells = '';
+  for (let i = 0; i < 42; i++){
+    const d = new Date(s0); d.setDate(s0.getDate() + i);
+    const o = Math.round((d - TODAY) / 864e5);
+    const items = [...rs.filter(r => r.in === o).map(r => [r, 'i']), ...rs.filter(r => r.out === o).map(r => [r, 'o'])];
+    const lim = S.openDay === o ? 99 : 4;
+    cells += `<div class="mc ${d.getMonth() !== base.getMonth() ? 'out' : ''} ${o === 0 ? 'today' : ''}">
+      <div class="top2"><span class="d">${d.getDate()}</span>${items.length ? `<span class="io">입실 ${items.filter(x => x[1] === 'i').length} · 퇴실 ${items.filter(x => x[1] === 'o').length}</span>` : ''}</div>
+      ${items.slice(0, lim).map(([r, k]) => `<button class="it ${k}" data-r="${r.idx}" style="--vc:${vById[r.villa].c}"><i style="background:${vById[r.villa].c}"></i><span class="vn">${k === 'o' ? '퇴실 · ' : ''}${vById[r.villa].name}</span><span class="nm2">${esc(r.name)}</span></button>`).join('')}
+      ${items.length > lim ? `<button class="more" data-day="${o}">+${items.length - lim}건 더보기</button>` : ''}
+    </div>`;
+  }
+  return `${toolbar()}${fbarHTML()}<div class="panel">
+    <div class="subnote"><span>보조 보기예요. 숙소마다 색이 고정되고 입실(●)과 퇴실(○)을 함께 보여줘요.</span><span class="lg">${VILLAS.filter(villaOn).map(v => `<span><i style="background:${v.c}"></i>${v.name}</span>`).join('')}</span></div>
+    <div class="month">${WD.map(x => `<div class="wd">${x}</div>`).join('')}${cells}</div></div>`;
+}
+
+/* ---------- list ---------- */
+function paneList(){
+  let rows = R.filter(r => S.key ? COND[S.key].f(r) && villaOn(vById[r.villa]) && matchQ(r) : resOn(r));
+  if (!S.key){ if (S.period === 'upcoming') rows = rows.filter(r => r.out >= 0); if (S.period === 'past') rows = rows.filter(r => r.out < 0); }
+  rows.sort((a, b) => S.period === 'past' && !S.key ? b.in - a.in : a.in - b.in || a.villa.localeCompare(b.villa));
+  const C = S.cols;
+  return `${fbarHTML()}<div class="panel" id="listPanel">
+    <div class="listbar">
+      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">✕</button></span>` :
+        `<div class="seg">${[['upcoming','다가오는 예약'],['past','지난 예약'],['all','전체']].map(([k, lb]) => `<button data-per="${k}" class="${S.period === k ? 'on' : ''}">${lb}</button>`).join('')}</div><span class="mut">${rows.length}건</span>`}
+      <div class="dd" style="margin-left:auto"><button class="btn sm line" data-cols>열 설정</button>
+        ${S.dd === 'cols' ? `<div class="ddpanel" style="left:auto;right:0;min-width:200px"><div class="grp">보조 정보</div>
+          <label><input type="checkbox" data-col="no" ${C.no ? 'checked' : ''}> 예약번호</label><label><input type="checkbox" data-col="created" ${C.created ? 'checked' : ''}> 예약 신청일</label><label><input type="checkbox" data-col="email" ${C.email ? 'checked' : ''}> 계정 이메일</label></div>` : ''}</div>
+      <button class="btn sm line">엑셀 내려받기</button>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>예약자</th><th>인원</th><th>예약 경로</th><th>결제</th><th>예약 상태</th><th>특이사항</th>${C.no ? '<th>예약번호</th>' : ''}${C.created ? '<th>신청일</th>' : ''}${C.email ? '<th>계정 이메일</th>' : ''}</tr></thead>
+      <tbody>${rows.length ? rows.map(r => { const v = vById[r.villa]; const is = issues(r).filter(k => k !== 'cancel' && k !== 'change' && k !== 'pay' && (k !== 'syncdate' || C.created));
+        return `<tr data-r="${r.idx}">
+        <td class="v"><span class="vdot" style="background:${v.c}"></span><b>${v.name}</b><span class="sub">${v.region} · ${v.type}</span></td>
+        <td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박${r.in === 0 ? ' · 오늘 입실' : ''}${r.out === 0 ? ' · 오늘 퇴실' : ''}</span></td>
+        <td>${esc(r.name)}<span class="sub num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)}</span>`}</span></td>
+        <td class="num">${r.adults + r.kids + r.infants}명<span class="sub">성인 ${r.adults}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}${r.pet ? ' · 반려견' : ''}</span></td>
+        <td>${chDot(r.ch)}<span class="sub">${r.corp ? '기업 숙박권' : r.email ? '회원' : '비회원'}</span></td>
+        <td>${payHTML(r)}</td>
+        <td>${stHTML(r)}</td>
+        <td><div class="lbl">${is.map(k => BD(ISSUE[k].lb, ISSUE[k].c, 'xs' + (k === 'conflict' ? ' fill' : ''))).join('')}</div>${r.note ? `<span class="sub">${esc(r.note)}</span>` : ''}${!is.length && !r.note ? '<span style="color:var(--ink-4)">–</span>' : ''}</td>
+        ${C.no ? `<td class="num mut">${r.id}</td>` : ''}${C.created ? `<td class="num" style="font-size:13px;color:${r.flags.includes('syncdate') ? 'var(--accent-ink)' : 'var(--ink-3)'}">${r.created}</td>` : ''}${C.email ? `<td class="mut">${r.email || '–'}</td>` : ''}
+      </tr>`; }).join('') : `<tr><td colspan="11" class="empty">조건에 맞는 예약이 없어요.</td></tr>`}</tbody>
+    </table></div></div>`;
+}
+
+/* ---------- render ---------- */
+function render(){
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === S.tab));
+  const n = needCount(); $('tabN').textContent = n; $('tabN').hidden = !n;
+  $('pane').innerHTML = S.tab === 'today' ? paneToday() : S.tab === 'board' ? paneBoard() : S.tab === 'list' ? paneList() : paneMonth();
+  mountSide();
+  if (!S.caseMode) try { history.replaceState(null, '', '#' + S.tab); } catch(e){}
+}
+function go(tab, key){ S.tab = tab; S.key = key || null; S.dd = null; if (key) S.period = 'all'; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+$('tabs').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) go(b.dataset.t); });
+const pane = $('pane');
+pane.addEventListener('click', e => {
+  const t = e.target;
+  const k = t.closest('[data-k]'); if (k){ go('list', k.dataset.k); return; }
+  if (t.closest('[data-soon2]')){ e.preventDefault(); toast('통계·매출 화면은 준비 중이에요', false); return; }
+  const dd = t.closest('[data-dd]'); if (dd){ S.dd = S.dd === dd.dataset.dd ? null : dd.dataset.dd; if (!S.dd) persist(); render(); return; }
+  const cl = t.closest('[data-clear]'); if (cl){ S.f[cl.dataset.clear].clear(); render(); return; }
+  if (t.closest('[data-reset]')){ S.f = {q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false}; persist(); render(); return; }
+  const ch = t.closest('[data-ch]'); if (ch){ const c = ch.dataset.ch; S.f.channels.has(c) ? S.f.channels.delete(c) : S.f.channels.add(c); persist(); render(); return; }
+  const sp = t.closest('[data-s]'); if (sp){ S.span = sp.dataset.s; S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; persist(); render(); return; }
+  if (t.closest('#prev') || t.closest('#next')){ const dir = t.closest('#prev') ? -1 : 1;
+    if (S.tab === 'month'){ const d = dOf(S.moff); S.moff = Math.round((new Date(d.getFullYear(), d.getMonth() + dir, 15) - TODAY) / 864e5); S.openDay = null; } else S.offset += dir * SPAN[S.span].n; render(); return; }
+  if (t.closest('#todayBtn')){ if (S.tab === 'month') S.moff = 0; else S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; render(); return; }
+  const g = t.closest('[data-grp]'); if (g){ const x = g.dataset.grp; S.collapsed.has(x) ? S.collapsed.delete(x) : S.collapsed.add(x); render(); return; }
+  if (t.closest('[data-clearkey]')){ S.key = null; render(); return; }
+  const per = t.closest('[data-per]'); if (per){ S.period = per.dataset.per; render(); return; }
+  if (t.closest('[data-cols]')){ S.dd = S.dd === 'cols' ? null : 'cols'; render(); return; }
+  const more = t.closest('[data-day]'); if (more){ S.openDay = +more.dataset.day; render(); return; }
+  const r = t.closest('[data-r]'); if (r) return openDrawer(+r.dataset.r);
+  const bk = t.closest('[data-blk]'); if (bk) return blockMenu(+bk.dataset.blk, e);
+  const tr = t.closest('.tl-track'); if (tr){ const x = e.clientX - tr.getBoundingClientRect().left; const day = S.offset + Math.floor(x / S.w); cellMenu(tr.dataset.v, day, e); }
+});
+pane.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.set){ t.checked ? S.f[t.dataset.set].add(t.value) : S.f[t.dataset.set].delete(t.value); return; }
+  if (t.dataset.col){ S.cols[t.dataset.col] = t.checked; render(); return; }
+  if (t.id === 'fStatus') S.f.status = t.value;
+  if (t.id === 'wc') S.f.withCancel = t.checked;
+  persist(); render();
+});
+pane.addEventListener('input', e => {
+  if (e.target.id !== 'q') return;
+  S.f.q = e.target.value; const pos = e.target.selectionStart; render();
+  const q = $('q'); if (q){ q.focus(); q.setSelectionRange(pos, pos); }
+});
+pane.addEventListener('keydown', e => { if (e.target.id === 'q' && e.key === 'Enter' && S.tab !== 'list'){ S.period = 'all'; go('list'); $('q').focus(); } });
+
+/* ---------- drawer: 요약 → 한 가지 다음 행동 → 상세 ---------- */
+const layer = $('layer');
+function openDrawer(i){
+  const r = R[i], is = issues(r), p = price(r);
+  const [sec, pri] = nextStep(r);
+  layer.innerHTML = `<div class="scrim" data-close></div>
+  <aside class="drawer" role="dialog" aria-label="예약 요약">
+    <div class="dr-head">
+      <div class="row"><div style="display:flex;gap:8px;align-items:center">${stHTML(r)}${r.isNew ? BD('신규','grey') : ''}</div><button class="x" data-close aria-label="닫기">${XI}</button></div>
+      <h3>${esc(r.name)}님</h3>
+      <div class="when"><b>${vFull(r.villa)}</b><br><span class="num">${mdw(r.in)} 15:00 → ${mdw(r.out)} 11:00 · ${r.out - r.in}박</span></div>
+    </div>
+    <div class="dr-body">
+      ${is.filter(k => k !== 'syncdate').map(k => `<div class="callout ${ISSUE[k].c}"><span class="ico sm ${ISSUE[k].c}" style="background:#fff">${ICON[ISSUE[k].ic]}</span><div class="tx"><b>${ISSUE[k].lb}</b><span>${issueDesc(r, k)}</span></div></div>`).join('')}
+      <div class="facts">
+        <div class="fact"><small>인원</small><b>${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}</b></div>
+        <div class="fact"><small>예약 경로</small><b>${CH[r.ch].lb}</b></div>
+        <div class="fact"><small>결제 금액</small><b class="num">${won(p.sub)}</b></div>
+      </div>
+      <dl class="kv">
+        <dt>연락처</dt><dd class="num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)} · 불완전</span>`}</dd>
+        <dt>결제 상태</dt><dd>${payHTML(r)}</dd>
+        <dt>특이사항</dt><dd>${esc(r.note) || '<span class="mut">없음</span>'}</dd>
+        ${r.memos.length ? `<dt>관리자 메모</dt><dd>${esc(r.memos[0].t)}</dd>` : ''}
+      </dl>
+    </div>
+    <div class="dr-link"><a class="tbtn" href="reservation?id=${r.idx}">결제·이력까지 전체 보기 ${ICON.chev}</a></div>
+    <div class="dr-foot">
+      ${sec ? `<button class="btn xl" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
+      ${pri ? `<button class="btn xl ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : `<a class="btn xl primary" href="reservation?id=${r.idx}">예약 상세 보기</a>`}
+    </div>
+  </aside>`;
+  layer.querySelectorAll('[data-do]').forEach(b => b.onclick = () => { const m = runAct(r, b.dataset.do); layer.innerHTML = ''; render(); toast(m); });
+}
+layer.addEventListener('click', e => { if (e.target.closest('[data-close]')) layer.innerHTML = ''; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ layer.innerHTML = ''; if (S.dd){ S.dd = null; render(); } } });
+
+/* ---------- 개선 포인트 ---------- */
+const ANNO = [
+  {t:'누적 통계 8칸 → 오늘 할 일', as:'전체 예약 564, 체크아웃 완료 342 같은 누적 숫자가 첫 화면을 차지하고 두 칸은 비어 있어요.', tb:'첫 탭을 "오늘 할 일"로 두고 처리할 것만 보여줘요. 0건 항목은 한 줄로 접고, 누적 통계는 통계·매출로 옮겨요.', go:['today','#actCard']},
+  {t:'숫자만 있는 타일 → 이유가 붙은 목록', as:'"취소 요청 상태 예약 수"처럼 건수만 있어 무엇부터 봐야 할지 알 수 없어요.', tb:'항목마다 확인이 필요한 이유를 붙이고, 누르면 그 조건의 예약 목록으로 바로 이동해요.', go:['today','#newCard']},
+  {t:'체크인 날에만 찍히는 달력 → 기간 막대', as:'9.27 체크인·9.28 체크아웃 예약이 27일에만 보여 오늘 퇴실 3건이 달력에 없어요.', tb:'숙소별 보드에 체크인부터 체크아웃까지 막대로 이어요. 날짜 머리에 입실·퇴실 수가 보여요.', go:['board','#boardPanel']},
+  {t:'잘리는 숙소명, 예약마다 다른 색 → 숙소가 행', as:'"양평, 캐빈 브리…"로 잘려 캐빈 A–D를 구분할 수 없어요.', tb:'숙소를 지역별 행으로 고정해요. 막대 색은 예약 경로 하나만 뜻하고, 월간 달력은 숙소마다 색을 고정했어요.', go:['board','#boardPanel']},
+  {t:'이름에 섞인 채널 → 예약 경로 열', as:'"민지(에어비앤비)"처럼 채널이 이름 괄호에 들어 있어 거르거나 셀 수 없어요.', tb:'채널을 분리해 예약 경로 열, 필터, 신규 채널별 건수로 써요. 원본 값은 상세 화면에 남겨요.', go:['list','#listPanel']},
+  {t:'모두 같은 모양의 표 → 이상만 라벨', as:'예약번호·신청일이 앞에 있고 숙소는 끝에서 잘려요. 정상과 이상이 같은 모양이에요.', tb:'숙소부터 특이사항까지 운영 순서로 정렬했어요. 정상 상태는 텍스트로, 확인이 필요한 것만 라벨로 보여줘요.', go:['list','#listPanel']},
+  {t:'큰 필터 패널 → 한 줄 필터', as:'"날짜별 최대 표시 수" 같은 설정이 검색과 같은 크기로 화면 1/3을 차지해요.', tb:'검색, 지역, 숙소, 운영 유형, 상태, 채널을 한 줄에 두고 조건을 다음 방문에도 유지해요.', go:['board','#fbar']},
+  {t:'날짜 → 표 → 상세 3단계 → 요약과 한 가지 행동', as:'날짜를 누르고, 아래 표에서 찾고, 다시 상세로 들어가야 해요.', tb:'막대나 행을 누르면 요약이 열리고 지금 할 한 가지 행동만 버튼으로 보여줘요. 결제·이력 같은 전체 정보는 예약 상세 화면에 있어요.', go:['drawer']},
+];
+$('anpB').innerHTML = ANNO.map((a, i) => `<button class="an" data-an="${i}"><h5><span class="n">${i + 1}</span>${a.t}</h5><p><em>현재</em><span>${a.as}</span></p><p class="tb"><em>개선</em><span>${a.tb}</span></p></button>`).join('');
+$('anpB').addEventListener('click', e => {
+  const b = e.target.closest('[data-an]'); if (!b) return;
+  document.querySelectorAll('.an').forEach(x => x.classList.toggle('on', x === b));
+  const [tab, sel] = ANNO[+b.dataset.an].go;
+  if (tab === 'drawer'){ openDrawer((R.find(r => r.base === '취소요청') || R.find(r => r.flags.includes('conflict')) || R[45]).idx); return; }
+  layer.innerHTML = ''; go(tab);
+  setTimeout(() => { const el = document.querySelector(sel); if (!el) return; el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }, 60);
+});
+function setAnno(on){ document.body.classList.toggle('anno', on); $('anp').hidden = !on; $('annoBtn').classList.toggle('on', on); try { localStorage.setItem('vh-anno', on ? '1' : '0'); } catch(e){} if (S.tab === 'board') render(); }
+$('annoBtn').onclick = () => setAnno(!document.body.classList.contains('anno'));
+$('anpX').onclick = () => setAnno(false);
+$('syncBtn').onclick = () => openChannels();
+$('addBtn').onclick = () => openCreate({});
+
+/* ---------- 빈 칸 메뉴 ---------- */
+function popAt(e, html){
+  document.querySelectorAll('.pop').forEach(x => x.remove());
+  const p = document.createElement('div'); p.className = 'pop'; p.innerHTML = html; document.body.appendChild(p);
+  const W = p.offsetWidth, Hh = p.offsetHeight;
+  p.style.left = Math.min(e.clientX, innerWidth - W - 12) + 'px'; p.style.top = Math.min(e.clientY + 6, innerHeight - Hh - 12) + 'px';
+  setTimeout(() => document.addEventListener('click', function f(ev){ if (!p.contains(ev.target)){ p.remove(); document.removeEventListener('click', f); } }), 0);
+  return p;
+}
+function cellMenu(villa, day, e){
+  if (day < 0) return toast('지난 날짜에는 예약을 등록할 수 없어요', false);
+  const p = popAt(e, `<div class="ph">${vFull(villa)} · ${mdw(day)}</div>
+    <button data-m="create">${ICON.calendar}이 날짜로 예약 등록</button><button data-m="block">${ICON.cancel}판매 막기</button>`);
+  p.onclick = ev => { const b = ev.target.closest('[data-m]'); if (!b) return; p.remove(); b.dataset.m === 'create' ? openCreate({villa, a:day, b:day + 1}) : openBlock({villa, a:day, b:day + 1}); };
+}
+function blockMenu(bi, e){
+  const x = BLOCKS[bi];
+  const p = popAt(e, `<div class="ph">${vFull(x.villa)} · ${md(x.in)} – ${md(x.out)} 판매 막기<br><span style="font-weight:500">${esc(x.reason)}${x.note ? ' · ' + esc(x.note) : ''} · ${esc(x.by)}</span></div><button data-m="un">${ICON.check}판매 막기 풀기</button>`);
+  p.onclick = ev => { if (!ev.target.closest('[data-m]')) return; p.remove(); BLOCKS.splice(bi, 1); saveBlocks(); render(); toast('판매 막기를 풀었어요. 채널에도 다시 열려요'); };
+}
+
+/* ---------- 예약 등록: 등록 전에 겹침을 막아요 ---------- */
+const dateVal = o => isoOf(o);
+const offVal = s => offOf(s);
+function autoBlock(){ try { return localStorage.getItem('vh-ch-autoblock') === '1'; } catch(e){ return false; } }
+function openCreate(o){
+  const F = {villa:o.villa || 'v1', a:o.a ?? 1, b:o.b ?? 2, name:'', phone:'', adults:2, kids:0, route:'전화', pay:'결제대기', note:'', notify:true};
+  const box = document.createElement('div'); box.className = 'mscrim';
+  box.innerHTML = `<div class="dlg" role="dialog" aria-label="예약 등록"><div class="h"><div><h3>예약 등록</h3><p>전화·현장 예약을 직접 등록해요. 이미 예약되거나 막힌 날짜는 등록할 수 없어요.</p></div><button class="x" data-x aria-label="닫기">${XI}</button></div>
+    <div class="b">
+      <div class="fl"><label>숙소</label><select class="inp" id="cVilla">${REGIONS.map(rg => `<optgroup label="${rg}">${VILLAS.filter(v => v.region === rg).map(v => `<option value="${v.id}" ${F.villa === v.id ? 'selected' : ''}>${v.region} ${v.name} · 최대 ${v.cap}인</option>`).join('')}</optgroup>`).join('')}</select></div>
+      <div class="fg"><div class="fl"><label>체크인</label><input class="inp" type="date" id="cA" value="${dateVal(F.a)}" min="${dateVal(0)}"></div><div class="fl"><label>체크아웃</label><input class="inp" type="date" id="cB" value="${dateVal(F.b)}" min="${dateVal(1)}"></div></div>
+      <div id="cCheck"></div>
+      <div class="fg"><div class="fl"><label>예약자 이름</label><input class="inp" id="cName" placeholder="홍길동"></div><div class="fl"><label>연락처</label><input class="inp num" id="cPhone" placeholder="010-0000-0000" inputmode="tel"><span class="err" id="cPhoneErr"></span></div></div>
+      <div class="fg" style="grid-template-columns:1fr"><div class="fl"><label>인원</label><div style="display:flex;gap:8px;align-items:center;flex-wrap:nowrap"><span class="mut" style="font-size:13px">성인</span><span class="stp"><button data-st="adults:-1">−</button><span id="nA">2</span><button data-st="adults:1">+</button></span><span class="mut" style="font-size:13px">아동</span><span class="stp"><button data-st="kids:-1">−</button><span id="nK">0</span><button data-st="kids:1">+</button></span></div><span class="err" id="cCapErr"></span></div>
+        <div class="fl"><label>예약 경로</label><div class="segb" id="cRoute">${['전화','현장','기타'].map(x => `<button data-rt="${x}" class="${F.route === x ? 'on' : ''}">${x}</button>`).join('')}</div></div></div>
+      <div class="fl"><label>결제</label><div class="segb" id="cPay"><button data-py="결제대기" class="on">입금 대기</button><button data-py="결제완료">결제 완료</button></div></div>
+      <div class="fl"><label>특이사항</label><input class="inp" id="cNote" placeholder="예: 늦은 입실, 반려견 동반"></div>
+      <label class="tgl" style="color:var(--ink)"><input type="checkbox" id="cNotify" checked>예약 확정 알림톡 보내기</label>
+      <div id="cChan"></div>
+    </div>
+    <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl primary" id="cGo">등록하기</button></div></div>`;
+  document.body.appendChild(box);
+  const q = s => box.querySelector(s);
+  function check(){
+    F.a = offVal(q('#cA').value); F.b = offVal(q('#cB').value);
+    const v = vById[F.villa], n = F.b - F.a;
+    const c = n > 0 ? clashes(F.villa, F.a, F.b) : {res:[], blk:[]};
+    const free = n > 0 && !c.res.length && !c.blk.length;
+    let html = '';
+    if (n <= 0) html = `<div class="callout orange"><div class="tx"><b>체크아웃은 체크인 다음 날 이후여야 해요</b></div></div>`;
+    else if (F.a < 0) html = `<div class="callout orange"><div class="tx"><b>지난 날짜예요</b></div></div>`;
+    else if (!free){
+      const alt = VILLAS.filter(x => x.id !== F.villa && freeFor(x.id, F.a, F.b) && x.cap >= F.adults + F.kids);
+      html = `<div class="callout red"><span class="ico sm red" style="background:#fff">${ICON.conflict}</span><div class="tx"><b>이 날짜엔 등록할 수 없어요</b>
+        <span>${c.res.map(r => `${esc(r.name)}(${CH[r.ch].lb}) ${md(r.in)} – ${md(r.out)} 예약`).concat(c.blk.map(x => `${md(x.in)} – ${md(x.out)} 판매 막기(${esc(x.reason)})`)).join(', ')}과 겹쳐요.</span>
+        ${alt.length ? `<span style="margin-top:6px">같은 날짜에 비어 있는 숙소</span><div class="sugg">${alt.map(x => `<button data-alt="${x.id}">${x.region} ${x.name}</button>`).join('')}</div>` : ''}</div></div>`;
+    } else html = `<div class="callout" style="background:var(--ok-soft)"><span class="ico sm green" style="background:#fff">${ICON.check}</span><div class="tx"><b>예약할 수 있어요 · ${n}박</b><span>${mdw(F.a)} 15:00 → ${mdw(F.b)} 11:00 · 예상 금액 ${won(price({villa:F.villa, in:F.a, out:F.b, note:F.note, pet:false, ch:'관리자', pay:F.pay}).sub)}</span></div></div>`;
+    q('#cCheck').innerHTML = html;
+    const digits = q('#cPhone').value.replace(/\D/g, '');
+    const phoneBad = digits.length > 0 && digits.length < 10;
+    q('#cPhoneErr').textContent = phoneBad ? '끝까지 입력해 주세요. 불완전한 번호로는 알림톡을 보낼 수 없어요.' : '';
+    q('#nA').textContent = F.adults; q('#nK').textContent = F.kids;
+    const over = F.adults + F.kids > v.cap;
+    q('#cCapErr').textContent = over ? `${v.name}은 최대 ${v.cap}인이에요` : '';
+    q('#cNotify').disabled = digits.length < 10;
+    q('#cChan').innerHTML = autoBlock() ? '<div class="mut" style="font-size:13px">등록하면 네이버·에어비앤비 달력에서도 이 날짜가 막혀요.</div>'
+      : `<div class="callout orange"><div class="tx"><b>채널 달력은 자동으로 막히지 않아요</b><span>에어비앤비에서 같은 날짜가 다시 팔릴 수 있어요. <a href="#" data-ch2 style="color:var(--accent-ink);font-weight:600">채널 연동</a>에서 자동 막기를 켜 주세요.</span></div></div>`;
+    const ok = free && F.a >= 0 && q('#cName').value.trim() && digits.length >= 10 && !over;
+    q('#cGo').disabled = !ok; q('#cGo').style.opacity = ok ? 1 : .35;
+  }
+  box.addEventListener('click', e => {
+    const t = e.target;
+    if (t === box || t.closest('[data-x]')) return box.remove();
+    if (t.closest('[data-ch2]')){ e.preventDefault(); box.remove(); return openChannels(); }
+    const alt = t.closest('[data-alt]'); if (alt){ F.villa = alt.dataset.alt; q('#cVilla').value = F.villa; return check(); }
+    const s = t.closest('[data-st]'); if (s){ const [k, d] = s.dataset.st.split(':'); F[k] = Math.max(k === 'adults' ? 1 : 0, F[k] + +d); return check(); }
+    const rt = t.closest('[data-rt]'); if (rt){ F.route = rt.dataset.rt; box.querySelectorAll('[data-rt]').forEach(b => b.classList.toggle('on', b === rt)); return; }
+    const py = t.closest('[data-py]'); if (py){ F.pay = py.dataset.py; box.querySelectorAll('[data-py]').forEach(b => b.classList.toggle('on', b === py)); return; }
+    if (t.id === 'cGo' && !t.disabled){
+      const r = createAdmin({villa:F.villa, a:F.a, b:F.b, name:q('#cName').value.trim(), phone:q('#cPhone').value, adults:F.adults, kids:F.kids, route:F.route + ' 예약', pay:F.pay, note:q('#cNote').value.trim(), notify:q('#cNotify').checked && !q('#cNotify').disabled});
+      box.remove(); S.tab = 'board'; S.offset = r.in - 1; render(); openDrawer(r.idx); toast(`${r.name}님 예약을 등록했어요`);
+    }
+  });
+  box.addEventListener('change', e => { if (e.target.id === 'cVilla') F.villa = e.target.value; check(); });
+  box.addEventListener('input', check);
+  check(); q('#cName').focus();
+}
+
+/* ---------- 판매 막기 ---------- */
+function openBlock(o){
+  const F = {villa:o.villa || 'v1', a:o.a ?? 1, b:o.b ?? 2, reason:'보수 공사'};
+  const box = document.createElement('div'); box.className = 'mscrim';
+  box.innerHTML = `<div class="dlg" role="dialog" aria-label="판매 막기"><div class="h"><div><h3>판매 막기</h3><p>보수 공사나 오너 사용처럼 예약을 받지 않을 기간을 막아요. 앱과 채널에서도 예약할 수 없게 돼요.</p></div><button class="x" data-x aria-label="닫기">${XI}</button></div>
+    <div class="b">
+      <div class="fl"><label>숙소</label><select class="inp" id="bVilla">${VILLAS.map(v => `<option value="${v.id}" ${F.villa === v.id ? 'selected' : ''}>${v.region} ${v.name}</option>`).join('')}</select></div>
+      <div class="fg"><div class="fl"><label>시작일</label><input class="inp" type="date" id="bA" value="${dateVal(F.a)}"></div><div class="fl"><label>다시 여는 날</label><input class="inp" type="date" id="bB" value="${dateVal(F.b)}"></div></div>
+      <div class="fl"><label>사유</label><div class="segb">${['보수 공사','오너 사용','청소·점검','기타'].map(x => `<button data-rs="${x}" class="${F.reason === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
+      <div class="fl"><label>메모</label><input class="inp" id="bNote" placeholder="예: 보일러 교체"></div>
+      <div id="bCheck"></div>
+    </div>
+    <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl primary" id="bGo">막기</button></div></div>`;
+  document.body.appendChild(box);
+  const q = s => box.querySelector(s);
+  function check(){
+    F.a = offVal(q('#bA').value); F.b = offVal(q('#bB').value); F.villa = q('#bVilla').value;
+    const c = F.b > F.a ? clashes(F.villa, F.a, F.b) : {res:[], blk:[]};
+    const ok = F.b > F.a && !c.res.length && !c.blk.length;
+    q('#bCheck').innerHTML = F.b <= F.a ? '<div class="err">다시 여는 날은 시작일 다음 날 이후여야 해요</div>'
+      : c.res.length ? `<div class="callout red"><div class="tx"><b>이 기간에 예약 ${c.res.length}건이 있어요</b><span>${c.res.map(r => `${esc(r.name)} ${md(r.in)} – ${md(r.out)}`).join(', ')}. 예약을 먼저 옮기거나 취소해야 막을 수 있어요.</span></div></div>`
+      : c.blk.length ? '<div class="err">이미 막힌 기간과 겹쳐요</div>'
+      : `<div class="mut" style="font-size:13px">${md(F.a)}부터 ${md(F.b)} 전날까지 ${F.b - F.a}박을 막아요.</div>`;
+    q('#bGo').disabled = !ok; q('#bGo').style.opacity = ok ? 1 : .35;
+  }
+  box.addEventListener('click', e => {
+    const t = e.target;
+    if (t === box || t.closest('[data-x]')) return box.remove();
+    const rs = t.closest('[data-rs]'); if (rs){ F.reason = rs.dataset.rs; box.querySelectorAll('[data-rs]').forEach(b => b.classList.toggle('on', b === rs)); return; }
+    if (t.id === 'bGo' && !t.disabled){ BLOCKS.push({villa:F.villa, in:F.a, out:F.b, reason:F.reason, note:q('#bNote').value.trim(), by:`jelin · ${md(0)}`}); saveBlocks(); box.remove(); S.tab = 'board'; render(); toast(`${vById[F.villa].name} ${md(F.a)} – ${md(F.b)} 판매를 막았어요`); }
+  });
+  box.addEventListener('change', check); box.addEventListener('input', check);
+  check();
+}
+
+/* ---------- 채널 연동 ---------- */
+function openChannels(){
+  const sync = R.filter(r => r.flags.includes('sync') && ACTIVE(r));
+  const sd = R.filter(r => r.flags.includes('syncdate'));
+  const cnt = c => R.filter(r => r.ch === c && ACTIVE(r) && r.out >= 0).length;
+  layer.innerHTML = `<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-label="채널 연동">
+    <div class="dr-head"><div class="row"><h3>채널 연동</h3><button class="x" data-close aria-label="닫기">${XI}</button></div><div class="when">마지막 동기화 오늘 10:20 · 10분마다 자동</div></div>
+    <div class="dr-body">
+      <div class="chc">
+        <div class="chcard"><span class="chdot" style="background:${CH['네이버'].c}"></span><div class="tx"><b>네이버 예약 <span class="mut" style="font-weight:500;font-size:13px">정상</span></b><span>다가오는 예약 ${cnt('네이버')}건 · 10:20 동기화</span></div></div>
+        <div class="chcard"><span class="chdot" style="background:${CH['에어비앤비'].c}"></span><div class="tx"><b>에어비앤비 ${sync.length ? BD(`반영 안 된 변경 ${sync.length}건`, 'orange', 'xs') : '<span class="mut" style="font-weight:500;font-size:13px">정상</span>'}</b>
+          <span>다가오는 예약 ${cnt('에어비앤비')}건 · ${sync.length ? sync.map(r => `${esc(r.name)} ${md(r.in)} 변경분`).join(', ') + '이 반영되지 않았어요' : '10:20 동기화'}</span></div>${sync.length ? '<button class="btn sm" data-resync>다시 동기화</button>' : ''}</div>
+        <div class="chcard"><span class="chdot" style="background:${CH['앱'].c}"></span><div class="tx"><b>베이컨하우스 앱 <span class="mut" style="font-weight:500;font-size:13px">실시간</span></b><span>다가오는 예약 ${cnt('앱')}건</span></div></div>
+      </div>
+      <div class="setrow"><div class="tx"><b>관리자 등록 예약을 채널 달력에도 막기</b><span>꺼져 있으면 전화로 받은 예약 날짜가 에어비앤비·네이버에서 다시 팔릴 수 있어요. 소석원 10.2 충돌이 이렇게 생겼어요.</span></div><span class="tgl"><input type="checkbox" id="autoB" ${autoBlock() ? 'checked' : ''}></span></div>
+      ${sd.length ? `<div class="callout orange"><div class="tx"><b>신청일 기록 이상 ${sd.length}건</b><span>채널 동기화가 신청일을 체크인·체크아웃 시각으로 덮어쓰고 있어요. 개발팀 확인이 필요해요.</span><a class="tbtn" href="#list&k=sync&cols=1" data-sdlist style="margin-top:4px">해당 예약 보기 ›</a></div></div>` : ''}
+    </div></aside>`;
+  layer.querySelector('[data-resync]')?.addEventListener('click', () => { sync.forEach(r => runAct(r, 'resync')); openChannels(); render(); toast('에어비앤비와 다시 동기화했어요'); });
+  layer.querySelector('#autoB').addEventListener('change', e => { try { localStorage.setItem('vh-ch-autoblock', e.target.checked ? '1' : '0'); } catch(x){} toast(e.target.checked ? '이제 관리자 등록 예약이 채널 달력에도 막혀요' : '채널 자동 막기를 껐어요'); });
+  layer.querySelector('[data-sdlist]')?.addEventListener('click', e => { e.preventDefault(); layer.innerHTML = ''; S.cols.created = true; go('list', 'sync'); });
+}
+
+const H = location.hash.slice(1);
+const PR = Object.fromEntries(H.split('&').slice(1).map(x => x.split('=').map(decodeURIComponent)));
+if (['today','board','list','month'].includes(H.split('&')[0])) S.tab = H.split('&')[0];
+if (PR.case){ S.caseMode = true; S.f = {q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false}; S.span = 'w1'; S.offset = -1; }
+if (PR.allclear) window.CASE_ALLCLEAR = true;
+if (PR.toast) try { sessionStorage.removeItem('vh-alert'); } catch(e){}
+if (PR.k){ S.key = PR.k; S.period = 'all'; }
+if (PR.cols){ S.cols.no = S.cols.created = true; }
+if (PR.q) S.f.q = PR.q;
+if (PR.region) S.f.regions = new Set([PR.region]);
+if (PR.span){ S.span = PR.span; S.offset = PR.span === 'm' ? -7 : PR.span === 'd1' ? 0 : -1; }
+if (PR.off) S.offset = +PR.off;
+render();
+if (PR.d) openDrawer(+PR.d);
+if (PR.create){ const [v, a, b] = PR.create.split(':'); openCreate({villa:v, a:+a, b:+b}); }
+if (PR.block){ const [v, a, b] = PR.block.split(':'); openBlock({villa:v, a:+a, b:+b}); }
+if (PR.channels) openChannels();
+try { if (localStorage.getItem('vh-anno') === '1' || /anno/.test(H)) setAnno(true); } catch(e){}
+addEventListener('resize', () => { if (S.tab === 'board') render(); });
+</script>
+</body>
+</html>

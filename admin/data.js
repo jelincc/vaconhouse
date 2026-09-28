@@ -48,10 +48,10 @@ const REGIONS = ['가평','양평','홍천','마포'];
 const TYPES = ['직영','위탁'];
 const VILLAS = [
   {id:'v1', name:'소석원',       region:'가평', type:'직영', cap:6, rate:390000, c:'#E86A33'},
-  {id:'v2', name:'캐빈 브리즈 A', region:'양평', type:'직영', cap:4, rate:190000, c:'#2F80ED'},
-  {id:'v3', name:'캐빈 브리즈 B', region:'양평', type:'직영', cap:4, rate:190000, c:'#27AE60'},
-  {id:'v4', name:'캐빈 브리즈 C', region:'양평', type:'직영', cap:4, rate:190000, c:'#9B51E0'},
-  {id:'v5', name:'캐빈 브리즈 D', region:'양평', type:'직영', cap:4, rate:190000, c:'#E2B000'},
+  {id:'v2', name:'캐빈 브리즈 A동', region:'양평', type:'직영', cap:4, rate:190000, c:'#2F80ED'},
+  {id:'v3', name:'캐빈 브리즈 B동', region:'양평', type:'직영', cap:4, rate:190000, c:'#27AE60'},
+  {id:'v4', name:'캐빈 브리즈 C동', region:'양평', type:'직영', cap:4, rate:190000, c:'#9B51E0'},
+  {id:'v5', name:'캐빈 브리즈 D동', region:'양평', type:'직영', cap:4, rate:190000, c:'#E2B000'},
   {id:'v6', name:'그로브',       region:'홍천', type:'위탁', cap:8, rate:450000, c:'#159A9C'},
   {id:'v7', name:'르 아르젠',     region:'마포', type:'위탁', cap:4, rate:260000, c:'#8E6C4E'},
 ];
@@ -64,9 +64,9 @@ const RAW = [
   ['v1','김태리','taeri.k@gmail.com','01023418890','2026-09-04','2026-09-05',2,0,0,'확정','결제완료','2026-08-21 20:14',''],
   ['v3','박준(네이버)',null,'010-3321-7781','2026-09-04','2026-09-05',2,0,0,'확정','채널정산','2026-08-30 09:12',''],
   ['v2','서성인','grunui2@gmail.com','01077470334','2026-09-05','2026-09-06',2,0,0,'확정','결제완료','2026-09-06 11:00',''],
-  ['v3','Jang-Sung(에어비앤비)',null,'010-9352-0033','2026-09-05','2026-09-06',2,0,0,'확정','채널정산','2026-09-06 11:00',''],
-  ['v4','혜정(에어비앤비)',null,'010-9747-0981','2026-09-05','2026-09-06',3,0,0,'확정','채널정산','2026-09-06 11:00',''],
-  ['v5','주현(에어비앤비)',null,'010-3654-8314','2026-09-05','2026-09-06',3,0,0,'확정','채널정산','2026-09-06 11:00',''],
+  ['v4','Jang-Sung(에어비앤비)',null,'010-9352-0033','2026-09-05','2026-09-06',2,0,0,'확정','채널정산','2026-09-06 11:00',''],
+  ['v5','혜정(에어비앤비)',null,'010-9747-0981','2026-09-05','2026-09-06',3,0,0,'확정','채널정산','2026-09-06 11:00',''],
+  ['v3','주현(에어비앤비)',null,'010-3654-8314','2026-09-05','2026-09-06',3,0,0,'확정','채널정산','2026-09-06 11:00',''],
   ['v6','명애',null,'010','2026-09-05','2026-09-06',5,0,0,'확정','결제완료','2026-09-06 11:00',''],
   ['v1','조재영','prinsnim@naver.com','01094238087','2026-09-05','2026-09-06',2,2,0,'확정','결제완료','2026-09-06 11:00',''],
   ['v1','이도현','dohyun.lee@naver.com','01055120931','2026-09-06','2026-09-07',2,0,0,'확정','결제완료','2026-08-28 13:40',''],
@@ -108,7 +108,7 @@ const RAW = [
   ['v7','정다은','daeun.j@gmail.com','01082204417','2026-09-29','2026-09-30',2,0,0,'확정','결제완료','2026-09-19 09:40','',{notify:true, clean:true}],
   ['v6','서준(네이버)',null,'010-4471-2093','2026-10-01','2026-10-03',4,0,0,'확정','채널정산','2026-09-27 22:30',''],
   ['v5','박지성',null,'010-3302-8817','2026-10-01','2026-10-02',3,0,0,'확정','결제대기','2026-09-26 14:05','전화 예약 · 무통장 입금 대기'],
-  ['v1','조석현',null,'010-9218-1533','2026-10-02','2026-10-03',2,0,0,'확정','결제완료','2026-09-27 17:38','전화 예약',{conflict:true}],
+  ['v1','조석현',null,'010-9218-1533','2026-10-02','2026-10-03',2,0,0,'확정','결제완료','2026-09-27 19:05','전화 예약',{conflict:true}],
   ['v1','태오(에어비앤비)',null,'010-5580-2204','2026-10-02','2026-10-04',3,0,0,'확정','채널정산','2026-09-28 06:51','',{conflict:true}],
   ['v3','이서연','seoyeon.l@naver.com','01073310028','2026-10-03','2026-10-04',2,1,0,'확정','결제완료','2026-09-24 19:22','소형견 1마리',{pet:true}],
   ['v4','하윤(에어비앤비)',null,'010','2026-10-03','2026-10-05',2,0,0,'확정','채널정산','2026-09-28 07:12',''],
@@ -168,7 +168,7 @@ function addBooking(a){ const r = build(a, R.length); R.push(r); try { const L =
 
 /* demo state survives page changes (예약 관리 ↔ 예약 상세) */
 const STORE = 'vh-res-state-v4';
-const KEEP = ['base','pay','seen','flags','memos','history','notices','in','out','phoneRaw','note','adults','kids','infants','pet'];
+const KEEP = ['villa','base','pay','seen','flags','memos','history','notices','in','out','phoneRaw','note','adults','kids','infants','pet'];
 try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); Object.entries(p).forEach(([i, o]) => Object.assign(R[+i], o)); } catch(e){}
 function save(r){ try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); p[r.idx] = Object.fromEntries(KEEP.map(k => [k, r[k]])); localStorage.setItem(STORE, JSON.stringify(p)); } catch(e){} }
 function resetDemo(){ try { Object.keys(localStorage).filter(k => /^vh-(res-state|res-extra|corp)/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){} }
@@ -180,6 +180,7 @@ function log(r, t){ r.history.unshift({t, m:`${nowStamp()} · jelin`, new:true})
 const ACTIVE = r => r.base !== '취소';
 function st(r){
   if (r.base === '취소') return '예약 취소';
+  if (r.base === '노쇼') return '노쇼';
   if (r.base === '취소요청') return '취소 요청';
   if (r.base === '변경요청') return '변경 요청';
   if (r.base === '이용완료' || r.out < 0) return '이용 완료';
@@ -187,11 +188,12 @@ function st(r){
   return '예약 확정';
 }
 /* 정상 상태는 텍스트, 사람이 봐야 하는 상태만 라벨 */
-const ST_DOT = {'예약 확정':'#0DBC7C','이용 중':'#1A1A1E','이용 완료':'#D5D8DC','예약 취소':'#D5D8DC'};
+const ST_DOT = {'예약 확정':'#0DBC7C','이용 중':'#1A1A1E','이용 완료':'#D5D8DC','예약 취소':'#D5D8DC','노쇼':'#949BA8'};
 function stHTML(r){
   const s = st(r);
   if (s === '취소 요청') return BD('취소 요청','red');
   if (s === '변경 요청') return BD('변경 요청','orange');
+  if (s === '노쇼') return BD('노쇼','grey');
   return `<span class="stt ${s==='이용 완료'||s==='예약 취소'?'mute':''}"><i style="background:${ST_DOT[s]}"></i>${s}${s==='이용 중' && r.out===0 ? ' · 오늘 퇴실' : ''}</span>`;
 }
 const PAY_LB = {'기업숙박권':'기업 숙박권','결제완료':'결제 완료','채널정산':'채널 정산','결제대기':'결제 대기','환불대기':'환불 대기','환불완료':'환불 완료'};
@@ -213,6 +215,7 @@ const ISSUE = {
   syncdate: {lb:'신청일 이상',   c:'grey',   ic:'sync',     sev:1},
 };
 function issues(r){
+  if (window.CASE_ALLCLEAR) return [];
   const L = [];
   const live = ACTIVE(r) && st(r) !== '이용 완료';
   if (live && r.flags.includes('conflict')) L.push('conflict');
@@ -268,12 +271,13 @@ const NAV = [
   ['콘텐츠/기록', ['CMS 관리','숙박권','예약 알림 설정','알림톡 기록']],
 ];
 function mountSide(){
+  setTimeout(mountAlert, 400);
   const n = R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
   document.querySelector('.side').innerHTML = `
-    <div class="brand"><a href="reservations.html">${LOGO}</a><small>ADMIN</small></div>
+    <div class="brand"><a href="./">${LOGO}</a><small>ADMIN</small></div>
     <nav class="nav">${NAV.map(([g, items]) => `<div class="nav-label">${g}</div>` + items.map(x => x === '예약 관리'
-      ? `<a href="reservations.html" class="on">예약 관리 <span class="cnt">${n}</span></a>` : `<a href="#" data-soon>${x}</a>`).join('')).join('')}</nav>
-    <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../index.html" id="logout">로그아웃</a></div>`;
+      ? `<a href="./" class="${/stats/.test(location.pathname) ? '' : 'on'}">예약 관리 <span class="cnt">${n}</span></a>` : x === '통계·매출' ? `<a href="stats" class="${/stats/.test(location.pathname) ? 'on' : ''}">통계·매출</a>` : `<a href="#" data-soon>${x}</a>`).join('')).join('')}</nav>
+    <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../" id="logout">로그아웃</a></div>`;
   try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
   document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} resetDemo(); };
   document.querySelectorAll('[data-soon]').forEach(a => a.onclick = e => { e.preventDefault(); toast(`${a.textContent} 화면은 준비 중이에요`, false); });
@@ -315,3 +319,79 @@ function nextStep(r){
   return [null,null];
 }
 function runAct(r, k){ const msg = ACT[k].run(r); save(r); return msg; }
+
+
+/* ---------- 판매 막기 · 가용성 · 환불 · 변경 ---------- */
+const BLKEY = 'vh-res-blocks-v1';
+let BLOCKS = [{villa:'v6', in:14, out:16, reason:'보수 공사', note:'보일러 교체', by:'jelin · 9.20'}];
+try { const b = JSON.parse(localStorage.getItem(BLKEY) || 'null'); if (b) BLOCKS = b; } catch(e){}
+const saveBlocks = () => { try { localStorage.setItem(BLKEY, JSON.stringify(BLOCKS)); } catch(e){} };
+const isoOf = o => { const d = dOf(o); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+/* what stands in the way of [a, b) at a villa */
+function clashes(villa, a, b, except){
+  return {
+    res: R.filter(r => r !== except && r.villa === villa && r.base !== '취소' && r.in < b && a < r.out),
+    blk: BLOCKS.filter(x => x.villa === villa && x.in < b && a < x.out),
+  };
+}
+const freeFor = (villa, a, b, except) => { const c = clashes(villa, a, b, except); return !c.res.length && !c.blk.length; };
+/* once a move clears an overlap, drop the stale conflict flags */
+function refreshConflicts(){
+  R.filter(r => r.flags.includes('conflict')).forEach(r => {
+    if (!clashes(r.villa, r.in, r.out, r).res.length){ r.flags = r.flags.filter(f => f !== 'conflict'); save(r); }
+  });
+}
+const POLICY = '체크인 7일 전까지 100% · 3일 전까지 50% · 이후 환불 없음';
+function refundOf(r){
+  const p = price(r).sub, d = r.in;
+  const rate = d >= 7 ? 1 : d >= 3 ? .5 : 0;
+  return {rate, amount: Math.round(p * rate / 100) * 100, paid: p, days: d};
+}
+function createAdmin(o){
+  const a = [o.villa, o.name, null, o.phone.replace(/\D/g, ''), isoOf(o.a), isoOf(o.b), o.adults, o.kids, 0, '확정', o.pay, `2026-09-28 ${new Date().toTimeString().slice(0,5)}`, [o.route, o.note].filter(Boolean).join(' · ')];
+  const r = addBooking(a);
+  r.seen = true; r.history = [{t:`예약 등록 · 관리자 (${o.route})`, m:`${nowStamp()} · jelin`, new:true}];
+  r.notices = o.notify ? [{t:'예약 확정 알림톡', m:nowStamp(), ok:true}] : [];
+  save(r); return r;
+}
+
+
+/* ---------- 상단 토스트: 실패·긴급 건 안내 ---------- */
+function alertKinds(){
+  const K = [['conflict','예약 충돌'], ['notify','알림 발송 실패'], ['cancel','신규 취소 요청'], ['sync','채널 연동 오류']];
+  return K.map(([k, lb]) => ({k, lb, L: R.filter(r => issues(r).includes(k))})).filter(x => x.L.length);
+}
+function alertMsg(A){
+  if (A.length === 1) return `${A[0].lb} 건이 있어요`;
+  if (A.length === 2) return `${A[0].lb} 및 ${A[1].lb} 건이 있어요`;
+  return `${A[0].lb} 외 ${A.length - 1}건의 확인 필요 사항이 있어요`;
+}
+/* 한 건이면 그 예약으로, 한 종류 여러 건이면 조건 목록으로, 여러 종류면 예약 관리로 */
+function alertTarget(A){
+  if (A.length === 1 && (A[0].L.length === 1 || A[0].k === 'conflict')) return `reservation?id=${A[0].L[0].idx}`;
+  if (A.length === 1) return `./#list&k=${A[0].k}`;
+  return './#today';
+}
+function mountAlert(){
+  if (window.__alertTried || !/\/admin\//.test(location.pathname) || window.CASE_ALLCLEAR) return;
+  window.__alertTried = true;
+  /* 오늘 할 일 탭은 같은 내용을 이미 크게 보여주니 토스트를 띄우지 않아요 */
+  if (document.querySelector('#tabs button.on')?.dataset.t === 'today') return;
+  const A = alertKinds(); if (!A.length) return;
+  const sig = A.map(a => a.k + a.L.map(r => r.idx).join('.')).join('|');
+  try { if (sessionStorage.getItem('vh-alert') === sig) return; sessionStorage.setItem('vh-alert', sig); } catch(e){}
+  const red = A.some(a => a.k !== 'sync');
+  const el = document.createElement('div'); el.className = 'topalert'; el.setAttribute('role', 'alert');
+  el.innerHTML = `<button class="ta-go"><span class="ta-dot ${red ? '' : 'o'}"></span><span class="ta-t">${alertMsg(A)}</span><span class="ta-l">확인하기 ${ICON.chev}</span></button><button class="ta-x" aria-label="닫기">✕</button>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('in'));
+  const bye = () => { el.classList.remove('in'); setTimeout(() => el.remove(), 250); };
+  el.querySelector('.ta-x').onclick = bye;
+  el.querySelector('.ta-go').onclick = () => {
+    const url = new URL(alertTarget(A), location.href);
+    bye();
+    if (url.pathname === location.pathname && url.search === location.search){ location.hash = url.hash; location.reload(); }
+    else location.href = url.href;
+  };
+  setTimeout(bye, 12000);
+}

@@ -151,16 +151,20 @@ body{background:#fff}
 </div>
 <script src="../admin/data.js"></script>
 <script src="../corp/corp-data.js"></script>
+<script src="../admin/cases.js" defer></script>
 <script>
 const $ = id => document.getElementById(id);
 const PERSONAS = [
   {email:'seoyun.lee@noeul.io', name:'이서윤', phone:'010-4402-1187', hint:'이용 권한이 있는 직원'},
   {email:'jihoon.park@noeul.io', name:'박지훈', phone:'010-9934-2210', hint:'소속 확인됨 · 권한 꺼짐'},
   {email:'wooseok.shin@noeul.io', name:'신우석', phone:'010-9102-3358', hint:'방금 앱에 가입한 직원'},
+  {email:'hayul.baek@noeul.io', name:'백하율', phone:'010-2290-4471', hint:'소속 확인을 기다리는 직원'},
 ];
 let who; try { who = localStorage.getItem('vh-corp-persona') || PERSONAS[0].email; } catch(e){ who = PERSONAS[0].email; }
 const me = () => PERSONAS.find(p => p.email === who);
-const state = () => { const e = empOf(who); return !e ? '미소속' : permState(e); };
+let OVR = {}; /* 케이스 보기용 임시 상태 (저장 안 함) */
+const state = () => { if (OVR.state) return OVR.state; const e = empOf(who); return !e ? '미소속' : permState(e); };
+const leftNow = () => OVR.left ?? nights().left;
 let stack = [{s:'home'}];
 const cur = () => stack[stack.length - 1];
 const push = o => { stack.push(o); draw(); $('scr').querySelector('.body')?.scrollTo(0, 0); };
@@ -176,7 +180,7 @@ function side(){
   const step = s === '미소속' ? 2 : s === '확인 대기' ? 2 : s === '권한 없음' ? 3 : 4;
   const li = (n, t, sub, extra = '') => `<li class="${n < step ? 'done' : n === step ? 'now' : ''}"><span class="n">${n < step ? '✓' : n}</span><div><b>${t}</b><small>${sub}</small>${extra ? `<div>${extra}</div>` : ''}</div></li>`;
   $('side').innerHTML = `
-    <a href="../index.html">${LOGO}</a>
+    <a href="../">${LOGO}</a>
     <h1>회사 숙박권은<br>기존 앱에서 그대로 써요</h1>
     <p>직원용 앱을 따로 만들지 않아요. 소속이 확인되고 이용 권한이 켜진 직원에게만 회사 숙박권 예약이 보여요.</p>
     <div class="persona">${PERSONAS.map(p => `<button data-p="${p.email}" class="${p.email === who ? 'on' : ''}"><span class="av">${p.name[0]}</span><span class="tx"><b>${p.name}</b><small>${(() => { const x = empOf(p.email); return !x ? '소속 확인 전' : permState(x) === '확인 대기' ? '소속 확인 대기' : permState(x) === '이용 가능' ? '이용 권한 있음' : '소속 확인됨 · 권한 꺼짐'; })()}</small></span></button>`).join('')}</div>
@@ -184,12 +188,12 @@ function side(){
       ${li(1, '앱 가입', '기존 베이컨하우스 앱에 가입')}
       ${li(2, '소속 확인', s === '미소속' ? '앱에서 회사 이메일로 확인을 요청해요' : s === '확인 대기' ? `${e.req} 요청 · 인사팀이 확인 중` : '인사팀이 확인했어요', s === '확인 대기' ? '<a href="../corp/">기업 관리자 화면에서 확인하기 ›</a>' : '')}
       ${li(3, '이용 권한', s === '권한 없음' ? '인사팀이 권한을 켜면 바로 쓸 수 있어요' : step > 3 ? `${e.since}부터 이용 가능` : '소속 확인 뒤에 켤 수 있어요', s === '권한 없음' ? '<a href="../corp/">기업 관리자 화면에서 켜기 ›</a>' : '')}
-      ${li(4, '앱에서 직접 예약', step === 4 ? `회사 잔여 ${nights().left}박 안에서 승인 없이 예약` : '권한이 켜지면 예약할 수 있어요')}
+      ${li(4, '앱에서 직접 예약', step === 4 ? `회사 잔여 ${leftNow()}박 안에서 승인 없이 예약` : '권한이 켜지면 예약할 수 있어요')}
     </ol>
-    <div class="links"><a href="../corp/">기업 관리자 화면</a><a href="../admin/reservations.html#board">본사 예약 보드</a><button id="reset">시안 초기화</button></div>`;
+    <div class="links"><a href="../corp/">기업 관리자 화면</a><a href="../admin/#board">본사 예약 보드</a><button id="reset">시안 초기화</button></div>`;
 }
 $('side').addEventListener('click', e => {
-  const p = e.target.closest('[data-p]'); if (p){ who = p.dataset.p; try { localStorage.setItem('vh-corp-persona', who); } catch(x){} home(); return; }
+  const p = e.target.closest('[data-p]'); if (p){ OVR = {}; who = p.dataset.p; try { localStorage.setItem('vh-corp-persona', who); } catch(x){} home(); return; }
   if (e.target.id === 'reset'){ resetDemo(); try { localStorage.removeItem('vh-corp-persona'); } catch(x){} location.reload(); }
 });
 
@@ -204,7 +208,9 @@ function frame(title, body, cta = '', tab = false){
 function sHome(){
   const s = state(), N = nights(), up = MY().filter(r => cst(r) === '예정' || cst(r) === '이용 중').sort((a, b) => a.in - b.in);
   let corp = '';
-  if (s === '이용 가능') corp = `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big"><em>${N.left}박</em> 남았어요</div><div class="sub">${COMPANY.until}까지 · 동료들과 함께 써요</div><button class="btn" data-go="villas">회사 숙박권으로 예약하기</button></div>`;
+  const L = leftNow();
+  if (s === '이용 가능') corp = L <= 0 ? `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big">모두 썼어요</div><div class="sub">추가 숙박권은 인사팀에 문의해 주세요. 이미 한 예약은 그대로예요.</div><button class="btn" disabled style="opacity:.35">회사 숙박권으로 예약하기</button></div>`
+    : `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big"><em>${L}박</em> 남았어요</div><div class="sub">${L <= 5 ? '얼마 남지 않았어요. 동료들과 나눠 쓰는 숙박권이에요.' : `${COMPANY.until}까지 · 동료들과 함께 써요`}</div><button class="btn" data-go="villas">회사 숙박권으로 예약하기</button></div>`;
   else if (s === '확인 대기') corp = `<div class="soft orange"><b>${COMPANY.name}에서 소속을 확인하고 있어요</b><span>확인되고 이용 권한이 켜지면 여기에 회사 숙박권이 생겨요. 알림으로 알려드릴게요.</span></div>`;
   else if (s === '권한 없음') corp = `<div class="soft"><b>${COMPANY.name} 소속으로 확인됐어요</b><span>인사팀에서 이용 권한을 켜면 회사 숙박권으로 예약할 수 있어요.</span></div>`;
   else corp = `<div class="soft"><b>회사에서 받은 숙박권이 있나요?</b><span>회사 이메일로 소속을 확인하면 회사 숙박권으로 예약할 수 있어요.</span><button class="btn primary" data-go="affil">소속 확인 요청하기</button></div>`;
@@ -217,12 +223,14 @@ function sHome(){
     <div class="sec">이번 주말 머물기 좋은 별장</div>
     <div class="hscroll">${recs.map(v => `<button class="vcard" data-v="${v.id}"><div class="img" style="${IMG(v.id)}"></div><b>${v.region} ${v.name}</b><small>최대 ${v.cap}인</small></button>`).join('')}</div>`, '', true);
 }
+const mailOk = c => (c.mail ?? me().email).trim().toLowerCase().endsWith('@' + COMPANY.domain);
 function sAffil(){
   const c = cur();
   return frame('', `
     <div class="h2">회사 소속을 확인할게요<small>회사 이메일로 인증하면 인사팀이 확인해요.</small></div>
     <div class="field"><label>회사</label><input class="inp" value="${COMPANY.name}" readonly></div>
-    <div class="field"><label>회사 이메일</label><div class="row2"><input class="inp" id="mail" value="${me().email}"><button class="btn" style="height:52px;border-radius:14px" data-code>${c.sent ? '다시 받기' : '인증번호 받기'}</button></div></div>
+    <div class="field"><label>회사 이메일</label><div class="row2"><input class="inp" id="mail" value="${esc(c.mail ?? me().email)}" autocomplete="off"><button class="btn" style="height:52px;border-radius:14px" data-code ${mailOk(c) ? '' : 'disabled style="height:52px;border-radius:14px;opacity:.4"'}>${c.sent ? '다시 받기' : '인증번호 받기'}</button></div>
+      ${mailOk(c) ? '' : `<span class="bad" style="font-size:13px">회사 이메일(@${COMPANY.domain})로만 확인할 수 있어요. 개인 이메일은 인증되지 않아요.</span>`}</div>
     ${c.sent ? `<div class="field"><label>인증번호</label><input class="inp num" value="482913"><span class="ok">인증됐어요</span></div>` : ''}`,
     `<div class="cta"><button class="btn primary" data-req ${c.sent ? '' : 'disabled style="opacity:.35"'}>확인 요청하기</button></div>`);
 }
@@ -231,7 +239,7 @@ function sVillas(){
   const vs = VILLAS.filter(v => rg === '전체' || v.region === rg);
   const freeWeekend = v => { let o = 1; while (dOf(o).getDay() !== 5) o++; return !booked(v.id, o) || !booked(v.id, o + 1); };
   return frame('회사 숙박권 예약', `
-    <div class="h2">어디로 갈까요?<small>회사 잔여 ${nights().left}박 안에서 예약할 수 있어요.</small></div>
+    <div class="h2">어디로 갈까요?<small>회사 잔여 ${leftNow()}박 안에서 예약할 수 있어요.</small></div>
     <div class="chips">${['전체', ...REGIONS].map(x => `<button data-rg="${x}" class="${rg === x ? 'on' : ''}">${x}</button>`).join('')}</div>
     ${vs.map(v => `<button class="vbig" data-v="${v.id}"><div class="img" style="${IMG(v.id)}">${freeWeekend(v) ? BD('이번 주말 가능','green') : BD('이번 주말 마감','grey')}</div><b>${v.region} ${v.name}</b><small>최대 ${v.cap}인 · ${v.type === '직영' ? '베이컨하우스 직영' : '위탁 운영'}</small></button>`).join('')}`);
 }
@@ -251,23 +259,23 @@ function monthGrid(c){
 }
 function rangeOk(c){ if (c.a == null || c.b == null) return false; for (let o = c.a; o < c.b; o++) if (booked(c.v, o, c.r)) return false; return true; }
 function sDates(){
-  const c = cur(), v = vById[c.v], N = nights();
+  const c = cur(), v = vById[c.v];
   const n = c.b != null ? c.b - c.a : 0;
   const give = c.r ? c.r.out - c.r.in : 0;
-  const left = N.left + give;
+  const left = leftNow() + give;
   const ok = rangeOk(c) && n <= left;
   const note = c.a == null ? '체크인 날짜를 골라 주세요' : c.b == null ? '체크아웃 날짜를 골라 주세요'
     : !rangeOk(c) ? '사이에 이미 예약된 날이 있어요' : n > left ? `회사 잔여 ${left}박보다 길어요`
     : `${mdw(c.a)} – ${mdw(c.b)} · 숙박권 <b>${n}박</b> · 예약 후 잔여 <b>${left - n}박</b>`;
   return frame(`${v.region} ${v.name}`, `
-    <div class="h2" style="margin-bottom:10px">${c.r ? '바꿀 날짜를 골라 주세요' : '언제 머무를까요?'}<small>취소선이 있는 날은 이미 예약됐어요.</small></div>
+    <div class="h2" style="margin-bottom:10px">${c.r ? '바꿀 날짜를 골라 주세요' : '언제 머무를까요?'}<small>취소선이 있는 날은 예약할 수 없어요.${BLOCKS.some(x => x.villa === c.v && x.out > 0) ? ` ${BLOCKS.filter(x => x.villa === c.v && x.out > 0).map(x => `${md(x.in)} – ${md(x.out)} ${x.reason}`).join(', ')} 기간이 포함돼요.` : ''}</small></div>
     ${monthGrid(c)}
     <div class="guests"><div><b style="font-size:16px">인원</b><div class="mut" style="font-size:13px">최대 ${v.cap}인</div></div><span class="stepper"><button data-g="-1">−</button><span>${c.g}</span><button data-g="1">+</button></span></div>`,
     `<div class="cta"><div class="note">${note}</div><button class="btn primary" data-book ${ok ? '' : 'disabled style="opacity:.35"'}>${c.r ? '이 날짜로 바꾸기' : n ? `${n}박 예약하기` : '예약하기'}</button></div>`);
 }
 function sDone(){
   const r = R[cur().idx];
-  return frame(null, `<div class="fin">${ICON.check}<h2>${cur().changed ? '일정을 바꿨어요' : '예약했어요'}</h2><p>${vFull(r.villa)}<br>${mdw(r.in)} – ${mdw(r.out)} · ${r.out - r.in}박</p><p style="margin-top:14px;color:var(--ink-3);font-size:14px">회사 숙박권 잔여 ${nights().left}박</p></div>`,
+  return frame(null, `<div class="fin">${ICON.check}<h2>${cur().changed ? '일정을 바꿨어요' : '예약했어요'}</h2><p>${vFull(r.villa)}<br>${mdw(r.in)} – ${mdw(r.out)} · ${r.out - r.in}박</p><p style="margin-top:14px;color:var(--ink-3);font-size:14px">회사 숙박권 잔여 ${leftNow()}박</p></div>`,
     `<div class="cta"><div class="two" style="margin:0"><button class="btn" data-tab="home">홈으로</button><button class="btn primary" data-tab="my">내 예약 보기</button></div></div>`);
 }
 function sMy(){
@@ -317,8 +325,8 @@ $('scr').addEventListener('click', e => {
     return push({s:'dates', v:v.dataset.v, m:0, g:2});
   }
   const rg = t.closest('[data-rg]'); if (rg){ c.rg = rg.dataset.rg; return draw(); }
-  if (t.closest('[data-code]')){ c.sent = true; return draw(); }
-  if (t.closest('[data-req]')){ requestAffil(me()); home(); return ptoast('확인을 요청했어요. 인사팀이 확인하면 알려드릴게요'); }
+  if (t.closest('[data-code]') && mailOk(c)){ c.sent = true; return draw(); }
+  if (t.closest('[data-req]')){ if (!c.sent || !mailOk(c)) return; requestAffil(me()); home(); return ptoast('확인을 요청했어요. 인사팀이 확인하면 알려드릴게요'); }
   const m = t.closest('[data-m]'); if (m && !m.disabled){ c.m += +m.dataset.m; return draw(); }
   const d = t.closest('[data-d]'); if (d && !d.disabled){
     const o = +d.dataset.d;
@@ -339,8 +347,22 @@ $('scr').addEventListener('click', e => {
   if (t.closest('[data-cancel]')){ const r = R[c.idx];
     return sheet('예약을 취소할까요?', `${vFull(r.villa)} ${mdw(r.in)} – ${mdw(r.out)} 예약이 취소되고, 숙박권 ${r.out - r.in}박이 회사 잔여로 돌아가요.`, '예약 취소', () => { r.base = '취소'; r.pay = '환불완료'; log(r, '직원 앱에서 예약 취소 · 숙박권 반환'); save(r); pop(); ptoast(`취소했어요. 숙박권 ${r.out - r.in}박이 돌아갔어요`); }); }
 });
-{ const H = location.hash; const pm = H.match(/p=(\d)/); if (pm) who = PERSONAS[+pm[1]].email;
-  if (/s=villas/.test(H)) stack.push({s:'villas'}); if (/s=dates/.test(H)) stack.push({s:'dates', v:'v7', m:0, g:2, a:19, b:21}); if (/s=my/.test(H)) stack = [{s:'my'}]; if (/s=affil/.test(H)) stack.push({s:'affil', sent:true}); }
+{ const PR = Object.fromEntries(location.hash.slice(1).split('&').filter(Boolean).map(x => { const [k, ...v] = x.split('='); return [k, decodeURIComponent(v.join('='))]; }));
+  if (PR.p != null) who = PERSONAS[+PR.p].email;
+  if (PR.left != null) OVR.left = +PR.left;
+  if (PR.state === 'off') OVR.state = '권한 없음';
+  const i = PR.i != null ? +PR.i : null;
+  switch (PR.s){
+    case 'villas': stack.push({s:'villas'}); break;
+    case 'dates': stack.push({s:'villas'}, {s:'dates', v:PR.v || 'v7', m:0, g:2, a:PR.a != null ? +PR.a : null, b:PR.b != null ? +PR.b : null}); break;
+    case 'done': { const r = MY().filter(x => cst(x) === '예정').sort((a, b) => a.in - b.in)[0]; if (r) stack.push({s:'done', idx:r.idx}); break; }
+    case 'my': stack = [{s:'my'}]; break;
+    case 'open': stack = [{s:'my'}, {s:'open', idx:i}]; break;
+    case 'change': { const r = R[i]; stack = [{s:'my'}, {s:'open', idx:i}, {s:'dates', v:r.villa, m:r.in > 34 ? 1 : 0, g:r.adults, r, a:r.in, b:r.out}]; break; }
+    case 'cancel': stack = [{s:'my'}, {s:'open', idx:i}]; setTimeout(() => $('scr').querySelector('[data-cancel]')?.click(), 60); break;
+    case 'affil': stack.push({s:'affil', sent:!PR.mail, mail:PR.mail}); break;
+  }
+}
 draw();
 </script>
 </body>

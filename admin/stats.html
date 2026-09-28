@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
+<title>VACON house 통계·매출</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="admin.css">
+<style>
+.wrap{max-width:1320px;display:flex;flex-direction:column;gap:20px}
+.bar2{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.kpi{padding:18px 22px;border-right:1px solid var(--line)}
+.kpi:last-child{border-right:0}
+.kpi small{display:block;font-size:13.5px;color:var(--ink-3);font-weight:500}
+.kpi b{display:block;font-size:28px;font-weight:700;letter-spacing:-.03em;margin:4px 0 2px}
+.kpi b em{font-style:normal;font-size:15px;font-weight:600;margin-left:2px}
+.kpi span{font-size:13px;color:var(--ink-3)}
+.kpi .up{color:var(--ok-ink)}
+.kpi .dn{color:var(--danger-ink)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+.card > h3 small{font-size:13px;color:var(--ink-3);font-weight:500}
+.card > h3 .tbtn{margin-left:auto}
+.cols{display:flex;align-items:flex-end;gap:14px;height:220px;padding:24px 4px 0;border-bottom:1px solid var(--line);position:relative}
+.cols .gl{position:absolute;left:0;right:0;border-top:1px solid #F0F1F3}
+.cols .gl span{position:absolute;left:0;top:-9px;font-size:11px;color:var(--ink-4);background:#fff;padding-right:4px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative;z-index:1;cursor:default}
+.col i{display:block;width:24px;max-width:70%;background:#D5D8DC;border-radius:4px 4px 0 0}
+.col.on i{background:var(--ink)}
+.col:hover i{background:var(--ink-3)}
+.col.on:hover i{background:var(--ink)}
+.col .v{font-size:12px;color:var(--ink-3);margin-bottom:4px;font-weight:600}
+.col.on .v{color:var(--ink)}
+.xl{display:flex;gap:14px;padding:8px 4px 0}
+.xl span{flex:1;text-align:center;font-size:12.5px;color:var(--ink-3)}
+.xl span.on{color:var(--ink);font-weight:700}
+.hb{display:flex;flex-direction:column;gap:12px}
+.hr{display:grid;grid-template-columns:148px 1fr 64px;gap:12px;align-items:center;font-size:14px}
+.hr .lb{display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hr .lb i{width:8px;height:8px;border-radius:2px;flex:none}
+.hr .tr{height:12px;background:var(--surface-2);border-radius:0 4px 4px 0;position:relative}
+.hr .tr b{position:absolute;left:0;top:0;bottom:0;background:var(--ink);border-radius:0 4px 4px 0}
+.hr .n{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.hr .n small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:500}
+.cum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cum div{background:var(--surface-2);border-radius:14px;padding:14px 16px}
+.cum small{display:block;font-size:13px;color:var(--ink-3)}
+.cum b{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:4px}
+.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl th{color:var(--ink-3);font-weight:600;font-size:12.5px}
+.tip{position:fixed;z-index:80;pointer-events:none;background:rgba(26,26,30,.94);color:#fff;border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.5;box-shadow:var(--shadow)}
+.tip b{font-size:13.5px}
+.note{font-size:12.5px;color:var(--ink-3)}
+@media (max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}.kpi:nth-child(3){border-right:0}.kpi:nth-child(-n+3){border-bottom:1px solid var(--line)}.grid2{grid-template-columns:1fr}.cum{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side"></aside>
+  <main class="main"><div class="wrap" id="wrap"></div></main>
+</div>
+<div class="tip" id="tip" hidden></div>
+<script src="data.js"></script>
+<script src="cases.js" defer></script>
+<script>
+/* 3–8월은 운영 시스템 월별 집계(시안용 예시), 9월은 예약 데이터에서 직접 계산 */
+const HIST = [
+  {m:3, res:31, cancel:7, occ:.19, rev:11200000},
+  {m:4, res:36, cancel:9, occ:.22, rev:12900000},
+  {m:5, res:40, cancel:8, occ:.24, rev:14200000},
+  {m:6, res:44, cancel:10, occ:.26, rev:15600000},
+  {m:7, res:58, cancel:13, occ:.34, rev:21500000},
+  {m:8, res:55, cancel:12, occ:.31, rev:20200000},
+];
+const SEP0 = -27, SEP1 = 3; // 9.1 – 10.1 (exclusive)
+const inSep = r => r.in >= SEP0 && r.in < SEP1;
+function sept(){
+  const L = R.filter(inSep), live = L.filter(r => r.base !== '취소');
+  const nightsIn = (r, a, b) => Math.max(0, Math.min(r.out, b) - Math.max(r.in, a));
+  const vn = v => R.filter(r => r.villa === v && r.base !== '취소').reduce((s, r) => s + nightsIn(r, SEP0, SEP1 - 1), 0);
+  const days = 30, tot = VILLAS.reduce((s, v) => s + vn(v.id), 0);
+  const rev = live.reduce((s, r) => s + price(r).sub, 0), nts = live.reduce((s, r) => s + (r.out - r.in), 0);
+  return {m:9, res:L.length, cancel:L.length - live.length, occ:tot / (VILLAS.length * days), rev, adr: nts ? rev / nts : 0,
+    villas: VILLAS.map(v => ({v, occ: vn(v.id) / days, n: vn(v.id)})),
+    ch: Object.keys(CH).map(c => ({c, n: live.filter(r => r.ch === c).length}))};
+}
+const S9 = sept();
+const MONTHS = [...HIST.map(h => ({...h, adr: h.rev / Math.round((h.res - h.cancel) * 1.3)})), S9];
+let sel = 9, tables = {};
+const pct = x => (x * 100).toFixed(1).replace(/\.0$/, '') + '%';
+const man = n => n >= 1e8 ? (n / 1e8).toFixed(1) + '억' : Math.round(n / 1e4).toLocaleString() + '만';
+const delta = (a, b, fmt, invert) => { if (b == null) return ''; const d = a - b; if (!d) return '<span>지난달과 같아요</span>'; const good = invert ? d < 0 : d > 0; return `<span class="${good ? 'up' : 'dn'}">지난달보다 ${fmt(Math.abs(d))} ${d > 0 ? '늘었어요' : '줄었어요'}</span>`; };
+
+function draw(){
+  const M = MONTHS.find(x => x.m === sel), P = MONTHS.find(x => x.m === sel - 1);
+  const cr = M.cancel / M.res, pcr = P ? P.cancel / P.res : null;
+  const maxRes = Math.ceil(Math.max(...MONTHS.map(x => x.res)) / 50) * 50;
+  const grid = [0, .5, 1].map(f => `<div class="gl" style="bottom:${f * 196}px"><span>${Math.round(maxRes * f)}</span></div>`).join('');
+  document.getElementById('wrap').innerHTML = `
+    <div class="pagehead"><div><h1>통계·매출</h1><p>예약관리 화면에서 옮겨 온 누적 숫자와 기간별 추이예요. 체크인 날짜 기준으로 셉니다.</p></div></div>
+    <div class="bar2"><div class="seg">${MONTHS.slice(-4).map(x => `<button data-m="${x.m}" class="${x.m === sel ? 'on' : ''}">${x.m}월${x.m === 9 ? ' · 28일까지' : ''}</button>`).join('')}</div><span class="note">3–8월은 월별 집계, 9월은 예약 데이터로 계산한 시안 값이에요. 9월은 28일까지라 지난달 전체와 비교해요.</span></div>
+    <section class="kpis">
+      <div class="kpi"><small>예약 수</small><b class="num">${M.res}<em>건</em></b>${delta(M.res, P?.res, x => x + '건')}</div>
+      <div class="kpi"><small>취소율</small><b class="num">${pct(cr)}</b>${delta(cr, pcr, x => pct(x) + 'p', true)}</div>
+      <div class="kpi"><small>가동률</small><b class="num">${pct(M.occ)}</b>${delta(M.occ, P?.occ, x => pct(x) + 'p')}</div>
+      <div class="kpi"><small>숙박 매출</small><b class="num">${man(M.rev)}<em>원</em></b>${delta(M.rev, P?.rev, x => man(x) + '원')}</div>
+      <div class="kpi"><small>1박 평균 요금</small><b class="num">${Math.round(M.adr / 1000).toLocaleString()}<em>천원</em></b>${delta(Math.round(M.adr / 1000), P ? Math.round(P.adr / 1000) : null, x => x.toLocaleString() + '천원')}</div>
+    </section>
+    <div class="grid2">
+      <section class="card"><h3>월별 예약 수 <small>체크인 기준 · 취소 포함</small><button class="tbtn" data-t="mon">${tables.mon ? '차트로 보기' : '표로 보기'}</button></h3>
+        ${tables.mon ? `<table class="tbl"><thead><tr><th>월</th><th>예약</th><th>취소</th><th>취소율</th><th>가동률</th><th>매출</th></tr></thead><tbody>${MONTHS.map(x => `<tr><td>${x.m}월</td><td>${x.res}</td><td>${x.cancel}</td><td>${pct(x.cancel / x.res)}</td><td>${pct(x.occ)}</td><td>${man(x.rev)}원</td></tr>`).join('')}</tbody></table>`
+        : `<div class="cols">${grid}${MONTHS.map(x => `<div class="col ${x.m === sel ? 'on' : ''}" data-tip="${x.m}월|예약 ${x.res}건 · 취소 ${x.cancel}건|취소율 ${pct(x.cancel / x.res)} · 가동률 ${pct(x.occ)}"><span class="v">${x.m === sel || x.m === 8 ? x.res : ''}</span><i style="height:${x.res / maxRes * 196}px"></i></div>`).join('')}</div>
+          <div class="xl">${MONTHS.map(x => `<span class="${x.m === sel ? 'on' : ''}">${x.m}월</span>`).join('')}</div>`}
+      </section>
+      <section class="card"><h3>누적 <small>운영 시작 이후 · 예약관리 상단에서 옮겨 왔어요</small></h3>
+        <div class="cum"><div><small>전체 예약</small><b class="num">564</b></div><div><small>취소된 예약 · 요청 포함</small><b class="num">${152 + R.filter(r => r.base === '취소요청').length}</b></div><div><small>체크아웃 완료</small><b class="num">342</b></div><div><small>취소 완료</small><b class="num">152</b></div></div>
+        <p class="note" style="margin:12px 0 0">누적 취소율 ${pct(152 / 564)} · 전체 예약에서 이용 중·예정 예약 70건을 뺀 값이 체크아웃 완료예요.</p>
+      </section>
+    </div>
+    ${sel === 9 ? `<div class="grid2">
+      <section class="card"><h3>숙소별 가동률 <small>9월 · 판매 가능 30박 기준</small><button class="tbtn" data-t="vil">${tables.vil ? '차트로 보기' : '표로 보기'}</button></h3>
+        ${tables.vil ? `<table class="tbl"><thead><tr><th>숙소</th><th>예약된 박</th><th>가동률</th></tr></thead><tbody>${[...S9.villas].sort((a, b) => b.occ - a.occ).map(x => `<tr><td>${x.v.region} ${x.v.name}</td><td>${x.n}박</td><td>${pct(x.occ)}</td></tr>`).join('')}</tbody></table>`
+        : `<div class="hb">${[...S9.villas].sort((a, b) => b.occ - a.occ).map(x => `<div class="hr" data-tip="${x.v.region} ${x.v.name}|${x.n}박 / 30박|가동률 ${pct(x.occ)}"><span class="lb">${x.v.name}</span><span class="tr"><b style="width:${Math.max(2, x.occ * 100)}%"></b></span><span class="n">${pct(x.occ)}</span></div>`).join('')}</div>`}
+      </section>
+      <section class="card"><h3>예약 경로 <small>9월 · 취소 제외</small><button class="tbtn" data-t="ch">${tables.ch ? '차트로 보기' : '표로 보기'}</button></h3>
+        ${(() => { const tot = S9.ch.reduce((s, x) => s + x.n, 0), mx = Math.max(...S9.ch.map(x => x.n));
+          return tables.ch ? `<table class="tbl"><thead><tr><th>경로</th><th>예약</th><th>비중</th></tr></thead><tbody>${S9.ch.map(x => `<tr><td>${CH[x.c].lb}</td><td>${x.n}건</td><td>${pct(x.n / tot)}</td></tr>`).join('')}</tbody></table>`
+          : `<div class="hb">${[...S9.ch].sort((a, b) => b.n - a.n).map(x => `<div class="hr" data-tip="${CH[x.c].lb}|${x.n}건 · ${pct(x.n / tot)}"><span class="lb"><i style="background:${CH[x.c].c}"></i>${CH[x.c].lb}</span><span class="tr"><b style="width:${Math.max(2, x.n / mx * 100)}%"></b></span><span class="n">${x.n}건<small>${pct(x.n / tot)}</small></span></div>`).join('')}</div>`; })()}
+      </section>
+    </div>` : '<p class="note">숙소별 가동률과 예약 경로는 예약 데이터가 있는 9월만 보여줘요.</p>'}`;
+  mountSide();
+}
+const wrap = document.getElementById('wrap'), tip = document.getElementById('tip');
+wrap.addEventListener('click', e => {
+  const m = e.target.closest('[data-m]'); if (m){ sel = +m.dataset.m; return draw(); }
+  const t = e.target.closest('[data-t]'); if (t){ tables[t.dataset.t] = !tables[t.dataset.t]; draw(); }
+});
+wrap.addEventListener('mousemove', e => {
+  const el = e.target.closest('[data-tip]');
+  if (!el){ tip.hidden = true; return; }
+  const [h, ...rest] = el.dataset.tip.split('|');
+  tip.innerHTML = `<b>${h}</b><br>${rest.join('<br>')}`; tip.hidden = false;
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 12) + 'px'; tip.style.top = (e.clientY + 14) + 'px';
+});
+wrap.addEventListener('mouseleave', () => tip.hidden = true);
+draw();
+</script>
+</body>
+</html>
