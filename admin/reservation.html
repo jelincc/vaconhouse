@@ -28,19 +28,19 @@
 .facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .fact{padding:18px 22px;border-right:1px solid var(--line)}
 .fact:last-child{border-right:0}
-.fact small{display:block;font-size:13px;color:var(--ink-3);margin-bottom:2px}
+.fact small{display:block;font-size:14px;color:var(--ink-3);margin-bottom:2px}
 .fact b{font-size:17px;font-weight:700;letter-spacing:-.02em}
-.fact span{display:block;font-size:13px;color:var(--ink-3);margin-top:2px}
+.fact span{display:block;font-size:14px;color:var(--ink-3);margin-top:2px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .card > h3 .tbtn{margin-left:auto}
 .money{display:grid;grid-template-columns:1fr auto;gap:10px 16px;font-size:14.5px}
 .money .sum{font-weight:700;font-size:17px}
-.money .m2{color:var(--ink-3);font-size:13.5px}
+.money .m2{color:var(--ink-3);font-size:14px}
 .opt{display:flex;justify-content:space-between;font-size:14.5px;padding:10px 0;border-bottom:1px solid var(--line)}
 .opt:last-child{border-bottom:0}
 .nt{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;padding:10px 0;border-bottom:1px solid var(--line)}
 .nt:last-child{border-bottom:0}
-.nt small{display:block;font-size:12.5px;color:var(--ink-3)}
+.nt small{display:block;font-size:13px;color:var(--ink-3)}
 .form{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;align-items:center;font-size:14px}
 .form label{color:var(--ink-3)}
 .stepper{display:inline-flex;align-items:center;gap:0;background:var(--surface-2);border-radius:10px;overflow:hidden}
@@ -49,14 +49,14 @@
 .frow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .frow small{color:var(--ink-3);margin-right:4px}
 .formfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.raw{font-size:12px;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
-.meta{font-size:12.5px;color:var(--ink-3);display:grid;grid-template-columns:72px 1fr;gap:4px 8px;padding:0 4px}
+.raw{font-size:13px;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
+.meta{font-size:13px;color:var(--ink-3);display:grid;grid-template-columns:72px 1fr;gap:4px 8px;padding:0 4px}
 .stnow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .stnow .big{font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
 .stnow .big i{width:10px;height:10px;border-radius:50%}
-.hint{font-size:13px;color:var(--ink-3);margin:10px 0 0}
+.hint{font-size:14px;color:var(--ink-3);margin:10px 0 0}
 .life{list-style:none;margin:4px 0 14px;padding:0;display:flex}
-.life li{flex:1;display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--ink-4);position:relative}
+.life li{flex:1;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--ink-4);position:relative}
 .life li i{width:12px;height:12px;border-radius:50%;background:var(--surface-3);position:relative;z-index:1}
 .life li:not(:last-child)::after{content:"";position:absolute;left:12px;right:0;top:5px;height:2px;background:var(--surface-3)}
 .life li.done{color:var(--ink-2)}
@@ -77,14 +77,14 @@
 .dlg .x{all:unset;cursor:pointer;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--ink-3)}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .fl{display:flex;flex-direction:column;gap:6px;min-width:0}
-.fl > label{font-size:13px;color:var(--ink-3);font-weight:500}
+.fl > label{font-size:14px;color:var(--ink-3);font-weight:500}
 .fl .inp{height:44px}
-.err{font-size:13px;color:var(--danger-ink)}
+.err{font-size:14px;color:var(--danger-ink)}
 .segb{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}
 .segb button{flex:1;border:0;background:transparent;height:36px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:14px}
 .segb button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .sugg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.sugg button{border:0;background:#fff;border-radius:999px;height:30px;padding:0 12px;font-size:13px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
+.sugg button{border:0;background:#fff;border-radius:999px;height:30px;padding:0 12px;font-size:14px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
 @media (max-width:1180px){.grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}.pair{grid-template-columns:1fr}}
 </style>
 </head>
@@ -187,7 +187,7 @@ function render(){
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
           <textarea class="inp" id="memoIn" placeholder="운영팀에 남길 메모. 예약 검색에도 걸려요."></textarea>
           <div class="formfoot" style="margin-top:8px"><button class="btn sm primary" id="memoAdd">메모 남기기</button></div></section>
-        <section class="card"><h3>취소·변경 이력 <span class="mut" style="font-weight:500;font-size:13px">${r.history.length}건</span></h3>
+        <section class="card"><h3>취소·변경 이력 <span class="mut" style="font-weight:500;font-size:14px">${r.history.length}건</span></h3>
           <ul class="hist">${r.history.map(h => `<li class="${h.new ? 'new' : ''}"><span class="b"></span><div><div class="t">${esc(h.t)}</div><div class="m">${h.m}</div></div></li>`).join('')}</ul></section>
       </div>
     </div>`;

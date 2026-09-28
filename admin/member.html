@@ -25,9 +25,9 @@
 .facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .fact{padding:18px 22px;border-right:1px solid var(--line)}
 .fact:last-child{border-right:0}
-.fact small{display:block;font-size:13px;color:var(--ink-3);margin-bottom:2px}
+.fact small{display:block;font-size:14px;color:var(--ink-3);margin-bottom:2px}
 .fact b{font-size:17px;font-weight:700}
-.fact span{display:block;font-size:13px;color:var(--ink-3);margin-top:2px}
+.fact span{display:block;font-size:14px;color:var(--ink-3);margin-top:2px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start}
 .col{display:flex;flex-direction:column;gap:16px;min-width:0}
 .card > h3 .tbtn{margin-left:auto}
@@ -36,13 +36,13 @@
 .formfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px}
 .row:last-child{border-bottom:0}
-.row small{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.row small{display:block;font-size:13px;color:var(--ink-3);margin-top:1px}
 .segb{display:flex;background:var(--surface-2);border-radius:10px;padding:3px;gap:2px}
-.segb button{border:0;background:transparent;height:32px;padding:0 12px;border-radius:8px;font-weight:600;color:var(--ink-3);font-size:13.5px}
+.segb button{border:0;background:transparent;height:32px;padding:0 12px;border-radius:8px;font-weight:600;color:var(--ink-3);font-size:14px}
 .segb button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .memo{display:flex;flex-direction:column;gap:8px}
 .memo .it{background:var(--surface-2);border-radius:12px;padding:10px 12px;font-size:14px}
-.memo .it small{display:block;color:var(--ink-3);font-size:12px;margin-top:2px}
+.memo .it small{display:block;color:var(--ink-3);font-size:13px;margin-top:2px}
 .memo .add{display:flex;gap:8px}
 .mscrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:45;display:grid;place-items:center;padding:16px}
 .dlg{background:#fff;border-radius:24px;width:min(440px,100%);box-shadow:var(--shadow);padding:24px}
@@ -50,10 +50,10 @@
 .dlg p{margin:8px 0 18px;font-size:14.5px;color:var(--ink-2)}
 .dlg .f{display:flex;gap:8px}
 table{width:100%;border-collapse:collapse}
-th{font-size:13px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:14px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
 td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
 tr:last-child td{border-bottom:0}
-td .sub{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
+td .sub{display:block;font-size:13px;color:var(--ink-3);margin-top:1px}
 tbody tr{cursor:pointer}
 tbody tr:hover td{background:#FAFBFC}
 .panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
@@ -108,7 +108,7 @@ function render(){
       <div class="col">
         <section class="card"><h3>기본 정보 ${edit ? '' : '<button class="tbtn" data-edit>수정</button>'}</h3>
           ${edit ? `<div class="form"><label>전화번호</label><input class="inp num" id="fPhone" value="${fmtPhone(m.phone)}"><label>생일</label><input class="inp" type="date" id="fBirth" value="${m.birth}"></div>
-            <span class="err" id="fErr" style="font-size:13px;color:var(--danger-ink)"></span>
+            <span class="err" id="fErr" style="font-size:14px;color:var(--danger-ink)"></span>
             <div class="formfoot"><button class="btn sm" data-edit>취소</button><button class="btn sm primary" id="save">저장</button></div>`
           : `<dl class="kv"><dt>이름</dt><dd>${esc(m.name)}</dd><dt>이메일</dt><dd>${esc(m.email)}</dd><dt>전화번호</dt><dd class="num">${fmtPhone(m.phone)}</dd><dt>생일</dt><dd>${m.birth ? m.birth.replace(/-/g, '.') : '<span class="mut">입력 안 함</span>'}</dd></dl>`}
         </section>
@@ -118,7 +118,7 @@ function render(){
         </section>
         <section class="card"><h3>계정·알림</h3>
           <div class="row"><div>가입 방식<small>${m.join === '카카오' ? '카카오로 로그인해요' : '이메일과 비밀번호로 로그인해요'}</small></div><span>${m.join}</span></div>
-          <div class="row"><div>비밀번호<small>관리자가 직접 정하지 않고, 회원에게 재설정 링크를 보내요</small></div>${m.join === '카카오' ? '<span class="mut" style="font-size:13px">해당 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</div>
+          <div class="row"><div>비밀번호<small>관리자가 직접 정하지 않고, 회원에게 재설정 링크를 보내요</small></div>${m.join === '카카오' ? '<span class="mut" style="font-size:14px">해당 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</div>
           <div class="row"><div>마케팅 푸시 수신<small>회원이 앱에서 바꿀 수 있어요</small></div><label class="tgl"><input type="checkbox" id="push" ${m.push ? 'checked' : ''}></label></div>
         </section>
       </div>

@@ -27,15 +27,15 @@ a{color:inherit}
 .brand a{color:var(--ink)}
 .brand small{font-size:11px;letter-spacing:.14em;color:var(--ink-3);font-weight:600}
 .logo-svg{display:block;width:148px;height:auto;color:var(--ink)}
-.nav-label{font-size:12px;color:var(--ink-4);padding:14px 12px 6px;font-weight:500}
+.nav-label{font-size:13px;color:var(--ink-4);padding:14px 12px 6px;font-weight:500}
 .nav a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-radius:10px;color:var(--ink-2);text-decoration:none;font-weight:500}
 .nav a:hover{background:var(--surface-2);color:var(--ink)}
 .nav a.on{background:var(--ink);color:#fff;font-weight:600}
 .nav .cnt{font-size:11px;background:var(--accent);color:#fff;border-radius:10px;padding:0 7px;font-weight:700;line-height:18px}
-.userbox{margin-top:auto;border-top:1px solid var(--line);padding:14px 10px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.userbox{margin-top:auto;border-top:1px solid var(--line);padding:14px 10px 0;display:flex;justify-content:space-between;align-items:center;font-size:14px}
 .userbox b{display:block;font-weight:600}
-.userbox small{color:var(--ink-3);font-size:12px}
-.userbox a{color:var(--ink-3);font-size:12.5px}
+.userbox small{color:var(--ink-3);font-size:13px}
+.userbox a{color:var(--ink-3);font-size:13px}
 .main{min-width:0;padding:28px 32px 64px;display:flex;flex-direction:column;gap:20px}
 
 /* TDS: Top */
@@ -52,16 +52,16 @@ a{color:inherit}
 .btn.line:hover{background:var(--surface-2)}
 .btn.danger{background:var(--danger);color:#fff}
 .btn.danger-weak{background:var(--danger-2);color:var(--danger-ink)}
-.btn.sm{height:32px;padding:0 12px;border-radius:8px;font-size:13px}
+.btn.sm{height:32px;padding:0 12px;border-radius:8px;font-size:14px}
 .btn.xl{height:52px;border-radius:14px;font-size:16px;flex:1}
 .btn.on{background:var(--accent);color:#fff}
-.tbtn{border:0;background:none;padding:0;color:var(--ink-3);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:2px}
+.tbtn{border:0;background:none;padding:0;color:var(--ink-3);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:2px}
 .tbtn:hover{color:var(--ink)}
 
 /* TDS: Badge  (정상 상태는 텍스트, 이상이 있을 때만 라벨) */
-.bd{display:inline-flex;align-items:center;gap:3px;height:22px;padding:0 7px;border-radius:6px;font-size:12px;font-weight:600;white-space:nowrap;vertical-align:middle;line-height:1;flex:none}
-.bd.xs{height:18px;padding:0 5px;font-size:11px;border-radius:5px}
-.bd.lg{height:26px;padding:0 9px;font-size:13px;border-radius:7px}
+.bd{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 8px;border-radius:6px;font-size:13px;font-weight:600;white-space:nowrap;vertical-align:middle;line-height:1;flex:none}
+.bd.xs{height:20px;padding:0 6px;font-size:12px;border-radius:5px}
+.bd.lg{height:26px;padding:0 9px;font-size:14px;border-radius:7px}
 .bd.red{background:var(--danger-2);color:var(--danger-ink)}
 .bd.red.fill{background:var(--danger);color:#fff}
 .bd.orange{background:var(--accent-2);color:var(--accent-ink)}
@@ -70,7 +70,7 @@ a{color:inherit}
 .bd.grey{background:#EFF0F2;color:var(--ink-2)}
 .bd.dark{background:var(--ink);color:#fff}
 .bd.line{background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink-2)}
-.chb{display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:5px;font-size:11.5px;font-weight:700;white-space:nowrap;vertical-align:middle;flex:none}
+.chb{display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:5px;font-size:12px;font-weight:700;white-space:nowrap;vertical-align:middle;flex:none}
 
 /* TDS: Asset (icon in rounded square) */
 .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--surface-2);color:var(--ink-2)}
@@ -83,16 +83,16 @@ a{color:inherit}
 
 /* TDS: SegmentedControl, Chip, inputs */
 .seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}
-.seg button{border:0;background:transparent;height:32px;padding:0 14px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:13.5px}
+.seg button{border:0;background:transparent;height:32px;padding:0 14px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:14px}
 .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .seg button span{margin-left:4px;color:var(--ink-4);font-weight:500}
-.chip{border:0;background:var(--surface-2);border-radius:999px;height:32px;padding:0 12px;font-size:13px;display:inline-flex;align-items:center;gap:6px;color:var(--ink-2);font-weight:500}
+.chip{border:0;background:var(--surface-2);border-radius:10px;height:36px;padding:0 12px;font-size:14px;display:inline-flex;align-items:center;gap:6px;color:var(--ink-2);font-weight:500}
 .chip.on{background:var(--ink);color:#fff}
 .chip i{width:8px;height:8px;border-radius:2px;display:inline-block}
-.fsel{border:0;background:var(--surface-2);border-radius:10px;height:36px;padding:0 12px;font-size:13.5px;font-weight:500}
+.fsel{border:0;background:var(--surface-2);border-radius:10px;height:36px;padding:0 12px;font-size:14px;font-weight:500}
 .inp{border:0;background:var(--surface-2);border-radius:10px;height:40px;padding:0 12px;width:100%}
 textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
-.tgl{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);cursor:pointer;user-select:none}
+.tgl{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);cursor:pointer;user-select:none}
 .tgl input{appearance:none;width:36px;height:22px;border-radius:11px;background:var(--line-2);position:relative;margin:0;cursor:pointer;transition:background .15s}
 .tgl input::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
 .tgl input:checked{background:var(--ink)}
@@ -106,7 +106,7 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 .lr:hover{background:var(--surface-2)}
 .lr .tx{flex:1;min-width:0;display:flex;flex-direction:column}
 .lr .tx b{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px}
-.lr .tx small{font-size:13px;color:var(--ink-3)}
+.lr .tx small{font-size:14px;color:var(--ink-3)}
 .kv{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;font-size:14px;margin:0}
 .kv dt{color:var(--ink-3)}
 .kv dd{margin:0;min-width:0}
@@ -119,7 +119,7 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 .callout.orange{background:var(--accent-soft)}
 .callout .tx{display:flex;flex-direction:column;gap:3px;min-width:0}
 .callout .tx b{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.callout .tx span{font-size:13px;color:var(--ink-2)}
+.callout .tx span{font-size:14px;color:var(--ink-2)}
 
 /* history */
 .hist{list-style:none;margin:0;padding:0}
@@ -129,9 +129,9 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 .hist .b{width:13px;height:13px;border-radius:50%;border:2px solid var(--line-2);background:#fff;margin-top:4px}
 .hist li.new .b{border-color:var(--accent);background:var(--accent)}
 .hist .t{font-size:14px}
-.hist .m{font-size:12px;color:var(--ink-3)}
+.hist .m{font-size:13px;color:var(--ink-3)}
 .memo{background:var(--surface-2);border-radius:12px;padding:10px 12px;font-size:14px}
-.memo small{display:block;color:var(--ink-3);font-size:12px;margin-top:2px}
+.memo small{display:block;color:var(--ink-3);font-size:13px;margin-top:2px}
 
 /* TDS: Toast */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);border:1px solid var(--line);padding:12px 18px 12px 14px;border-radius:14px;font-size:14px;font-weight:500;z-index:90;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px}
@@ -144,12 +144,12 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* status text, channel text */
-.stt{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:500;white-space:nowrap}
+.stt{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;white-space:nowrap}
 .stt i{width:7px;height:7px;border-radius:50%;flex:none}
 .stt.mute{color:var(--ink-3)}
-.chn{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;white-space:nowrap}
+.chn{display:inline-flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap}
 .chn i{width:8px;height:8px;border-radius:2px;flex:none}
-.mut{color:var(--ink-3);font-size:13.5px}
+.mut{color:var(--ink-3);font-size:14px}
 .flash{animation:fl 1.4s ease}
 @keyframes fl{0%,100%{box-shadow:0 0 0 0 rgba(255,109,18,0)}25%,60%{box-shadow:0 0 0 4px rgba(255,109,18,.5)}}
 
@@ -162,9 +162,9 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 .ta-dot{width:9px;height:9px;border-radius:50%;background:var(--danger);box-shadow:0 0 0 4px rgba(252,59,59,.25);flex:none}
 .ta-dot.o{background:var(--accent);box-shadow:0 0 0 4px rgba(255,109,18,.25)}
 .ta-t{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ta-l{display:flex;align-items:center;gap:2px;font-size:13.5px;color:var(--accent-ink);font-weight:600;flex:none}
+.ta-l{display:flex;align-items:center;gap:2px;font-size:14px;color:var(--accent-ink);font-weight:600;flex:none}
 .ta-l svg{width:14px;height:14px}
-.ta-x{width:32px;height:32px;justify-content:center;border-radius:10px;color:var(--ink-3);font-size:13px}
+.ta-x{width:32px;height:32px;justify-content:center;border-radius:10px;color:var(--ink-3);font-size:14px}
 .ta-x:hover{background:var(--surface-2)}
 @media (prefers-reduced-motion:reduce){.topalert{transition:none}}
 
@@ -178,7 +178,7 @@ body{letter-spacing:-.015em}
 .side{border-right-color:var(--line)}
 .nav a{font-weight:500;color:var(--ink-2)}
 .nav a.on{background:var(--surface-2);color:var(--ink);font-weight:700}
-.nav-label{color:var(--ink-4);font-size:12.5px}
+.nav-label{color:var(--ink-4);font-size:13px}
 /* secondary buttons are weak fills, not outlines */
 .btn.line{background:var(--surface-2);box-shadow:none}
 .btn.line:hover{background:var(--surface-3)}
@@ -188,7 +188,7 @@ body{letter-spacing:-.015em}
 .card > h3{font-size:18px;margin-bottom:12px}
 .lr{padding:12px 8px}
 .lr .tx b{font-size:15.5px}
-.lr .tx small{font-size:13.5px;margin-top:1px}
+.lr .tx small{font-size:14px;margin-top:1px}
 .ico{border-radius:14px}
 .kv{font-size:14.5px;gap:12px 14px}
 .callout{border-radius:16px}
@@ -213,7 +213,7 @@ input[type=checkbox]{accent-color:#3E434B}
 /* 사이드 메뉴: 큰 묶음 3개. 묶음 이름은 작고 옅게, 묶음 사이 여백으로 구분 */
 .side .nav{display:flex;flex-direction:column;gap:24px}
 .side .ng{display:flex;flex-direction:column;gap:2px}
-.side .ngh{padding:0 12px 6px;color:rgba(255,255,255,.38);font-size:12px;font-weight:600;letter-spacing:.02em}
+.side .ngh{padding:0 12px 6px;color:rgba(255,255,255,.38);font-size:13px;font-weight:600;letter-spacing:.02em}
 .side .ng a{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,.72);font-size:14.5px;font-weight:500;text-decoration:none}
 .side .ng a:hover{background:rgba(255,255,255,.06);color:#fff}
 .side .ng a.on{background:rgba(255,255,255,.12);color:#fff;font-weight:700}
@@ -224,13 +224,31 @@ input[type=checkbox]{accent-color:#3E434B}
 .spec.two{grid-template-columns:104px minmax(0,1fr)}
 .spec > *{border-top:1px solid var(--line);min-width:0}
 .spec > :first-child{border-top:0}
-.spec .sg{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;font-size:13.5px;font-weight:700;color:var(--ink);background:#fff}
+.spec .sg{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;font-size:14px;font-weight:700;color:var(--ink);background:#fff}
 .spec .sg + .k,.spec .sg + .k + .v,.spec .sg + .k + .v + .k,.spec .sg + .k + .v + .k + .v{border-top:1px solid var(--line)}
-.spec .k{background:var(--surface-2);color:var(--ink-3);font-size:13.5px;padding:12px 14px}
+.spec .k{background:var(--surface-2);color:var(--ink-3);font-size:14px;padding:12px 14px}
 .spec .v{padding:12px 16px;line-height:1.5}
-.spec .v small{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.spec .v small{display:block;font-size:13px;color:var(--ink-3);margin-top:1px}
 .spec .v.w{grid-column:2/-1}
 .spec .v.r{text-align:right}
 .spec .v.sum{font-weight:700;font-size:16px}
-.spec .tbtn{font-size:13px}
+.spec .tbtn{font-size:14px}
 @media (max-width:900px){.spec{grid-template-columns:104px minmax(0,1fr)}}
+
+/* 컨트롤 모양 통일: 필터 · 칩 · 조건 · 옵션 모두 10px 라운드 사각형 (알약형 없음) */
+.chip,.fchip,.sugg button,.chips button,.cr .optc{border-radius:10px}
+.chip{height:36px}
+.fchip{height:36px}
+.fchip button{border-radius:6px}
+/* 체크박스: 토스 스타일. 회색 면 위 흰 체크 → 선택하면 어두운 그레이로 채움 */
+input[type=checkbox]:not(.tgl input){appearance:none;-webkit-appearance:none;width:20px;height:20px;margin:0;border-radius:6px;flex:none;cursor:pointer;vertical-align:middle;
+  background:#E5E8EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.2l3 3L14.5 7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat;transition:background-color .15s}
+input[type=checkbox]:not(.tgl input):checked{background-color:#3E434B}
+input[type=checkbox]:not(.tgl input):disabled{opacity:.4;cursor:not-allowed}
+input[type=checkbox]:not(.tgl input):focus-visible{outline:2px solid #3E434B;outline-offset:2px}
+/* 검색: 입력칸 오른쪽 검색 버튼(또는 Enter)으로 적용 */
+.sbox{position:relative;display:flex}
+.sbox .search{padding:0 40px 0 12px;background-image:none}
+.sbox button{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:8px;background:none;color:var(--ink-3);display:grid;place-items:center;cursor:pointer}
+.sbox button:hover{background:var(--surface-3);color:var(--ink)}
+.sbox button svg{width:18px;height:18px}

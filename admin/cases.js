@@ -129,7 +129,7 @@
   .cs-seg{display:inline-flex;background:#F6F7F8;border-radius:12px;padding:4px;gap:2px}
   .cs-seg button{border:0;background:transparent;height:34px;padding:0 16px;border-radius:9px;font:600 14px inherit;color:#768091;cursor:pointer}
   .cs-seg button.on{background:#fff;color:#1A1A1E;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-  .cs-edge{display:inline-flex;gap:8px;align-items:center;font-size:13.5px;color:#575F6C;cursor:pointer;margin-left:auto}
+  .cs-edge{display:inline-flex;gap:8px;align-items:center;font-size:14px;color:#575F6C;cursor:pointer;margin-left:auto}
   .cs-edge input{width:18px;height:18px;accent-color:#1A1A1E}
   .cs-b{overflow:auto;padding:4px 24px 28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px;align-content:start}
   .cs-sec{display:flex;flex-direction:column}
@@ -137,9 +137,9 @@
   .cs-it{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;font-size:14px;line-height:1.4}
   .cs-it:hover{background:#F6F7F8}
   .cs-it.on{background:#FBF4EF;font-weight:600}
-  .cs-it i{font-style:normal;flex:none;font-size:11px;font-weight:700;border-radius:5px;padding:2px 5px;background:#FAEAE0;color:#D4560A}
+  .cs-it i{font-style:normal;flex:none;font-size:12px;font-weight:700;border-radius:5px;padding:2px 5px;background:#FAEAE0;color:#D4560A}
   .cs-it b{font-weight:inherit;flex:1}
-  .cs-it u{text-decoration:none;color:#949BA8;font-size:12px;flex:none}
+  .cs-it u{text-decoration:none;color:#949BA8;font-size:13px;flex:none}
   @media (max-width:720px){.cs-b{grid-template-columns:1fr}}`;
   const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
   const fab = document.createElement('button'); fab.className = 'cs-fab'; fab.type = 'button';
