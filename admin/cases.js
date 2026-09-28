@@ -106,10 +106,11 @@
   let onlyEdge = false;
 
   const css = `
-  .cs-fab{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:95;display:flex;align-items:center;gap:8px;background:#1A1A1E;color:#fff;border:0;border-radius:999px;height:48px;padding:0 20px 0 16px;font:600 15px var(--font,sans-serif);box-shadow:0 10px 30px rgba(26,26,30,.28);cursor:pointer;max-width:calc(100% - 32px)}
+  .cs-fab{position:fixed;right:24px;bottom:24px;z-index:95;display:flex;white-space:nowrap;align-items:center;gap:8px;background:#fff;color:#1A1A1E;border:1px solid #E6E8EA;border-radius:999px;height:48px;padding:0 20px 0 16px;font:600 15px var(--font,sans-serif);box-shadow:0 10px 30px rgba(26,26,30,.14);cursor:pointer;max-width:min(360px,calc(100% - 48px))}
+  .cs-fab:hover{border-color:#1A1A1E}
   .cs-fab svg{width:18px;height:18px;flex:none}
-  .cs-fab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.7);font-weight:500}
-  .cs-scrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:96;display:flex;align-items:flex-end;justify-content:center}
+  .cs-fab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#768091;font-weight:500}
+  .cs-scrim{position:fixed;inset:0;background:rgba(26,26,30,.28);z-index:96;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 24px}
   .cs{background:#fff;width:min(880px,100%);max-height:84vh;border-radius:28px 28px 0 0;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(26,26,30,.18);font-family:var(--font,sans-serif);color:#1A1A1E}
   .cs-h{padding:22px 24px 12px;display:flex;flex-direction:column;gap:12px}
   .cs-h .top{display:flex;justify-content:space-between;align-items:center}
