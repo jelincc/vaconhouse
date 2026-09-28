@@ -204,13 +204,27 @@ input[type=checkbox]{accent-color:#3E434B}
 .side{background:#1A1A1E;border-right:0;color:#fff;scrollbar-color:rgba(255,255,255,.18) transparent}
 .side .brand a,.side .logo-svg{color:#fff}
 .side .brand small{color:rgba(255,255,255,.5)}
-.side .nav-label{color:rgba(255,255,255,.42)}
-.side .nav a{color:rgba(255,255,255,.72)}
-.side .nav a:hover{background:rgba(255,255,255,.06);color:#fff}
-.side .nav a.on{background:rgba(255,255,255,.12);color:#fff;font-weight:700}
-.side .nav a:focus-visible{outline:2px solid rgba(255,255,255,.7);outline-offset:-2px}
 .side .userbox{border-top-color:rgba(255,255,255,.1)}
 .side .userbox b{color:#fff}
 .side .userbox small{color:rgba(255,255,255,.5)}
 .side .userbox a{color:rgba(255,255,255,.62)}
 .side .userbox a:hover{color:#fff}
+
+/* 사이드 메뉴 2단계: 대상(아이콘 + 굵은 이름) → 실제 메뉴(들여쓰기, 작고 옅게) */
+.side .nav{display:flex;flex-direction:column;gap:2px}
+.side .ngh{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,.62);font-size:15px;font-weight:600;letter-spacing:-.01em}
+.side .ngh:hover{background:rgba(255,255,255,.05);color:#fff}
+.side .ngh:focus-visible,.side .ngs a:focus-visible{outline:2px solid rgba(255,255,255,.7);outline-offset:-2px}
+.side .ngi{display:flex;flex:none}
+.side .ngi svg{width:20px;height:20px}
+.side .ngc{margin-left:auto;display:flex;opacity:.35;transition:transform .18s}
+.side .ngc svg{width:14px;height:14px}
+.side .ngh .cnt{margin-left:auto}
+.side .ngh .cnt + .ngc{margin-left:8px}
+.side .ng.here .ngh{color:#fff}
+.side .ng.open .ngc{transform:rotate(180deg)}
+.side .ngs{display:none;flex-direction:column;gap:1px;padding:2px 0 8px}
+.side .ng.open .ngs{display:flex}
+.side .ngs a{display:flex;align-items:center;justify-content:space-between;padding:8px 12px 8px 44px;border-radius:10px;color:rgba(255,255,255,.5);font-size:14px;font-weight:500;text-decoration:none}
+.side .ngs a:hover{background:rgba(255,255,255,.05);color:#fff}
+.side .ngs a.on{background:rgba(255,255,255,.1);color:#fff;font-weight:700}

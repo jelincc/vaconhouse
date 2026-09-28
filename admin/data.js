@@ -278,22 +278,41 @@ function price(r){
 }
 
 /* ---------- chrome ---------- */
+/* 사이드 메뉴: 다루는 대상(회원·숙소·예약…)이 1단계, 실제 메뉴가 2단계. 지금 보는 그룹만 펼쳐요 */
 const NAV = [
-  ['핵심 업무', ['회원 관리','회원 상태','숙소 관리','숙소 운영','예약 관리','예약 운영']],
-  ['정책/정산', ['멤버십 관리','결제 내역','하이시즌','통계·매출']],
-  ['콘텐츠/기록', ['CMS 관리','숙박권','예약 알림 설정','알림톡 기록']],
+  ['member', '회원', I('<circle cx="10" cy="7" r="3.2"/><path d="M3.8 16.5c.9-3 3.3-4.6 6.2-4.6s5.3 1.6 6.2 4.6"/>'), ['회원 관리','회원 상태']],
+  ['villa', '숙소', I('<path d="M3 9.2 10 3.5l7 5.7"/><path d="M5 8v8.5h10V8"/><path d="M8.3 16.5v-4.3h3.4v4.3"/>'), ['숙소 관리','숙소 운영']],
+  ['res', '예약', I('<rect x="3" y="4.5" width="14" height="12.5" rx="2.2"/><path d="M3 8.5h14M7 3v3M13 3v3"/>'), ['예약 관리','예약 운영']],
+  ['member2', '멤버십', I('<path d="M10 3.2l2 4.1 4.5.6-3.3 3.1.8 4.5L10 13.4l-4 2.1.8-4.5-3.3-3.1 4.5-.6z"/>'), ['멤버십 관리','하이시즌']],
+  ['money', '매출', I('<path d="M4 16.5V11M8 16.5V7.5M12 16.5V9.5M16 16.5V4"/>'), ['결제 내역','통계·매출']],
+  ['content', '콘텐츠', I('<rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h3.5"/>'), ['CMS 관리','숙박권']],
+  ['notice', '알림', I('<path d="M6 8.5a4 4 0 0 1 8 0c0 3.8 1.8 5 1.8 5H4.2S6 12.3 6 8.5"/><path d="M8.6 16.2a1.6 1.6 0 0 0 2.8 0"/>'), ['예약 알림 설정','알림톡 기록']],
 ];
 function mountSide(){
   setTimeout(mountAlert, 400);
   const n = R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
-  document.querySelector('.side').innerHTML = `
+  const cur = /stats/.test(location.pathname) ? '통계·매출' : '예약 관리';
+  let open;
+  try { open = new Set(JSON.parse(localStorage.getItem('vh-nav-open') || '[]')); } catch(e){ open = new Set(); }
+  open.add(NAV.find(g => g[3].includes(cur))[0]);
+  const side = document.querySelector('.side');
+  const href = x => x === '예약 관리' ? './' : x === '통계·매출' ? 'stats' : '#';
+  const draw = () => {
+    side.innerHTML = `
     <div class="brand"><a href="./">${LOGO}</a><small>ADMIN</small></div>
-    <nav class="nav">${NAV.map(([g, items]) => `<div class="nav-label">${g}</div>` + items.map(x => x === '예약 관리'
-      ? `<a href="./" class="${/stats/.test(location.pathname) ? '' : 'on'}">예약 관리 <span class="cnt">${n}</span></a>` : x === '통계·매출' ? `<a href="stats" class="${/stats/.test(location.pathname) ? 'on' : ''}">통계·매출</a>` : `<a href="#" data-soon>${x}</a>`).join('')).join('')}</nav>
+    <nav class="nav">${NAV.map(([id, lb, ic, items]) => {
+      const isOpen = open.has(id), here = items.includes(cur), cnt = items.includes('예약 관리') && n;
+      return `<div class="ng ${isOpen ? 'open' : ''} ${here ? 'here' : ''}">
+        <button class="ngh" data-g="${id}" aria-expanded="${isOpen}"><span class="ngi">${ic}</span><span class="ngl">${lb}</span>${cnt && !isOpen ? `<span class="cnt">${n}</span>` : ''}<span class="ngc">${ICON.down}</span></button>
+        <div class="ngs">${items.map(x => `<a href="${href(x)}" class="${x === cur ? 'on' : ''}" ${href(x) === '#' ? 'data-soon' : ''}>${x}${x === '예약 관리' && n ? `<span class="cnt">${n}</span>` : ''}</a>`).join('')}</div>
+      </div>`; }).join('')}</nav>
     <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../" id="logout">로그아웃</a></div>`;
-  try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
-  document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} resetDemo(); };
-  document.querySelectorAll('[data-soon]').forEach(a => a.onclick = e => { e.preventDefault(); toast(`${a.textContent} 화면은 준비 중이에요`, false); });
+    try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
+    document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} resetDemo(); };
+    side.querySelectorAll('[data-soon]').forEach(a => a.onclick = e => { e.preventDefault(); toast(`${a.textContent} 화면은 준비 중이에요`, false); });
+    side.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { const g = b.dataset.g; open.has(g) ? open.delete(g) : open.add(g); try { localStorage.setItem('vh-nav-open', JSON.stringify([...open])); } catch(e){} draw(); });
+  };
+  draw();
 }
 function toast(msg, ok = true){
   document.querySelectorAll('.toast').forEach(t => t.remove());
