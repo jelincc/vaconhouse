@@ -20,7 +20,7 @@
 .tabs .n{font-size:12px;font-weight:700;background:var(--accent);color:#fff;border-radius:10px;padding:0 7px;line-height:18px}
 
 /* ===== 오늘 할 일 ===== */
-.hero h2{margin:4px 0 0;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
+.hero h2{margin:4px 0 0;font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
 .hero h2 em{font-style:normal;color:var(--accent)}
 .hero p{margin:6px 0 0;color:var(--ink-3);font-size:14.5px}
 .strip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
@@ -42,7 +42,7 @@
 .newbox{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:6px 8px 16px;border-bottom:1px solid var(--line);margin-bottom:6px;border-radius:12px 12px 0 0}
 .newbox:hover .big span{color:var(--ink)}
 .newbox .big{display:flex;align-items:baseline;gap:8px}
-.newbox .big b{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.newbox .big b{font-size:24px;font-weight:700;letter-spacing:-.03em}
 .newbox .big span{color:var(--ink-3);font-size:14px}
 .bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:12px 0 10px;gap:2px}
 .bar i{display:block;height:100%}
@@ -57,18 +57,18 @@
 /* 오늘의 운영: 테두리 없이 크기와 면으로 강조 */
 .ops{padding:4px 0 0}
 .ops-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
-.ops-h h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.ops-h h3{margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em}
 .ops-h span{font-size:14px;color:var(--ink-3)}
 .ops-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.op{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface-2);border-radius:20px;padding:22px 22px 18px;display:flex;flex-direction:column;min-width:0;transition:background .15s}
+.op{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface-2);border-radius:18px;padding:18px 20px 16px;display:flex;flex-direction:column;min-width:0;transition:background .15s}
 .op:hover{background:#EFF0F2}
-.op-l{font-size:15px;color:var(--ink-2);font-weight:600}
-.op-v{font-size:48px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-top:8px;color:var(--ink)}
-.op-v small{font-size:20px;font-weight:600;margin-left:3px;color:var(--ink-2)}
+.op-l{font-size:14px;color:var(--ink-2);font-weight:600}
+.op-v{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-top:6px;color:var(--ink)}
+.op-v small{font-size:16px;font-weight:600;margin-left:2px;color:var(--ink-2)}
 .op.zero .op-v,.op.zero .op-v small{color:var(--ink-4)}
 .op-s{font-size:13.5px;color:var(--ink-3);margin-top:4px}
-.op-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;min-height:78px}
-.op-p{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.op-list{display:flex;flex-direction:column;gap:6px;margin-top:12px;min-height:66px}
+.op-p{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .op-p i{width:7px;height:7px;border-radius:2px;flex:none}
 .op-p em{font-style:normal;color:var(--ink-3);margin-left:auto;padding-left:6px;flex:none}
 .op-p.none{color:var(--ink-3)}
@@ -329,12 +329,12 @@ const pick = k => R.filter(COND[k].f);
 function reason(k){
   const L = pick(k);
   switch(k){
-    case 'unseen': return `채널에서 들어와 아직 확인하지 않았어요 · 가장 빠른 입실 ${mdw(Math.min(...L.map(r => r.in)))}`;
+    case 'unseen': return `들어온 뒤 운영자가 아직 열어 보지 않았어요 · 가장 빠른 입실 ${mdw(Math.min(...L.map(r => r.in)))}`;
     case 'cancel': return L.map(r => `${r.name} · ${md(r.in)} 입실 · ${r.reqAt} 요청`).join(', ');
     case 'change': return L.map(r => `${r.name} · ${r.note}`).join(', ');
     case 'pay': return L.map(r => `${r.name} · ${md(r.in)} 입실 · 무통장 입금 대기`).join(', ');
     case 'conflict': { const c = L.filter(has('conflict')), d = L.filter(has('dup')); return [c.length ? `${vById[c[0].villa].name} ${md(Math.max(...c.map(r => r.in)))} 두 예약이 겹쳐요` : '', d.length ? `${d[0].name}님 4분 사이 취소 후 재예약` : ''].filter(Boolean).join(' · '); }
-    case 'missing': return L.map(r => `${r.name}님 연락처가 '${r.phoneRaw}'뿐이에요`).join(', ');
+    case 'missing': return L.map(r => `${r.name}님 연락처가 ${r.phoneRaw}까지만 있어요`).join(', ');
     case 'sync': { const s = L.filter(has('sync')).length, d = L.length - s; return [s ? `에어비앤비 변경 ${s}건 미반영` : '', d ? `신청일 덮어쓰기 ${d}건` : ''].filter(Boolean).join(' · '); }
     case 'notify': return L.map(r => `${r.name} · ${r.in === 1 ? '내일' : md(r.in)} 입실 안내`).join(', ');
     case 'clean': return L.map(r => `${vFull(r.villa)} · ${r.in === 1 ? '내일' : md(r.in)} 입실`).join(', ');
@@ -631,7 +631,8 @@ function openDrawer(i){
     <div class="dr-link"><a class="tbtn" href="reservation?id=${r.idx}">결제·이력까지 전체 보기 ${ICON.chev}</a></div>
     <div class="dr-foot">
       ${sec ? `<button class="btn xl" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
-      ${pri ? `<button class="btn xl ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : `<a class="btn xl primary" href="reservation?id=${r.idx}">예약 상세 보기</a>`}
+      ${pri === 'conflictOk' ? `<button class="btn xl" data-do="conflictOk">이미 해결했어요</button><a class="btn xl primary" href="reservation?id=${r.idx}#act=move">다른 날짜·숙소로 옮기기</a>`
+        : pri ? `<button class="btn xl ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : `<a class="btn xl primary" href="reservation?id=${r.idx}">예약 상세 보기</a>`}
     </div>
   </aside>`;
   layer.querySelectorAll('[data-do]').forEach(b => b.onclick = () => { const m = runAct(r, b.dataset.do); layer.innerHTML = ''; render(); toast(m); });
@@ -720,7 +721,7 @@ function openCreate(o){
     else if (!free){
       const alt = VILLAS.filter(x => x.id !== F.villa && freeFor(x.id, F.a, F.b) && x.cap >= F.adults + F.kids);
       html = `<div class="callout red"><span class="ico sm red" style="background:#fff">${ICON.conflict}</span><div class="tx"><b>이 날짜엔 등록할 수 없어요</b>
-        <span>${c.res.map(r => `${esc(r.name)}(${CH[r.ch].lb}) ${md(r.in)} – ${md(r.out)} 예약`).concat(c.blk.map(x => `${md(x.in)} – ${md(x.out)} 판매 막기(${esc(x.reason)})`)).join(', ')}과 겹쳐요.</span>
+        <span>겹치는 일정: ${c.res.map(r => `${esc(r.name)}님 ${md(r.in)} – ${md(r.out)} (${CH[r.ch].lb})`).concat(c.blk.map(x => `판매 막기 ${md(x.in)} – ${md(x.out)} (${esc(x.reason)})`)).join(', ')}</span>
         ${alt.length ? `<span style="margin-top:6px">같은 날짜에 비어 있는 숙소</span><div class="sugg">${alt.map(x => `<button data-alt="${x.id}">${x.region} ${x.name}</button>`).join('')}</div>` : ''}</div></div>`;
     } else html = `<div class="callout" style="background:var(--ok-soft)"><span class="ico sm green" style="background:#fff">${ICON.check}</span><div class="tx"><b>예약할 수 있어요 · ${n}박</b><span>${mdw(F.a)} 15:00 → ${mdw(F.b)} 11:00 · 예상 금액 ${won(price({villa:F.villa, in:F.a, out:F.b, note:F.note, pet:false, ch:'관리자', pay:F.pay}).sub)}</span></div></div>`;
     q('#cCheck').innerHTML = html;
@@ -729,7 +730,7 @@ function openCreate(o){
     q('#cPhoneErr').textContent = phoneBad ? '끝까지 입력해 주세요. 불완전한 번호로는 알림톡을 보낼 수 없어요.' : '';
     q('#nA').textContent = F.adults; q('#nK').textContent = F.kids;
     const over = F.adults + F.kids > v.cap;
-    q('#cCapErr').textContent = over ? `${v.name}은 최대 ${v.cap}인이에요` : '';
+    q('#cCapErr').textContent = over ? `${josa(v.name, '은', '는')} 최대 ${v.cap}인이에요` : '';
     q('#cNotify').disabled = digits.length < 10;
     q('#cChan').innerHTML = autoBlock() ? '<div class="mut" style="font-size:13px">등록하면 네이버·에어비앤비 달력에서도 이 날짜가 막혀요.</div>'
       : `<div class="callout orange"><div class="tx"><b>채널 달력은 자동으로 막히지 않아요</b><span>에어비앤비에서 같은 날짜가 다시 팔릴 수 있어요. <a href="#" data-ch2 style="color:var(--accent-ink);font-weight:600">채널 연동</a>에서 자동 막기를 켜 주세요.</span></div></div>`;
@@ -774,7 +775,7 @@ function openBlock(o){
     const c = F.b > F.a ? clashes(F.villa, F.a, F.b) : {res:[], blk:[]};
     const ok = F.b > F.a && !c.res.length && !c.blk.length;
     q('#bCheck').innerHTML = F.b <= F.a ? '<div class="err">다시 여는 날은 시작일 다음 날 이후여야 해요</div>'
-      : c.res.length ? `<div class="callout red"><div class="tx"><b>이 기간에 예약 ${c.res.length}건이 있어요</b><span>${c.res.map(r => `${esc(r.name)} ${md(r.in)} – ${md(r.out)}`).join(', ')}. 예약을 먼저 옮기거나 취소해야 막을 수 있어요.</span></div></div>`
+      : c.res.length ? `<div class="callout red"><div class="tx"><b>이 기간에 예약 ${c.res.length}건이 있어요</b><span>${c.res.map(r => `${esc(r.name)}님 ${md(r.in)} – ${md(r.out)}`).join(', ')}. 예약을 먼저 옮기거나 취소해야 막을 수 있어요.</span></div></div>`
       : c.blk.length ? '<div class="err">이미 막힌 기간과 겹쳐요</div>'
       : `<div class="mut" style="font-size:13px">${md(F.a)}부터 ${md(F.b)} 전날까지 ${F.b - F.a}박을 막아요.</div>`;
     q('#bGo').disabled = !ok; q('#bGo').style.opacity = ok ? 1 : .35;

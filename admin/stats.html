@@ -17,7 +17,7 @@
 .kpi{padding:18px 22px;border-right:1px solid var(--line)}
 .kpi:last-child{border-right:0}
 .kpi small{display:block;font-size:13.5px;color:var(--ink-3);font-weight:500}
-.kpi b{display:block;font-size:28px;font-weight:700;letter-spacing:-.03em;margin:4px 0 2px}
+.kpi b{display:block;font-size:24px;font-weight:700;letter-spacing:-.03em;margin:4px 0 2px}
 .kpi b em{font-style:normal;font-size:15px;font-weight:600;margin-left:2px}
 .kpi span{font-size:13px;color:var(--ink-3)}
 .kpi .up{color:var(--ok-ink)}
@@ -103,7 +103,7 @@ function draw(){
   const maxRes = Math.ceil(Math.max(...MONTHS.map(x => x.res)) / 50) * 50;
   const grid = [0, .5, 1].map(f => `<div class="gl" style="bottom:${f * 196}px"><span>${Math.round(maxRes * f)}</span></div>`).join('');
   document.getElementById('wrap').innerHTML = `
-    <div class="pagehead"><div><h1>통계·매출</h1><p>예약관리 화면에서 옮겨 온 누적 숫자와 기간별 추이예요. 체크인 날짜 기준으로 셉니다.</p></div></div>
+    <div class="pagehead"><div><h1>통계·매출</h1><p>예약관리 화면에서 옮겨 온 누적 숫자와 기간별 추이예요. 체크인 날짜 기준이에요.</p></div></div>
     <div class="bar2"><div class="seg">${MONTHS.slice(-4).map(x => `<button data-m="${x.m}" class="${x.m === sel ? 'on' : ''}">${x.m}월${x.m === 9 ? ' · 28일까지' : ''}</button>`).join('')}</div><span class="note">3–8월은 월별 집계, 9월은 예약 데이터로 계산한 시안 값이에요. 9월은 28일까지라 지난달 전체와 비교해요.</span></div>
     <section class="kpis">
       <div class="kpi"><small>예약 수</small><b class="num">${M.res}<em>건</em></b>${delta(M.res, P?.res, x => x + '건')}</div>

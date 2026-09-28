@@ -51,7 +51,7 @@
         ['detail-conflict', '예약 충돌 → 다른 날짜·숙소로 옮기기', D(id.admin, 'act=move')],
         ['detail-channelmove', '채널 예약은 날짜를 채널에서 바꿔야 할 때', D(id.conflict, 'act=move'), 1],
         ['detail-refund100', '관리자 취소 · 전액 환불 (7일 전)', D(id.cancel, 'act=cancel'), 1],
-        ['detail-refund50', '관리자 취소 · 50% 환불 (3일 전)', D(id.in3, 'act=cancel'), 1],
+        ['detail-refund50', '관리자 취소 · 50% 환불 (4일 전)', D(id.admin, 'act=cancel'), 1],
         ['detail-refund0', '관리자 취소 · 환불 없음 (내일 입실)', D(id.in1, 'act=cancel'), 1],
         ['detail-corp', '기업 숙박권 예약 (숙박권 차감·반환)', D(id.corp)],
         ['detail-noshow', '노쇼 처리', D(id.stay, 'act=status'), 1],
@@ -101,6 +101,7 @@
   const H = location.hash;
   const curId = (H.match(/case=([\w-]+)/) || [])[1];
   const all = DOCS.flatMap(d => d.secs.flatMap(s => s.items.map(it => ({doc:d.doc, sec:s.t, id:it[0], t:it[1], url:it[2], edge:!!it[3]}))));
+  window.__CASES = all;
   const cur = all.find(x => x.id === curId);
   let docIx = cur ? DOCS.findIndex(d => d.doc === cur.doc) : (/\/(corp|app)\//.test(location.pathname) ? 1 : 0);
   let onlyEdge = false;

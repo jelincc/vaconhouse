@@ -9,6 +9,15 @@ const dOf = n => { const d = new Date(TODAY); d.setDate(d.getDate() + n); return
 const md = n => { const d = dOf(n); return `${d.getMonth()+1}.${d.getDate()}`; };
 const mdw = n => { const d = dOf(n); return `${d.getMonth()+1}.${d.getDate()} (${WD[d.getDay()]})`; };
 const offOf = s => Math.round((new Date(+s.slice(0,4), +s.slice(5,7)-1, +s.slice(8,10)) - TODAY) / 864e5);
+/* 받침에 맞는 조사: josa('그로브','은','는') → '그로브는' */
+function josa(w, a, b){
+  const s = String(w).trim(), ch = s.slice(-1), c = ch.charCodeAt(0);
+  let jong = 0;
+  if (c >= 0xAC00 && c <= 0xD7A3) jong = (c - 0xAC00) % 28;
+  else if (/[013678]/.test(ch)) jong = 1; else if (/[A-Za-z]/.test(ch)) jong = /[lmnr]/i.test(ch) ? 1 : 0;
+  if (a === '으로') return s + (jong && jong !== 8 ? '으로' : '로');
+  return s + (jong ? a : b);
+}
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const won = n => n.toLocaleString('ko-KR') + '원';
 const nowStamp = () => '9.28 ' + new Date().toTimeString().slice(0,5);
@@ -234,12 +243,12 @@ function issues(r){
 function issueDesc(r, k){
   const other = f => R.find(x => x !== r && x.flags.includes(f) && x.villa === r.villa);
   switch(k){
-    case 'conflict': { const o = other('conflict'); return o ? `${md(Math.max(r.in, o.in))} ${o.name}(${CH[o.ch].lb}) 예약과 겹쳐요. 관리자 등록 건이 에어비앤비 달력에서 막히지 않았어요.` : '같은 숙소 예약과 겹쳐요.'; }
+    case 'conflict': { const o = other('conflict'); return o ? `${md(Math.max(r.in, o.in))}에 ${esc(o.name)}님(${CH[o.ch].lb}) 예약과 겹쳐요.${[r.ch, o.ch].includes('관리자') ? ' 관리자 등록 예약이 채널 달력에서 막히지 않아 생긴 충돌이에요.' : ''}` : '같은 숙소 예약과 겹쳐요.'; }
     case 'notify': return '입실 안내 알림톡이 발송되지 않았어요. 재발송하거나 전화로 안내해 주세요.';
-    case 'cancel': return `${r.reqAt} 고객이 취소를 요청했어요. 입실 ${r.in}일 전이라 ${r.in >= 7 ? '전액' : '50%'} 환불 대상이에요.`;
-    case 'change': return `${r.note}. 해당 날짜는 공실이에요.`;
+    case 'cancel': { const f = refundOf(r); return `${r.reqAt} 고객이 취소를 요청했어요. 입실 ${r.in}일 전이라 ${f.rate === 1 ? '전액 환불' : f.rate ? '50% 환불' : '환불 없이 취소'} 대상이에요.`; }
+    case 'change': return `${r.note}. ${freeFor(r.villa, r.in + 1, r.out + 1, r) ? '바꾸려는 날짜는 비어 있어요.' : '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요.'}`;
     case 'pay': return r.note || '결제가 끝나지 않았어요.';
-    case 'missing': return `연락처가 '${esc(r.phoneRaw)}'로만 저장돼 알림을 보낼 수 없어요. ${r.ch === '에어비앤비' || r.ch === '네이버' ? r.ch + ' 예약 상세에서 확인해 주세요.' : ''}`;
+    case 'missing': return `연락처가 ${esc(r.phoneRaw)}까지만 저장돼 있어 알림을 보낼 수 없어요.${r.ch === '에어비앤비' || r.ch === '네이버' ? ` ${r.ch} 예약 상세에서 번호를 확인해 주세요.` : ''}`;
     case 'dup': { const o = R.find(x => x !== r && x.flags.includes('dup')); return `같은 예약자·같은 일정 예약이 ${o.created.slice(11)}에 ${o.base === '취소' ? '취소' : '접수'}됐어요. 이중 결제나 환불 누락이 없는지 확인해 주세요.`; }
     case 'sync': return '에어비앤비 쪽 변경 내역이 10:20 동기화에서 반영되지 않았어요.';
     case 'clean': return '내일 입실인데 청소 완료 확인이 아직 없어요.';
@@ -292,7 +301,7 @@ function toast(msg, ok = true){
 const ACT = {
   cancelOk:{lb:'취소 승인', cls:'danger', run:r => { r.base = '취소'; r.pay = '환불대기'; log(r, '취소 승인 · 환불 요청'); return '취소를 승인하고 환불을 요청했어요'; }},
   cancelNo:{lb:'거절', run:r => { r.base = '확정'; log(r, '취소 요청 거절'); return '취소 요청을 거절했어요'; }},
-  changeOk:{lb:'변경 승인', run:r => { r.in += 1; r.out += 1; r.base = '확정'; r.note = ''; log(r, `일정 변경 승인 · ${md(r.in)} – ${md(r.out)}`); return '일정을 바꾸고 고객에게 알렸어요'; }},
+  changeOk:{lb:'변경 승인', run:r => { if (!freeFor(r.villa, r.in + 1, r.out + 1, r)) return '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요'; r.in += 1; r.out += 1; r.base = '확정'; r.note = ''; log(r, `일정 변경 승인 · ${md(r.in)} – ${md(r.out)}`); return '일정을 바꾸고 고객에게 알렸어요'; }},
   changeNo:{lb:'거절', run:r => { r.base = '확정'; log(r, '일정 변경 거절'); return '변경 요청을 거절했어요'; }},
   resend:  {lb:'알림톡 재발송', run:r => { r.flags = r.flags.filter(f => f !== 'notify'); r.notices.push({t:'입실 안내 알림톡 · 재발송', m:nowStamp(), ok:true}); log(r, '입실 안내 알림톡 재발송'); return '알림톡을 다시 보냈어요'; }},
   seen:    {lb:'확인했어요', run:r => { r.seen = true; log(r, '예약 확인'); return '확인 완료로 표시했어요'; }},
@@ -300,7 +309,7 @@ const ACT = {
   clean:   {lb:'청소 완료 확인', run:r => { r.flags = r.flags.filter(f => f !== 'clean'); log(r, '객실 준비 완료 확인'); return '객실 준비 완료로 표시했어요'; }},
   checkout:{lb:'퇴실 처리', run:r => { r.base = '이용완료'; log(r, '퇴실 처리'); return `${r.name}님 퇴실 처리했어요`; }},
   resync:  {lb:'다시 동기화', run:r => { r.flags = r.flags.filter(f => f !== 'sync'); log(r, '에어비앤비 재동기화'); return '에어비앤비와 다시 동기화했어요'; }},
-  conflictOk:{lb:'충돌 해결됨으로 표시', run:r => { R.filter(x => x.flags.includes('conflict') && x.villa === r.villa).forEach(x => { x.flags = x.flags.filter(f => f !== 'conflict'); if (x !== r){ log(x, '예약 충돌 해결'); save(x); } }); log(r, '예약 충돌 해결 · 겹친 예약과 일정 조정'); return '충돌을 해결한 것으로 표시했어요'; }},
+  conflictOk:{lb:'이미 해결했어요', run:r => { R.filter(x => x.flags.includes('conflict') && x.villa === r.villa).forEach(x => { x.flags = x.flags.filter(f => f !== 'conflict'); if (x !== r){ log(x, '예약 충돌 해결'); save(x); } }); log(r, '예약 충돌 해결 · 겹친 예약과 일정 조정'); return '충돌을 해결한 것으로 표시했어요'; }},
   dupOk:   {lb:'정상 예약으로 확인', run:r => { R.filter(x => x.flags.includes('dup')).forEach(x => { x.flags = x.flags.filter(f => f !== 'dup'); save(x); }); log(r, '중복 아님 확인 · 이전 건 환불 완료 확인'); return '중복이 아닌 것으로 확인했어요'; }},
 };
 /* the one next step for a reservation: [secondary, primary] */

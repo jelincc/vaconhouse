@@ -66,7 +66,7 @@ body{background:#fff}
 /* cards */
 .corp{background:var(--accent-soft);color:var(--ink);border-radius:22px;padding:20px}
 .corp small{font-size:13px;color:var(--ink-3)}
-.corp .big{font-size:30px;font-weight:700;letter-spacing:-.03em;margin:4px 0 2px}
+.corp .big{font-size:28px;font-weight:700;letter-spacing:-.03em;margin:4px 0 2px}
 .corp .big em{font-style:normal;color:var(--accent)}
 .corp .sub{font-size:13px;color:var(--ink-2)}
 .corp .btn{width:100%;margin-top:16px;height:50px;border-radius:14px;background:var(--accent);color:#fff;font-size:16px}
@@ -211,7 +211,7 @@ function sHome(){
   const s = state(), N = nights(), up = MY().filter(r => cst(r) === '예정' || cst(r) === '이용 중').sort((a, b) => a.in - b.in);
   let corp = '';
   const L = leftNow();
-  if (s === '이용 가능') corp = L <= 0 ? `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big">모두 썼어요</div><div class="sub">추가 숙박권은 인사팀에 문의해 주세요. 이미 한 예약은 그대로예요.</div><button class="btn" disabled style="opacity:.35">회사 숙박권으로 예약하기</button></div>`
+  if (s === '이용 가능') corp = L <= 0 ? `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big">모두 썼어요</div><div class="sub">추가 숙박권은 인사팀에 문의해 주세요. 이미 잡힌 예약은 그대로예요.</div><button class="btn" disabled style="opacity:.35">회사 숙박권으로 예약하기</button></div>`
     : `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big"><em>${L}박</em> 남았어요</div><div class="sub">${L <= 5 ? '얼마 남지 않았어요. 동료들과 나눠 쓰는 숙박권이에요.' : `${COMPANY.until}까지 · 동료들과 함께 써요`}</div><button class="btn" data-go="villas">회사 숙박권으로 예약하기</button></div>`;
   else if (s === '확인 대기') corp = `<div class="soft orange"><b>${COMPANY.name}에서 소속을 확인하고 있어요</b><span>확인되고 이용 권한이 켜지면 여기에 회사 숙박권이 생겨요. 알림으로 알려드릴게요.</span></div>`;
   else if (s === '권한 없음') corp = `<div class="soft"><b>${COMPANY.name} 소속으로 확인됐어요</b><span>인사팀에서 이용 권한을 켜면 회사 숙박권으로 예약할 수 있어요.</span></div>`;
