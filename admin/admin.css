@@ -210,14 +210,11 @@ input[type=checkbox]{accent-color:#3E434B}
 .side .userbox a{color:rgba(255,255,255,.62)}
 .side .userbox a:hover{color:#fff}
 
-/* 사이드 메뉴: 전부 펼침. 대상 머리글(아이콘 + 작은 글자)은 누르지 않고, 메뉴만 누른다 */
-.side .nav{display:flex;flex-direction:column;gap:14px}
-.side .ng{display:flex;flex-direction:column;gap:1px}
-.side .ngh{display:flex;align-items:center;gap:8px;padding:0 12px 4px;color:rgba(255,255,255,.4);font-size:12.5px;font-weight:600}
-.side .ngi{display:flex}
-.side .ngi svg{width:15px;height:15px}
-.side .ng.here .ngh{color:rgba(255,255,255,.62)}
-.side .ng a{display:flex;align-items:center;justify-content:space-between;padding:8px 12px 8px 35px;border-radius:10px;color:rgba(255,255,255,.72);font-size:14.5px;font-weight:500;text-decoration:none}
+/* 사이드 메뉴: 큰 묶음 3개. 묶음 이름은 작고 옅게, 묶음 사이 여백으로 구분 */
+.side .nav{display:flex;flex-direction:column;gap:24px}
+.side .ng{display:flex;flex-direction:column;gap:2px}
+.side .ngh{padding:0 12px 6px;color:rgba(255,255,255,.38);font-size:12px;font-weight:600;letter-spacing:.02em}
+.side .ng a{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,.72);font-size:14.5px;font-weight:500;text-decoration:none}
 .side .ng a:hover{background:rgba(255,255,255,.06);color:#fff}
 .side .ng a.on{background:rgba(255,255,255,.12);color:#fff;font-weight:700}
 .side .ng a:focus-visible{outline:2px solid rgba(255,255,255,.7);outline-offset:-2px}

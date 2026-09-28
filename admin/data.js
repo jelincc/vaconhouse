@@ -278,15 +278,11 @@ function price(r){
 }
 
 /* ---------- chrome ---------- */
-/* 사이드 메뉴: 모든 메뉴를 펼쳐 두고, 다루는 대상(회원·숙소·예약…)을 작은 머리글로 묶어요 */
+/* 사이드 메뉴: 큰 묶음 3개. 묶음 이름은 작고 옅게, 묶음 사이는 넉넉히 띄워 구분해요 */
 const NAV = [
-  ['member', '회원', I('<circle cx="10" cy="7" r="3.2"/><path d="M3.8 16.5c.9-3 3.3-4.6 6.2-4.6s5.3 1.6 6.2 4.6"/>'), ['회원 관리','회원 상태']],
-  ['villa', '숙소', I('<path d="M3 9.2 10 3.5l7 5.7"/><path d="M5 8v8.5h10V8"/><path d="M8.3 16.5v-4.3h3.4v4.3"/>'), ['숙소 관리','숙소 운영']],
-  ['res', '예약', I('<rect x="3" y="4.5" width="14" height="12.5" rx="2.2"/><path d="M3 8.5h14M7 3v3M13 3v3"/>'), ['예약 관리','예약 운영']],
-  ['member2', '멤버십', I('<path d="M10 3.2l2 4.1 4.5.6-3.3 3.1.8 4.5L10 13.4l-4 2.1.8-4.5-3.3-3.1 4.5-.6z"/>'), ['멤버십 관리','하이시즌']],
-  ['money', '매출', I('<path d="M4 16.5V11M8 16.5V7.5M12 16.5V9.5M16 16.5V4"/>'), ['결제 내역','통계·매출']],
-  ['content', '콘텐츠', I('<rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h3.5"/>'), ['CMS 관리','숙박권']],
-  ['notice', '알림', I('<path d="M6 8.5a4 4 0 0 1 8 0c0 3.8 1.8 5 1.8 5H4.2S6 12.3 6 8.5"/><path d="M8.6 16.2a1.6 1.6 0 0 0 2.8 0"/>'), ['예약 알림 설정','알림톡 기록']],
+  ['core', '핵심 업무', ['회원 관리','회원 상태','숙소 관리','숙소 운영','예약 관리','예약 운영']],
+  ['policy', '정책·정산', ['멤버십 관리','결제 내역','하이시즌','통계·매출']],
+  ['content', '콘텐츠·기록', ['CMS 관리','숙박권','예약 알림 설정','알림톡 기록']],
 ];
 function mountSide(){
   setTimeout(mountAlert, 400);
@@ -296,8 +292,8 @@ function mountSide(){
   const side = document.querySelector('.side');
   side.innerHTML = `
     <div class="brand"><a href="./">${LOGO}</a><small>ADMIN</small></div>
-    <nav class="nav">${NAV.map(([id, lb, ic, items]) => `<div class="ng ${items.includes(cur) ? 'here' : ''}">
-      <div class="ngh"><span class="ngi">${ic}</span>${lb}</div>
+    <nav class="nav">${NAV.map(([id, lb, items]) => `<div class="ng">
+      <div class="ngh">${lb}</div>
       ${items.map(x => `<a href="${href(x)}" class="${x === cur ? 'on' : ''}" ${href(x) === '#' ? 'data-soon' : ''}>${x}${x === '예약 관리' && n ? `<span class="cnt">${n}</span>` : ''}</a>`).join('')}
     </div>`).join('')}</nav>
     <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../" id="logout">로그아웃</a></div>`;
