@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
 <title>베이컨하우스 회사 숙박권</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
@@ -20,7 +21,8 @@ body{background:#fff}
 .persona{display:flex;flex-direction:column;gap:8px}
 .persona button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line)}
 .persona button:hover{background:var(--surface-2)}
-.persona button.on{box-shadow:inset 0 0 0 2px var(--ink)}
+.persona button.on{box-shadow:none;background:var(--surface-2)}
+.persona button.on .av{background:var(--ink);color:#fff}
 .persona .av{width:36px;height:36px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-weight:700;color:var(--ink-2);flex:none}
 .persona .tx{display:flex;flex-direction:column}
 .persona .tx b{font-size:15px}

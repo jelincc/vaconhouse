@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
 <title>VACON house 예약 관리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
@@ -53,24 +54,21 @@
 .foot a{color:var(--ink-2);font-weight:600;text-decoration:none}
 .foot a:hover{text-decoration:underline}
 
-/* 오늘의 운영 (강조 · 라이트) */
-.ops{background:#fff;border:1.5px solid var(--ink);border-radius:24px;padding:22px 24px 24px}
-.ops-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
-.ops-h h3{margin:0;font-size:19px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
-.ops-h h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-2)}
-.ops-h span{font-size:13.5px;color:var(--ink-3)}
-.ops-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.op{all:unset;box-sizing:border-box;cursor:pointer;background:var(--accent-soft);border-radius:18px;padding:18px 18px 16px;display:flex;flex-direction:column;min-width:0;transition:background .15s,box-shadow .15s}
-.op:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
-.op.zero{background:var(--surface-2)}
-.op.zero:hover{box-shadow:inset 0 0 0 1.5px var(--line-2)}
-.op-l{font-size:14.5px;color:var(--ink-2);font-weight:600}
-.op-v{font-size:44px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-top:6px;color:var(--ink)}
-.op-v small{font-size:18px;font-weight:600;margin-left:3px;color:var(--ink-2)}
-.op.zero .op-v{color:var(--ink-4)}
-.op-s{font-size:13px;color:var(--ink-3);margin-top:2px}
-.op-list{display:flex;flex-direction:column;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(26,26,30,.08);min-height:74px}
-.op-p{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 오늘의 운영: 테두리 없이 크기와 면으로 강조 */
+.ops{padding:4px 0 0}
+.ops-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.ops-h h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.ops-h span{font-size:14px;color:var(--ink-3)}
+.ops-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.op{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface-2);border-radius:20px;padding:22px 22px 18px;display:flex;flex-direction:column;min-width:0;transition:background .15s}
+.op:hover{background:#EFF0F2}
+.op-l{font-size:15px;color:var(--ink-2);font-weight:600}
+.op-v{font-size:48px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-top:8px;color:var(--ink)}
+.op-v small{font-size:20px;font-weight:600;margin-left:3px;color:var(--ink-2)}
+.op.zero .op-v,.op.zero .op-v small{color:var(--ink-4)}
+.op-s{font-size:13.5px;color:var(--ink-3);margin-top:4px}
+.op-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;min-height:78px}
+.op-p{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .op-p i{width:7px;height:7px;border-radius:2px;flex:none}
 .op-p em{font-style:normal;color:var(--ink-3);margin-left:auto;padding-left:6px;flex:none}
 .op-p.none{color:var(--ink-3)}
@@ -386,7 +384,7 @@ function paneToday(){
       <h2>${n ? `확인이 필요한 예약이 <em>${n}건</em> 있어요` : '지금 처리할 예약이 없어요'}</h2>
     </div>
     <section class="ops" id="opsCard">
-      <div class="ops-h"><h3>오늘의 운영</h3><span>9월 28일 월요일 · 오전 10:24</span></div>
+      <div class="ops-h"><h3>오늘의 운영</h3></div>
       <div class="ops-g">
         ${op('in', '오늘 체크인', ins, '15:00부터 입실', r => '15:00', tmr.length ? `오늘은 없어요 · 내일 ${tmr.map(r => `${vById[r.villa].name} ${esc(r.name)}`).join(', ')}` : '오늘은 없어요')}
         ${op('out', '오늘 체크아웃', outs, '11:00까지 퇴실', r => st(r) === '이용 완료' ? '퇴실 완료' : '11:00', '오늘은 없어요')}

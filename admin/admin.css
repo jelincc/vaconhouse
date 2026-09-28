@@ -167,3 +167,29 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 .ta-x{width:32px;height:32px;justify-content:center;border-radius:10px;color:var(--ink-3);font-size:13px}
 .ta-x:hover{background:var(--surface-2)}
 @media (prefers-reduced-motion:reduce){.topalert{transition:none}}
+
+/* ===== Design pass: Toss-like calm hierarchy ===== */
+:root{
+  --line:#EEF0F2; --line-2:#DDE0E4;
+  --font:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+}
+body{letter-spacing:-.015em}
+/* sidebar: selection is a soft surface, not a black pill */
+.side{border-right-color:var(--line)}
+.nav a{font-weight:500;color:var(--ink-2)}
+.nav a.on{background:var(--surface-2);color:var(--ink);font-weight:700}
+.nav-label{color:var(--ink-4);font-size:12.5px}
+/* secondary buttons are weak fills, not outlines */
+.btn.line{background:var(--surface-2);box-shadow:none}
+.btn.line:hover{background:var(--surface-3)}
+.btn{letter-spacing:-.01em}
+/* cards: lighter hairline, a touch more air */
+.card{padding:22px 24px}
+.card > h3{font-size:18px;margin-bottom:12px}
+.lr{padding:12px 8px}
+.lr .tx b{font-size:15.5px}
+.lr .tx small{font-size:13.5px;margin-top:1px}
+.ico{border-radius:14px}
+.kv{font-size:14.5px;gap:12px 14px}
+.callout{border-radius:16px}
+.toast{font-weight:600}

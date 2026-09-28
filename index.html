@@ -6,6 +6,7 @@
 <link rel="icon" href="assets/vacon-logo-stacked.svg" type="image/svg+xml">
 <style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>VACON house 관리자 로그인</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
@@ -15,9 +16,9 @@
   --bg:#FFFFFF; --surface:#FFFFFF; --field:#FFFFFF; --field-hover:#F6F7F8; --line:#E6E8EA; --line-2:#D5D8DC;
   --ink:#1A1A1E; --ink-2:#575F6C; --ink-3:#768091; --ink-4:#AFB5BE;
   --accent:#FF6D12; --accent-soft:#FBF4EF;
-  --btn:#1A1A1E; --btn-ink:#FFFFFF; --btn-hover:#3E434B; --btn-dis:#E6E8EA; --btn-dis-ink:#AFB5BE; --focus:#1A1A1E;
+  --btn:#1A1A1E; --btn-ink:#FFFFFF; --btn-hover:#3E434B; --btn-dis:#E6E8EA; --btn-dis-ink:#AFB5BE; --focus:#FF6D12;
   --danger:#E8322F; --danger-soft:#FAE6E6;
-  --font:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font:"Pretendard Variable","Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --logo:"Cormorant","Cormorant Garamond",Georgia,"Times New Roman",serif;
 }
 *{box-sizing:border-box}
@@ -39,11 +40,11 @@ form{display:flex;flex-direction:column;gap:20px}
 .field{display:flex;flex-direction:column;gap:8px}
 .field label{font-size:14px;font-weight:600;color:var(--ink-2)}
 .inp{position:relative;display:flex;align-items:center}
-.inp input{width:100%;height:56px;border:0;border-radius:14px;background:var(--field);padding:0 18px;font-size:16px;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2);transition:box-shadow .15s,background .15s}
+.inp input{width:100%;height:56px;border:0;border-radius:14px;background:var(--field);padding:0 18px;font-size:16px;color:var(--ink);box-shadow:none;transition:box-shadow .15s,background .15s}
 .inp input::placeholder{color:var(--ink-4)}
 .inp input:hover{background:var(--field-hover)}
-.inp input:focus{outline:none;background:var(--surface);box-shadow:inset 0 0 0 2px var(--focus)}
-.inp.err input{box-shadow:inset 0 0 0 2px var(--danger);background:var(--surface)}
+.inp input:focus{outline:none;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--focus)}
+.inp.err input{box-shadow:inset 0 0 0 1.5px var(--danger);background:var(--surface)}
 .inp.pw input{padding-right:84px}
 .inp .clear,.inp .eye{position:absolute;border:0;background:transparent;cursor:pointer;color:var(--ink-3);border-radius:8px;display:grid;place-items:center}
 .inp .clear{right:12px;width:28px;height:28px}
@@ -66,7 +67,7 @@ form{display:flex;flex-direction:column;gap:20px}
 .link{font-size:14px;color:var(--ink-3);background:none;border:0;cursor:pointer;padding:4px 2px;border-radius:6px}
 .link:hover{color:var(--ink);text-decoration:underline}
 
-.toast{position:fixed;left:50%;bottom:calc(48px + env(safe-area-inset-bottom, 0px));transform:translate(-50%,16px);opacity:0;background:#1A1A1E;color:#fff;border-radius:14px;padding:14px 20px;font-size:15px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 12px 32px rgba(26,26,30,.22);transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap;max-width:calc(100% - 32px)}
+.toast{position:fixed;left:50%;bottom:calc(48px + env(safe-area-inset-bottom, 0px));transform:translate(-50%,16px);opacity:0;background:#fff;color:#1A1A1E;border:1px solid #EEF0F2;border-radius:14px;padding:14px 20px;font-size:15px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:0 12px 32px rgba(26,26,30,.22);transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap;max-width:calc(100% - 32px)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast svg{width:20px;height:20px;flex:none;color:#F37676}
 
