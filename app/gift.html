@@ -29,7 +29,6 @@ body{background:#fff}
 .sim .acts{display:flex;flex-direction:column;gap:6px}
 .sim .acts .btn{justify-content:flex-start;background:#fff;height:42px;border-radius:12px}
 .sim .acts .btn:hover{background:var(--surface-3)}
-.sim .acts .btn svg{width:16px;height:16px;color:var(--ink-3)}
 .links{display:flex;gap:14px;font-size:13px}
 .links a,.links button{color:var(--ink-3);font-weight:600;text-decoration:none;background:none;border:0;padding:0;font-size:13px}
 
@@ -78,17 +77,17 @@ body{background:#fff}
 .menu hr{border:0;height:8px;background:var(--surface-2);margin:8px -20px}
 
 /* gift list */
-.gift{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:14px;align-items:center;padding:12px 0;width:100%}
-.gift .ic{width:48px;height:48px;border-radius:16px;background:var(--surface-2);display:grid;place-items:center;flex:none;color:var(--ink-2)}
-.gift .ic svg{width:24px;height:24px}
-.gift .ic.on{background:var(--accent-soft);color:var(--accent)}
-.gift .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.gift{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px 0;width:100%;border-bottom:1px solid var(--line)}
+.gift:last-child{border-bottom:0}
+.gift .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .gift .tx b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gift .tx small{font-size:13.5px;color:var(--ink-3)}
 .gift .rt{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right;flex:none}
-.gift .rt span{font-size:14px;font-weight:600;color:var(--ink-2)}
-.gift .rt small{font-size:12.5px;color:var(--ink-3)}
-.gift .rt small.hot{color:var(--accent-ink);font-weight:600}
+.gift .rt small{font-size:13px;color:var(--ink-3)}
+.st{font-size:15px;font-weight:700;color:var(--ink)}
+.st.hot,.gift .rt small.hot{color:var(--accent-ink)}
+.st.ok{color:var(--ok-ink)}
+.st.end{color:var(--ink-4)}
 .empty{padding:36px 0;text-align:center;color:var(--ink-3);font-size:14.5px}
 .soft{background:var(--surface-2);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:6px}
 .soft b{font-size:17px;letter-spacing:-.02em}
@@ -110,46 +109,35 @@ body{background:#fff}
 .field label{font-size:13.5px;color:var(--ink-3);font-weight:500}
 .field .inp{height:54px;border-radius:14px;font-size:16px;border:0;background:var(--surface-2);padding:0 16px;outline:none}
 .field .inp:focus{box-shadow:inset 0 0 0 2px #3E434B}
-.rules{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
-.rules li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-2);line-height:1.5}
-.rules li svg{width:18px;height:18px;color:var(--ink-4);flex:none;margin-top:2px}
+.rules{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.rules li{font-size:14px;color:var(--ink-3);line-height:1.5;padding-left:12px;position:relative}
+.rules li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;background:var(--ink-4)}
+.rules b{color:var(--ink-2)}
 
 /* detail */
-.clock{background:var(--surface-2);border-radius:20px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.clock.hot{background:var(--accent-soft)}
-.clock small{display:block;font-size:13.5px;color:var(--ink-3)}
-.clock b{font-size:17px}
-.clock .left{font-size:22px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
-.clock.hot .left{color:var(--accent-ink)}
-.track{list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column}
-.track li{display:grid;grid-template-columns:26px 1fr auto;gap:12px;padding-bottom:18px;position:relative}
-.track li::before{content:"";position:absolute;left:12px;top:28px;bottom:2px;width:2px;background:var(--line)}
-.track li.done::before{background:var(--ink)}
-.track li:last-child::before{display:none}
-.track .n{width:26px;height:26px;border-radius:50%;background:var(--surface-2);color:var(--ink-4);display:grid;place-items:center;font-size:12.5px;font-weight:700}
-.track .n svg{width:14px;height:14px}
-.track li.done .n{background:var(--ink);color:#fff}
-.track li.now .n{background:var(--accent);color:#fff}
-.track li.back .n{background:var(--surface-3);color:var(--ink-2)}
-.track b{font-size:15.5px;display:block;margin-top:2px}
-.track small{font-size:13.5px;color:var(--ink-3)}
-.track li:not(.done):not(.now):not(.back) b{color:var(--ink-4);font-weight:600}
-.track .d{font-size:13px;color:var(--ink-3);margin-top:3px;white-space:nowrap}
-.kv2{display:flex;flex-direction:column;margin-top:4px}
+.prog{margin:4px 0 0}
+.prog .bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.prog .bar i{height:6px;border-radius:3px;background:var(--surface-3)}
+.prog .bar i.done{background:var(--ink)}
+.prog .bar i.now{background:var(--accent)}
+.prog .lbl{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+.prog .lbl span{font-size:13px;color:var(--ink-4);font-weight:500}
+.prog .lbl span.done{color:var(--ink-2)}
+.prog .lbl span.now{color:var(--accent-ink);font-weight:700}
+.prog .lbl span.fail{color:var(--ink);font-weight:700}
+.h2 small.hot{color:var(--accent-ink);font-weight:600}
+.kv2{display:flex;flex-direction:column;margin-top:32px;border-top:1px solid var(--line);padding-top:6px}
 .kv2 div{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}
 .kv2 div:last-child{border-bottom:0}
 .kv2 span{color:var(--ink-3);flex:none}
 .kv2 b{font-weight:600;text-align:right}
-.hr8{height:8px;background:var(--surface-2);margin:22px -20px 8px}
 
 /* share sheet, push, toast */
 .shscrim{position:absolute;inset:0;background:rgba(26,26,30,.4);z-index:10;display:flex;align-items:flex-end}
 .sheet{background:#fff;width:100%;border-radius:28px 28px 0 0;padding:28px 22px 34px}
 .sheet h3{margin:0;font-size:21px;font-weight:700;letter-spacing:-.03em;line-height:1.4}
 .sheet p{margin:8px 0 22px;font-size:15px;color:var(--ink-2);line-height:1.55}
-.sheet .card{background:var(--surface-2);border-radius:18px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:22px}
-.sheet .card .ic{width:44px;height:44px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
-.sheet .card .ic svg{width:22px;height:22px}
+.sheet .card{background:var(--surface-2);border-radius:18px;padding:16px 18px;margin-bottom:22px}
 .sheet .card b{display:block;font-size:15.5px}
 .sheet .card small{font-size:13px;color:var(--ink-3)}
 .sheet .btn{width:100%;height:56px;border-radius:16px;font-size:17px}
@@ -166,7 +154,6 @@ body{background:#fff}
 .push p{margin:1px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.4}
 @keyframes drop{from{transform:translateY(-120%);opacity:0}to{transform:none;opacity:1}}
 .ptoast{position:absolute;left:20px;right:20px;bottom:110px;background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:0 10px 28px rgba(26,26,30,.14);border-radius:16px;padding:14px 16px;font-size:14.5px;display:flex;gap:8px;align-items:center;z-index:12}
-.ptoast svg{width:20px;height:20px;color:var(--ok);flex:none}
 @media (max-width:900px){.stage{gap:28px}.side2{width:100%;max-width:390px}}
 @media (max-width:430px){.stage{padding:24px 16px}.phone{width:100%;height:760px;border-radius:44px;padding:8px}.scr{border-radius:36px}}
 </style>
@@ -184,11 +171,7 @@ const NOW = 14, LIMIT = 48;
 const hm = h => { const d = dOf(Math.floor(h / 24)), m = ((h % 24) + 24) % 24; return `${d.getMonth()+1}.${d.getDate()} (${WD[d.getDay()]}) ${String(Math.floor(m)).padStart(2,'0')}:${m % 1 ? '30' : '00'}`; };
 const dayOf = h => md(Math.floor(h / 24));
 const GI = {
-  gift: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="11.5" rx="2"/><path d="M2.5 9h19v-3h-19zM12 6v14.5"/><path d="M12 6c-1.5-3.2-5.5-3.2-5.5-.8C6.5 6 8 6 12 6zM12 6c1.5-3.2 5.5-3.2 5.5-.8 0 .8-1.5.8-5.5.8z"/></svg>',
   kakao: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5c-5 0-9 3.2-9 7.1 0 2.5 1.6 4.7 4.1 5.9l-.9 3.4c-.1.3.3.6.6.4l4-2.6c.4 0 .8.1 1.2.1 5 0 9-3.2 9-7.2S17 3.5 12 3.5z"/></svg>',
-  clock: I('<circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.6 1.6"/>'),
-  back: I('<path d="M16 10a6 6 0 1 1-1.8-4.3"/><path d="M16 3.5v3.3h-3.3"/>'),
-  user: I('<circle cx="10" cy="7" r="3.2"/><path d="M3.8 17c.5-3.2 3-5 6.2-5s5.7 1.8 6.2 5"/>'),
 };
 
 /* ---------- 데이터 ---------- */
@@ -234,19 +217,22 @@ function frame(title, body, cta = '', tab = false){
       <button class="on"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6z"/></svg>MY</button></nav>` : ''}`;
 }
 
-/* 목록 한 줄: 오른쪽은 지금 상태 한 마디, 확인이 필요할 때만 주황 */
+/* 지금 상태 한 마디 + 보조 문구. tone: hot(보낸 사람이 할 일) · ok(다녀옴) · end(끝남) */
+function stateOf(g){
+  const soon = hoursLeft(g) < 12;
+  if (g.st === '발송 전') return {st:'보내기 전', sub:leftTxt(g), tone:'hot'};
+  if (g.st === '발송됨') return {st:'받기 전', sub:leftTxt(g), tone:soon ? 'hot' : ''};
+  if (g.st === '사용 가능') return {st:'예약 전', sub:leftTxt(g), tone:soon ? 'hot' : ''};
+  if (g.st === '예약 완료') return {st:'예약 완료', sub:`${md(g.res.in)} 체크인`, tone:''};
+  if (g.st === '이용 완료') return {st:'다녀왔어요', sub:`${md(g.res.in + 1)} 체크아웃`, tone:'ok'};
+  if (g.st === '노쇼') return {st:'이용 안 함', sub:`${md(g.res.in)} 미입실`, tone:'end'};
+  return {st:'1박 돌아옴', sub:`${dayOf(g.backAt)} 반환`, tone:'end'};
+}
 function giftRow(g){
-  let st, sub = '', hot = false;
-  if (g.st === '발송 전'){ st = '보내기 전'; sub = leftTxt(g); hot = true; }
-  else if (g.st === '발송됨'){ st = '받기 전'; sub = leftTxt(g); hot = hoursLeft(g) < 12; }
-  else if (g.st === '사용 가능'){ st = '예약 전'; sub = leftTxt(g); hot = hoursLeft(g) < 12; }
-  else if (g.st === '예약 완료'){ st = '예약 완료'; sub = `${md(g.res.in)} 체크인`; }
-  else if (g.st === '이용 완료'){ st = '다녀왔어요'; sub = `${md(g.res.in + 1)} 체크아웃`; }
-  else if (g.st === '노쇼'){ st = '이용 안 함'; sub = `${md(g.res.in)} 미입실`; }
-  else { st = '1박 돌아옴'; sub = `${dayOf(g.backAt)} 반환`; }
-  return `<button class="gift" data-g="${g.id}"><span class="ic ${isOpen(g) ? 'on' : ''}">${GI.gift}</span>
+  const {st, sub, tone} = stateOf(g);
+  return `<button class="gift" data-g="${g.id}">
     <span class="tx"><b>${esc(who(g))}</b><small>${g.type} 1박 · ${dayOf(g.made)} 선물</small></span>
-    <span class="rt"><span>${st}</span><small class="${hot ? 'hot' : ''}">${sub}</small></span></button>`;
+    <span class="rt"><span class="st ${tone}">${st}</span><small class="${tone === 'hot' ? 'hot' : ''}">${sub}</small></span></button>`;
 }
 
 /* ---------- 화면 ---------- */
@@ -294,47 +280,48 @@ function sNew(){
     ${opt('주말', '금요일 · 토요일 · 공휴일 전날 밤')}
     <div class="field"><label for="memo">받는 분 (나만 보는 이름)</label><input class="inp" id="memo" placeholder="예: 지민님, 엄마" maxlength="12" value="${esc(c.memo || '')}" autocomplete="off"></div>
     <ul class="rules">
-      <li>${ICON.info}<span>선물하면 ${c.type} 잔여 숙박일에서 1박이 바로 빠져요.</span></li>
-      <li>${GI.clock}<span>받는 분이 <b>48시간 안에</b> 예약하지 않으면 1박이 다시 돌아와요.</span></li>
-      <li>${GI.user}<span>받는 분이 등록, 예약, 이용을 마칠 때마다 알려드려요.</span></li>
+      <li>선물하면 ${c.type} 잔여 숙박일에서 1박이 바로 빠져요.</li>
+      <li><b>48시간 안에</b> 예약하지 않으면 1박이 돌아와요.</li>
+      <li>받는 분이 등록, 예약, 이용을 마칠 때마다 알려드려요.</li>
     </ul>`,
     `<div class="cta"><button class="btn primary" data-make>${c.type} 1박 선물하기</button></div>`);
 }
 
 function sDetail(){
   const g = gById(cur().g), w = who(g), r = g.res, v = r && vById[r.v];
+  const due = `${hm(g.made + LIMIT)}까지 예약해야 해요 · ${leftTxt(g)}`, soon = hoursLeft(g) < 12;
   let h, sub;
-  if (g.st === '발송 전'){ h = '아직 선물을<br>보내지 않았어요'; sub = '카카오톡으로 보내야 받는 분이 쓸 수 있어요.'; }
-  else if (g.st === '발송됨'){ h = `${esc(josa(w, '이', '가'))} 아직<br>선물을 받지 않았어요`; sub = '받는 분이 링크를 열고 등록하면 알려드릴게요.'; }
-  else if (g.st === '사용 가능'){ h = `${esc(josa(w, '이', '가'))} 선물을 받았어요<br><em>아직 예약 전</em>이에요`; sub = '예약하면 어디로, 언제 가는지 알려드릴게요.'; }
-  else if (g.st === '예약 완료'){ h = `${esc(josa(w, '이', '가'))} ${josa(v.name, '을', '를')}<br>예약했어요`; sub = `${mdw(r.in)} 체크인 · 1박`; }
-  else if (g.st === '이용 완료'){ h = `${esc(josa(w, '이', '가'))} 선물로<br>${v.name}에 다녀왔어요`; sub = `${mdw(r.in)} – ${mdw(r.in + 1)} · 1박`; }
+  if (g.st === '발송 전') h = '아직 선물을<br>보내지 않았어요';
+  else if (g.st === '발송됨') h = `${esc(josa(w, '이', '가'))} 아직<br>선물을 받지 않았어요`;
+  else if (g.st === '사용 가능') h = `${esc(josa(w, '이', '가'))} 선물을 받았어요<br><em>아직 예약 전</em>이에요`;
+  else if (g.st === '예약 완료') h = `${esc(josa(w, '이', '가'))} ${josa(v.name, '을', '를')}<br>예약했어요`;
+  else if (g.st === '이용 완료') h = `${esc(josa(w, '이', '가'))} 선물로<br>${v.name}에 다녀왔어요`;
   else if (g.st === '노쇼'){ h = `${esc(josa(w, '이', '가'))} 예약한 날<br>입실하지 않았어요`; sub = '예약한 날이 지나 1박은 돌아오지 않아요.'; }
   else { h = '48시간 안에 예약하지 않아<br>1박이 돌아왔어요'; sub = `${g.type} 잔여 숙박일에 다시 더했어요.`; }
+  if (isOpen(g)) sub = due;
 
-  const stepDone = {'발송 전':0,'발송됨':1,'사용 가능':2,'예약 완료':3,'이용 완료':4,'노쇼':3,'회수 완료':g.reg ? 2 : 1}[g.st];
-  const tick = ICON.tick;
-  const li = (i, t, s, d) => `<li class="${i < stepDone || (i === 3 && g.st === '이용 완료') ? 'done' : i === stepDone && isOpen(g) ? 'now' : ''}"><span class="n">${i < stepDone || (i === 3 && g.st === '이용 완료') ? tick : i + 1}</span><div><b>${t}</b>${s ? `<small>${s}</small>` : ''}</div><span class="d">${d || ''}</span></li>`;
-  let steps = li(0, g.st === '발송 전' ? '선물 만들기' : '카카오톡으로 보냄', `${g.type} 1박`, dayOf(g.made))
-    + li(1, g.reg ? '받는 분이 등록' : '받는 분 등록', g.reg ? `${esc(g.reg)} 계정으로 등록` : '', g.regAt != null ? dayOf(g.regAt) : '');
-  if (g.st === '회수 완료') steps += `<li class="back"><span class="n">${GI.back}</span><div><b>기한 지나서 1박 반환</b><small>${g.type} 잔여 숙박일에 더함</small></div><span class="d">${dayOf(g.backAt)}</span></li>`;
-  else steps += li(2, r ? `${v.region} ${v.name} 예약` : '예약', r ? `${mdw(r.in)} 체크인` : `${hm(g.made + LIMIT)}까지`, r ? dayOf(r.at) : '')
-    + (g.st === '노쇼' ? `<li class="back"><span class="n">${ICON.x}</span><div><b>입실하지 않음</b><small>1박은 돌아오지 않아요</small></div><span class="d">${md(r.in)}</span></li>`
-      : li(3, '이용 완료', g.st === '이용 완료' ? '체크아웃했어요' : '', g.st === '이용 완료' ? md(r.in + 1) : r ? `${md(r.in + 1)} 예정` : ''));
+  /* 4단계 막대: 보냄 → 받음 → 예약 → 이용 */
+  const done = {'발송 전':0,'발송됨':1,'사용 가능':2,'예약 완료':3,'이용 완료':4,'노쇼':3,'회수 완료':g.reg ? 2 : 1}[g.st];
+  const fail = g.st === '회수 완료' ? '반환' : g.st === '노쇼' ? '미입실' : '';
+  const cls = i => i < done ? 'done' : i === done && isOpen(g) ? 'now' : i === done && fail ? 'fail' : '';
+  const names = ['보냄', '받음', '예약', '이용'].map((t, i) => i === done && fail ? fail : t);
+  const prog = `<div class="prog"><div class="bar">${names.map((_, i) => `<i class="${cls(i) === 'fail' ? '' : cls(i)}"></i>`).join('')}</div>
+    <div class="lbl">${names.map((t, i) => `<span class="${cls(i)}">${t}</span>`).join('')}</div></div>`;
 
-  const clock = isOpen(g) ? `<div class="clock ${hoursLeft(g) < 12 ? 'hot' : ''}"><div><small>예약 기한</small><b>${hm(g.made + LIMIT)}</b></div><span class="left num">${leftTxt(g)}</span></div>` : '';
+  const row = (k, val) => `<div><span>${k}</span><b>${val}</b></div>`;
   const cta = g.st === '발송 전' ? `<div class="cta"><button class="btn kakao" data-share>${GI.kakao}카카오톡으로 보내기</button></div>`
     : g.st === '발송됨' || g.st === '사용 가능' ? `<div class="cta"><button class="btn" data-share>${g.st === '발송됨' ? '링크 다시 보내기' : '예약해 달라고 다시 알리기'}</button></div>` : '';
   return frame('', `
-    <div class="h2">${h}<small>${sub}</small></div>
-    ${clock}
-    <ol class="track">${steps}</ol>
-    <div class="hr8"></div>
+    <div class="h2">${h}${sub ? `<small class="${isOpen(g) && soon ? 'hot' : ''}">${sub}</small>` : ''}</div>
+    ${prog}
     <div class="kv2">
-      <div><span>숙박권</span><b>${g.type} 1박</b></div>
-      <div><span>받는 분</span><b>${g.reg ? esc(g.reg) : '등록 전'}${g.memo ? `<span style="color:var(--ink-3);font-weight:500"> · ${esc(g.memo)}</span>` : ''}</b></div>
-      <div><span>선물한 날</span><b>${hm(g.made)}</b></div>
-      <div><span>선물 번호</span><b class="num" style="color:var(--ink-3);font-weight:500">${g.id}</b></div>
+      ${row('받는 분', `${g.reg ? esc(g.reg) : '등록 전'}${g.memo ? `<span style="color:var(--ink-3);font-weight:500"> · ${esc(g.memo)}</span>` : ''}`)}
+      ${row('숙박권', `${g.type} 1박`)}
+      ${r ? row('숙소', `${v.region} ${v.name}`) + row('일정', `${mdw(r.in)} – ${mdw(r.in + 1)}`) : ''}
+      ${row('선물한 날', hm(g.made))}
+      ${g.regAt != null ? row('받은 날', hm(g.regAt)) : ''}
+      ${g.st === '회수 완료' ? row('돌아온 날', hm(g.backAt)) : ''}
+      ${row('선물 번호', `<span class="num" style="color:var(--ink-3);font-weight:500">${g.id}</span>`)}
     </div>`, cta);
 }
 
@@ -364,7 +351,7 @@ function side(){
     <div class="grp"><b>오너 회원 상태</b><div class="seg">${['이용 가능','관리비 미납','사용 시작 전'].map(x => `<button data-m="${x}" class="${D.member === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
     <div class="sim">
       <div class="tg">받는 분 쪽에서 일어나는 일<small>${g ? `${esc(who(g))} · ${g.type} 1박 · 지금 ${g.st}` : '진행 중인 선물이 없어요. 새로 선물해 보세요.'}</small></div>
-      ${acts.length ? `<div class="acts">${acts.map(([k, e]) => `<button class="btn" data-ev="${k}">${ICON.chev}${e.lb}</button>`).join('')}</div>` : ''}
+      ${acts.length ? `<div class="acts">${acts.map(([k, e]) => `<button class="btn" data-ev="${k}">${e.lb}</button>`).join('')}</div>` : ''}
     </div>
     <div class="grp"><b>케이스 바로 보기</b><select id="case" class="inp" style="height:44px;border-radius:12px;border:0;background:var(--surface-2);padding:0 12px;font-size:14px;font-weight:600"><option value="">직접 눌러 보기</option>${CASES.map(([id, grp, lb]) => `<option value="${id}" ${CASE === id ? 'selected' : ''}>${grp} · ${lb}</option>`).join('')}</select></div>
     <div class="links"><a href="../admin/">관리자</a><button id="reset">시안 초기화</button></div>`;
@@ -383,7 +370,7 @@ function draw(){
   $('scr').innerHTML = {my:sMy, gifts:sGifts, new:sNew, detail:sDetail}[cur().s]();
   side();
 }
-function ptoast(m){ $('scr').querySelectorAll('.ptoast').forEach(x => x.remove()); const t = document.createElement('div'); t.className = 'ptoast'; t.innerHTML = ICON.check + `<span>${m}</span>`; $('scr').appendChild(t); setTimeout(() => t.remove(), 2200); }
+function ptoast(m){ $('scr').querySelectorAll('.ptoast').forEach(x => x.remove()); const t = document.createElement('div'); t.className = 'ptoast'; t.innerHTML = `<span>${m}</span>`; $('scr').appendChild(t); setTimeout(() => t.remove(), 2200); }
 let pushT;
 function pushNoti(title, text, gid){
   $('scr').querySelectorAll('.push').forEach(x => x.remove()); clearTimeout(pushT);
@@ -405,7 +392,7 @@ function copyLink(g){
 function shareSheet(g, fresh){
   const d = document.createElement('div'); d.className = 'shscrim';
   d.innerHTML = `<div class="sheet"><h3>${fresh ? '선물을 만들었어요<br>카카오톡으로 보내 주세요' : '카카오톡으로 다시 보낼게요'}</h3><p>${fresh ? `${g.type} 잔여 숙박일에서 1박이 빠졌어요. ` : ''}${hm(g.made + LIMIT)}까지 예약하지 않으면 1박이 돌아와요.</p>
-    <div class="card"><span class="ic">${GI.gift}</span><div><b>베이컨하우스 ${g.type} 숙박권 1박</b><small>${OWNER.name}님이 보낸 선물</small></div></div>
+    <div class="card"><div><b>베이컨하우스 ${g.type} 숙박권 1박</b><small>${OWNER.name}님이 보낸 선물</small></div></div>
     <button class="btn kakao" data-y>${GI.kakao}카카오톡으로 보내기</button>${fresh ? '<button class="btn ghost" data-x>나중에 보낼게요</button>' : '<button class="btn ghost" data-x>닫기</button>'}</div>`;
   d.onclick = e => {
     if (e.target === d || e.target.closest('[data-x]')){ d.remove(); if (fresh) ptoast('선물함에서 언제든 보낼 수 있어요'); return; }
