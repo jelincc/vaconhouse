@@ -92,7 +92,7 @@
 .ddpanel .grp{font-size:12px;color:var(--ink-3);padding:8px 10px 2px;font-weight:600}
 .ddpanel .sw2{width:9px;height:9px;border-radius:3px;margin-left:auto}
 .ddfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 4px 2px;border-top:1px solid var(--line);margin-top:6px}
-.fsel.on{background:var(--ink);color:#fff}
+.fsel.on{background:#3E434B;color:#fff}
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .datebar{display:flex;align-items:center;gap:6px}
 .datebar .range{font-weight:700;font-size:15px;min-width:200px;text-align:center}
@@ -153,6 +153,21 @@
 .legend .sw{width:22px;height:14px;border-radius:4px;display:inline-block;box-shadow:inset 0 0 0 1px var(--line-2);background:#fff}
 .legend .t{color:var(--ink-3)}
 
+.fsel svg,.newbox .big span svg,.tbtn svg{width:14px;height:14px;vertical-align:-2px}
+.fsel{display:inline-flex;align-items:center;gap:4px;border:0;cursor:pointer}
+.ddpanel .opt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%;padding:9px 10px;border-radius:10px;font-size:14px}
+.ddpanel .opt:hover{background:var(--surface-2)}
+.ddpanel .opt.on{font-weight:700}
+.ddpanel .opt svg{width:16px;height:16px;color:#3E434B}
+.newbox .big span{display:inline-flex;align-items:center;gap:2px}
+.nti{display:inline-flex;color:var(--ink-3)}
+.nti svg{width:13px;height:13px}
+.fchip button svg{width:12px;height:12px}
+.op-p b{font-weight:600;flex:none}
+.mc .it .io2{flex:none;font-size:11px;font-weight:600;color:var(--ink-3);background:var(--surface-2);border-radius:4px;padding:0 4px;line-height:16px}
+.mc .it.o .io2{background:transparent;box-shadow:inset 0 0 0 1px var(--line-2)}
+.idot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none;display:inline-block}
+.idot.red{background:var(--danger)}
 /* 판매 막기 · 빈 칸 메뉴 */
 .bk{all:unset;cursor:pointer;position:absolute;height:34px;border-radius:9px;box-sizing:border-box;display:flex;align-items:center;gap:6px;padding:0 10px;font-size:12.5px;font-weight:600;color:var(--ink-2);background:repeating-linear-gradient(135deg,#EFF0F2 0 6px,#fff 6px 12px);box-shadow:inset 0 0 0 1px var(--line-2);overflow:hidden;white-space:nowrap}
 .bk:hover{box-shadow:inset 0 0 0 1px var(--ink-3)}
@@ -278,8 +293,7 @@ body.anno .main{margin-right:432px}
     <div class="pagehead">
       <div><h1>예약 관리</h1><p>9월 28일 월요일 · 오전 10:24 기준</p></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn line" id="annoBtn">개선 포인트</button>
-        <button class="btn line" id="syncBtn">채널 동기화</button>
+        <button class="btn line" id="syncBtn">채널 연동</button>
         <button class="btn primary" id="addBtn">예약 등록</button>
       </div>
     </div>
@@ -374,7 +388,7 @@ function paneToday(){
   const fresh = pick('new');
   const ins = pick('in'), outs = pick('out'), stay = pick('stay'), same = pick('sameday');
   const tmr = R.filter(r => ACTIVE(r) && r.in === 1);
-  const who = (L, tm) => L.slice(0, 3).map(r => `<span class="op-p"><i style="background:${vById[r.villa].c}"></i>${vById[r.villa].name} · ${esc(r.name)}<em>${tm(r)}</em></span>`).join('') + (L.length > 3 ? `<span class="op-p none">외 ${L.length - 3}건</span>` : '');
+  const who = (L, tm) => L.slice(0, 3).map(r => `<span class="op-p"><b>${vById[r.villa].name}</b>${esc(r.name)}<em>${tm(r)}</em></span>`).join('') + (L.length > 3 ? `<span class="op-p none">외 ${L.length - 3}건</span>` : '');
   const op = (k, lb, L, sub, tm, empty) => `<button class="op ${L.length ? '' : 'zero'}" data-k="${k}"><span class="op-l">${lb}</span><span class="op-v num">${L.length}<small>건</small></span><span class="op-s">${sub}</span><span class="op-list">${L.length ? who(L, tm) : `<span class="op-p none">${empty}</span>`}</span></button>`;
   const row = k => { const c = pick(k).length, col = c ? (SEV[k] || '') : '';
     return `<button class="lr ${c ? '' : 'zero'}" data-k="${k}"><span class="ico ${col}">${ICON[ICK[k]]}</span><span class="tx"><b>${COND[k].lb}${c && col === 'red' ? ' ' + BD('긴급','red','xs') : ''}</b><small>${c ? esc(reason(k)) : '이상 없어요'}</small></span><span class="cnt2 ${col === 'red' ? 'red' : ''} num">${c}건</span><span class="chev">${ICON.chev}</span></button>`; };
@@ -395,7 +409,7 @@ function paneToday(){
     <div class="twin">
       <section class="card" id="newCard"><h3>신규·처리 대기 <span class="r mut" style="font-size:13px;font-weight:500">어제 18시 이후</span></h3>
         <button class="newbox" data-k="new">
-          <div class="big"><b class="num">${fresh.length}건</b><span>신규 예약 ›</span></div>
+          <div class="big"><b class="num">${fresh.length}건</b><span>신규 예약 ${ICON.chev}</span></div>
           <div class="bar">${chAll.filter(x => x[1]).map(([c, k]) => `<i style="flex:${k};background:${CH[c].c}"></i>`).join('')}</div>
           <div class="chline">${chAll.map(([c, k]) => `<span class="${k ? '' : 'z'}">${CH[c].lb} <b class="${k ? '' : 'z'}">${k}건</b></span>`).join(' · ')}</div>
         </button>
@@ -409,8 +423,8 @@ function paneToday(){
 /* ---------- filters ---------- */
 function ddMulti(key, label, groups){
   const set = S.f[key];
-  return `<div class="dd"><button class="fsel ${set.size ? 'on' : ''}" data-dd="${key}">${set.size ? `${label} ${set.size}` : `${label} 전체`} ▾</button>
-    ${S.dd === key ? `<div class="ddpanel">${groups.map(([g, items]) => (g ? `<div class="grp">${g}</div>` : '') + items.map(([v, t, c]) => `<label><input type="checkbox" data-set="${key}" value="${v}" ${set.has(v) ? 'checked' : ''}> ${t}${c ? `<i class="sw2" style="background:${c}"></i>` : ''}</label>`).join('')).join('')}
+  return `<div class="dd"><button class="fsel ${set.size ? 'on' : ''}" data-dd="${key}">${set.size ? `${label} ${set.size}` : `${label} 전체`} ${ICON.down}</button>
+    ${S.dd === key ? `<div class="ddpanel">${groups.map(([g, items]) => (g ? `<div class="grp">${g}</div>` : '') + items.map(([v, t]) => `<label><input type="checkbox" data-set="${key}" value="${v}" ${set.has(v) ? 'checked' : ''}> ${t}</label>`).join('')).join('')}
       <div class="ddfoot"><button class="btn sm" data-clear="${key}">전체 해제</button><button class="btn sm primary" data-dd="${key}">적용</button></div></div>` : ''}</div>`;
 }
 function fbarHTML(){
@@ -420,7 +434,8 @@ function fbarHTML(){
     ${ddMulti('regions','지역',[['', REGIONS.map(r => [r, r])]])}
     ${ddMulti('villas','숙소', REGIONS.map(rg => [rg, VILLAS.filter(v => v.region === rg).map(v => [v.id, v.name, v.c])]))}
     ${ddMulti('types','운영 유형',[['', TYPES.map(t => [t, t])]])}
-    <select class="fsel" id="fStatus" aria-label="예약 상태"><option value="전체">상태 전체</option>${['예약 확정','이용 중','이용 완료','취소 요청','변경 요청','예약 취소'].map(s => `<option ${S.f.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+    <div class="dd"><button class="fsel ${S.f.status !== '전체' ? 'on' : ''}" data-dd="status">${S.f.status === '전체' ? '상태 전체' : S.f.status} ${ICON.down}</button>
+      ${S.dd === 'status' ? `<div class="ddpanel" style="min-width:200px">${['전체','예약 확정','이용 중','이용 완료','취소 요청','변경 요청','예약 취소','노쇼'].map(s => `<button class="opt ${S.f.status === s ? 'on' : ''}" data-stv="${s}">${s === '전체' ? '상태 전체' : s}${S.f.status === s ? ICON.tick : ''}</button>`).join('')}</div>` : ''}</div>
     <span class="fsep"></span>
     ${Object.keys(CH).map(c => `<button class="chip ${S.f.channels.has(c) ? 'on' : ''}" data-ch="${c}"><i style="background:${CH[c].c}"></i>${CH[c].lb}</button>`).join('')}
     <span class="fsep"></span>
@@ -449,7 +464,7 @@ function blockHTML(r, start, n, w, lane){
   const title = `${r.name} · ${vFull(r.villa)} · ${mdw(r.in)} – ${mdw(r.out)} ${r.out - r.in}박 · ${CH[r.ch].lb} · ${st(r)}${r.note ? ' · ' + r.note : ''}`;
   return `<button class="blk s-${st(r).replace(' ', '')} ${is.includes('conflict') ? 'cf' : ''} ${r.isNew && !r.seen ? 'nw' : ''} ${r.in + .5 < start ? 'clipl' : ''} ${r.out + .5 > start + n ? 'clipr' : ''}" style="--chc:${CH[r.ch].c};left:${left}px;width:${width}px;top:${8 + lane * 40}px" data-r="${r.idx}" title="${esc(title)}">
     <span class="nm">${esc(width < 64 ? r.name.slice(0, 2) : r.name)}</span>
-    ${showMeta ? `<span class="mt">${md(r.in)}–${md(r.out)} · ${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}${room > 260 ? ' · ' + CH[r.ch].lb : ''}</span>` : ''}${r.note && r.base !== '변경요청' ? `<span class="mt" title="${esc(r.note)}" style="flex:none">✎</span>` : ''}
+    ${showMeta ? `<span class="mt">${md(r.in)}–${md(r.out)} · ${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}${room > 260 ? ' · ' + CH[r.ch].lb : ''}</span>` : ''}${r.note && r.base !== '변경요청' ? `<span class="mt nti" title="${esc(r.note)}">${ICON.note}</span>` : ''}
     ${showLbs ? `<span class="lbs">${lbs.slice(0, 2).join('')}</span>` : dot}
   </button>`;
 }
@@ -496,7 +511,7 @@ function paneBoard(){
       <span class="grp2"><span class="t">막대 색은 예약 경로</span>${Object.keys(CH).map(c => `<span class="it2"><i class="c" style="background:${CH[c].c}"></i>${CH[c].lb}</span>`).join('')}</span>
       <span class="grp2"><span class="it2"><i class="sw"></i>예약 확정</span><span class="it2"><i class="sw" style="background:#EDEEF0;box-shadow:none"></i>이용 중</span><span class="it2"><i class="sw" style="background:var(--surface-2);box-shadow:none"></i>이용 완료</span></span>
       <span class="grp2"><span class="t">라벨은 확인 필요</span>${BD('충돌','red','xs fill')}${BD('취소 요청','red','xs')}${BD('변경 요청','orange','xs')}<span class="it2"><i style="width:6px;height:6px;border-radius:50%;background:var(--accent)"></i>미확인 신규</span></span>
-      <span class="grp2"><span class="it2"><i class="sw" style="background:repeating-linear-gradient(135deg,#EFF0F2 0 4px,#fff 4px 8px)"></i>판매 막기</span><span class="it2">✎ 특이사항</span></span>
+      <span class="grp2"><span class="it2"><i class="sw" style="background:repeating-linear-gradient(135deg,#EFF0F2 0 4px,#fff 4px 8px)"></i>판매 막기</span><span class="it2"><span class="nti">${ICON.note}</span>특이사항</span></span>
       <span class="t" style="margin-left:auto">빈 칸을 누르면 예약 등록·판매 막기 · 체크인 15:00 → 체크아웃 11:00</span>
     </div></div>`;
 }
@@ -514,12 +529,12 @@ function paneMonth(){
     const lim = S.openDay === o ? 99 : 4;
     cells += `<div class="mc ${d.getMonth() !== base.getMonth() ? 'out' : ''} ${o === 0 ? 'today' : ''}">
       <div class="top2"><span class="d">${d.getDate()}</span>${items.length ? `<span class="io">입실 ${items.filter(x => x[1] === 'i').length} · 퇴실 ${items.filter(x => x[1] === 'o').length}</span>` : ''}</div>
-      ${items.slice(0, lim).map(([r, k]) => `<button class="it ${k}" data-r="${r.idx}" style="--vc:${vById[r.villa].c}"><i style="background:${vById[r.villa].c}"></i><span class="vn">${k === 'o' ? '퇴실 · ' : ''}${vById[r.villa].name}</span><span class="nm2">${esc(r.name)}</span></button>`).join('')}
+      ${items.slice(0, lim).map(([r, k]) => { const is = issues(r).filter(x => ISSUE[x].c !== 'grey'); return `<button class="it ${k}" data-r="${r.idx}"><span class="io2">${k === 'o' ? '퇴실' : '입실'}</span><span class="vn">${vById[r.villa].name}</span><span class="nm2">${esc(r.name)}</span>${is.length ? `<i class="idot ${is.some(x => ISSUE[x].c === 'red') ? 'red' : ''}"></i>` : ''}</button>`; }).join('')}
       ${items.length > lim ? `<button class="more" data-day="${o}">+${items.length - lim}건 더보기</button>` : ''}
     </div>`;
   }
   return `${toolbar()}${fbarHTML()}<div class="panel">
-    <div class="subnote"><span>보조 보기예요. 숙소마다 색이 고정되고 입실(●)과 퇴실(○)을 함께 보여줘요.</span><span class="lg">${VILLAS.filter(villaOn).map(v => `<span><i style="background:${v.c}"></i>${v.name}</span>`).join('')}</span></div>
+    <div class="subnote"><span>보조 보기예요. 날짜별 입실과 퇴실을 숙소 이름으로 보여줘요. 숙소가 많으면 위 필터로 지역이나 숙소를 좁혀 보세요.</span><span class="lg"><span><i class="idot red"></i>확인 필요</span></span></div>
     <div class="month">${WD.map(x => `<div class="wd">${x}</div>`).join('')}${cells}</div></div>`;
 }
 
@@ -531,7 +546,7 @@ function paneList(){
   const C = S.cols;
   return `${fbarHTML()}<div class="panel" id="listPanel">
     <div class="listbar">
-      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">✕</button></span>` :
+      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">${ICON.x}</button></span>` :
         `<div class="seg">${[['upcoming','다가오는 예약'],['past','지난 예약'],['all','전체']].map(([k, lb]) => `<button data-per="${k}" class="${S.period === k ? 'on' : ''}">${lb}</button>`).join('')}</div><span class="mut">${rows.length}건</span>`}
       <div class="dd" style="margin-left:auto"><button class="btn sm line" data-cols>열 설정</button>
         ${S.dd === 'cols' ? `<div class="ddpanel" style="left:auto;right:0;min-width:200px"><div class="grp">보조 정보</div>
@@ -542,7 +557,7 @@ function paneList(){
       <thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>예약자</th><th>인원</th><th>예약 경로</th><th>결제</th><th>예약 상태</th><th>특이사항</th>${C.no ? '<th>예약번호</th>' : ''}${C.created ? '<th>신청일</th>' : ''}${C.email ? '<th>계정 이메일</th>' : ''}</tr></thead>
       <tbody>${rows.length ? rows.map(r => { const v = vById[r.villa]; const is = issues(r).filter(k => k !== 'cancel' && k !== 'change' && k !== 'pay' && (k !== 'syncdate' || C.created));
         return `<tr data-r="${r.idx}">
-        <td class="v"><span class="vdot" style="background:${v.c}"></span><b>${v.name}</b><span class="sub">${v.region} · ${v.type}</span></td>
+        <td class="v"><b>${v.name}</b><span class="sub">${v.region} · ${v.type}</span></td>
         <td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박${r.in === 0 ? ' · 오늘 입실' : ''}${r.out === 0 ? ' · 오늘 퇴실' : ''}</span></td>
         <td>${esc(r.name)}<span class="sub num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)}</span>`}</span></td>
         <td class="num">${r.adults + r.kids + r.infants}명<span class="sub">성인 ${r.adults}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}${r.pet ? ' · 반려견' : ''}</span></td>
@@ -571,6 +586,7 @@ pane.addEventListener('click', e => {
   const k = t.closest('[data-k]'); if (k){ go('list', k.dataset.k); return; }
   if (t.closest('[data-soon2]')){ e.preventDefault(); toast('통계·매출 화면은 준비 중이에요', false); return; }
   const dd = t.closest('[data-dd]'); if (dd){ S.dd = S.dd === dd.dataset.dd ? null : dd.dataset.dd; if (!S.dd) persist(); render(); return; }
+  const sv = t.closest('[data-stv]'); if (sv){ S.f.status = sv.dataset.stv; S.dd = null; persist(); render(); return; }
   const cl = t.closest('[data-clear]'); if (cl){ S.f[cl.dataset.clear].clear(); render(); return; }
   if (t.closest('[data-reset]')){ S.f = {q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false}; persist(); render(); return; }
   const ch = t.closest('[data-ch]'); if (ch){ const c = ch.dataset.ch; S.f.channels.has(c) ? S.f.channels.delete(c) : S.f.channels.add(c); persist(); render(); return; }
@@ -660,8 +676,8 @@ $('anpB').addEventListener('click', e => {
   layer.innerHTML = ''; go(tab);
   setTimeout(() => { const el = document.querySelector(sel); if (!el) return; el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }, 60);
 });
-function setAnno(on){ document.body.classList.toggle('anno', on); $('anp').hidden = !on; $('annoBtn').classList.toggle('on', on); try { localStorage.setItem('vh-anno', on ? '1' : '0'); } catch(e){} if (S.tab === 'board') render(); }
-$('annoBtn').onclick = () => setAnno(!document.body.classList.contains('anno'));
+function setAnno(on){ document.body.classList.toggle('anno', on); $('anp').hidden = !on; try { localStorage.setItem('vh-anno', on ? '1' : '0'); } catch(e){} if (S.tab === 'board') render(); }
+/* 개선 포인트 패널은 상단 버튼 없이 코드만 남겨 둬요 */
 $('anpX').onclick = () => setAnno(false);
 $('syncBtn').onclick = () => openChannels();
 $('addBtn').onclick = () => openCreate({});
@@ -805,7 +821,7 @@ function openChannels(){
         <div class="chcard"><span class="chdot" style="background:${CH['앱'].c}"></span><div class="tx"><b>베이컨하우스 앱 <span class="mut" style="font-weight:500;font-size:13px">실시간</span></b><span>다가오는 예약 ${cnt('앱')}건</span></div></div>
       </div>
       <div class="setrow"><div class="tx"><b>관리자 등록 예약을 채널 달력에도 막기</b><span>꺼져 있으면 전화로 받은 예약 날짜가 에어비앤비·네이버에서 다시 팔릴 수 있어요. 소석원 10.2 충돌이 이렇게 생겼어요.</span></div><span class="tgl"><input type="checkbox" id="autoB" ${autoBlock() ? 'checked' : ''}></span></div>
-      ${sd.length ? `<div class="callout orange"><div class="tx"><b>신청일 기록 이상 ${sd.length}건</b><span>채널 동기화가 신청일을 체크인·체크아웃 시각으로 덮어쓰고 있어요. 개발팀 확인이 필요해요.</span><a class="tbtn" href="#list&k=sync&cols=1" data-sdlist style="margin-top:4px">해당 예약 보기 ›</a></div></div>` : ''}
+      ${sd.length ? `<div class="callout orange"><div class="tx"><b>신청일 기록 이상 ${sd.length}건</b><span>채널 동기화가 신청일을 체크인·체크아웃 시각으로 덮어쓰고 있어요. 개발팀 확인이 필요해요.</span><a class="tbtn" href="#list&k=sync&cols=1" data-sdlist style="margin-top:4px">해당 예약 보기 ${ICON.chev}</a></div></div>` : ''}
     </div></aside>`;
   layer.querySelector('[data-resync]')?.addEventListener('click', () => { sync.forEach(r => runAct(r, 'resync')); openChannels(); render(); toast('에어비앤비와 다시 동기화했어요'); });
   layer.querySelector('#autoB').addEventListener('change', e => { try { localStorage.setItem('vh-ch-autoblock', e.target.checked ? '1' : '0'); } catch(x){} toast(e.target.checked ? '이제 관리자 등록 예약이 채널 달력에도 막혀요' : '채널 자동 막기를 껐어요'); });
@@ -829,7 +845,7 @@ if (PR.d) openDrawer(+PR.d);
 if (PR.create){ const [v, a, b] = PR.create.split(':'); openCreate({villa:v, a:+a, b:+b}); }
 if (PR.block){ const [v, a, b] = PR.block.split(':'); openBlock({villa:v, a:+a, b:+b}); }
 if (PR.channels) openChannels();
-try { if (localStorage.getItem('vh-anno') === '1' || /anno/.test(H)) setAnno(true); } catch(e){}
+if (/anno/.test(H)) setAnno(true);
 addEventListener('resize', () => { if (S.tab === 'board') render(); });
 </script>
 </body>

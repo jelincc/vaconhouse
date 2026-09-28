@@ -193,3 +193,9 @@ body{letter-spacing:-.015em}
 .kv{font-size:14.5px;gap:12px 14px}
 .callout{border-radius:16px}
 .toast{font-weight:600}
+
+/* 활성 필터는 어두운 그레이(Gray 800) · 포커스도 같은 톤 */
+.chip.on,.fsel.on,.fchip,.seg2 button.on{background:#3E434B;color:#fff}
+input[type=checkbox]{accent-color:#3E434B}
+.fsel:focus-visible,.search:focus-visible,.inp:focus-visible,select:focus-visible{outline:2px solid #3E434B;outline-offset:1px}
+.ddpanel label input[type=checkbox]{width:16px;height:16px}

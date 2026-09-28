@@ -138,7 +138,7 @@ function page(){
     <button class="step" data-go="emp:미가입"><span class="who">직원</span><span class="no">1</span><b>앱 가입</b><span>기존 베이컨하우스 앱에 가입해요</span><span class="k">${joined}명 가입 · 미가입 ${EMP.length - joined}명</span></button>
     <button class="step ${req.length ? 'hot' : ''}" data-go="req"><span class="who">관리자</span><span class="no">2</span><b>소속 확인</b><span>회사 직원이 맞는지 확인해요</span><span class="k">${req.length ? `확인 요청 ${req.length}건` : '확인할 요청이 없어요'}</span></button>
     <button class="step" data-go="emp:이용 가능"><span class="who">관리자</span><span class="no">3</span><b>이용 권한 부여</b><span>권한을 켜면 앱에 회사 숙박권이 보여요</span><span class="k">${perm}명 이용 가능</span></button>
-    <a class="step" href="../app/corp"><span class="who">직원</span><span class="no">4</span><b>앱에서 직접 예약</b><span>승인 없이 바로 확정돼요</span><span class="k">다가오는 예약 ${up.length}건 · 직원 앱 보기 ›</span></a>
+    <a class="step" href="../app/corp"><span class="who">직원</span><span class="no">4</span><b>앱에서 직접 예약</b><span>승인 없이 바로 확정돼요</span><span class="k">다가오는 예약 ${up.length}건 · 직원 앱 보기 ${ICON.chev.replace('<svg', '<svg width="14" height="14" style="vertical-align:-2px"')}</span></a>
   </section>
 
   ${req.length ? `<section class="req" id="reqBox">
