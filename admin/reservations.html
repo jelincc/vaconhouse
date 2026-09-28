@@ -8,637 +8,291 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="admin.css">
 <style>
-:root{
-  color-scheme:light;
-  --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#F6F7F8; --surface-3:#E6E8EA; --line:#E6E8EA; --line-2:#D5D8DC;
-  --ink:#1A1A1E; --ink-2:#575F6C; --ink-3:#768091; --ink-4:#949BA8;
-  --accent:#FF6D12; --accent-soft:#FBF4EF; --accent-2:#FAEAE0;
-  --danger:#FC3B3B; --danger-ink:#D92B2B; --danger-soft:#FBF5F5; --danger-2:#FAE6E6;
-  --ok:#0DBC7C; --ok-ink:#079466; --ok-soft:#EAFAF4;
-  --ch-app:#FF6D12; --ch-naver:#0DBC7C; --ch-airbnb:#E0457B; --ch-admin:#768091;
-  --shadow:0 12px 36px rgba(26,26,30,.12);
-  --font:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-[hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
-button,select,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.num{font-variant-numeric:tabular-nums}
+/* TDS Tab */
+.tabs{display:flex;gap:28px;border-bottom:1px solid var(--line);margin-top:-4px}
+.tabs button{all:unset;cursor:pointer;padding:12px 2px 13px;font-size:16px;font-weight:600;color:var(--ink-3);position:relative;display:flex;align-items:center;gap:6px}
+.tabs button:hover{color:var(--ink-2)}
+.tabs button.on{color:var(--ink)}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);border-radius:2px}
+.tabs .n{font-size:12px;font-weight:700;background:var(--accent);color:#fff;border-radius:10px;padding:0 7px;line-height:18px}
 
-/* shell */
-.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
-.side{border-right:1px solid var(--line);padding:22px 14px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
-.brand{padding:4px 10px 22px;display:flex;flex-direction:column;gap:6px}
-.brand a{color:var(--ink)}
-.brand small{font-size:11px;letter-spacing:.14em;color:var(--ink-3);font-weight:600}
-.logo-svg{display:block;width:148px;height:auto;color:var(--ink)}
-.nav-label{font-size:12px;color:var(--ink-4);padding:14px 12px 6px;font-weight:500}
-.nav a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-radius:10px;color:var(--ink-2);text-decoration:none;font-weight:500}
-.nav a:hover{background:var(--surface-2);color:var(--ink)}
-.nav a.on{background:var(--ink);color:#fff;font-weight:600}
-.nav .cnt{font-size:11px;background:var(--accent);color:#fff;border-radius:10px;padding:0 7px;font-weight:600;line-height:18px}
-.nav .newm{font-size:10.5px;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:0 6px;font-weight:600;line-height:18px}
-.userbox{margin-top:auto;border-top:1px solid var(--line);padding:14px 10px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px}
-.userbox b{display:block;font-weight:600}
-.userbox small{color:var(--ink-3);font-size:12px}
-.userbox a{color:var(--ink-3);font-size:12.5px}
+/* ===== 오늘 할 일 ===== */
+.hero h2{margin:4px 0 0;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
+.hero h2 em{font-style:normal;color:var(--accent)}
+.hero p{margin:6px 0 0;color:var(--ink-3);font-size:14.5px}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.sp{all:unset;cursor:pointer;padding:18px 22px;display:flex;align-items:center;gap:14px;border-right:1px solid var(--line)}
+.sp:last-child{border-right:0}
+.sp:hover{background:var(--surface-2)}
+.sp .tx{display:flex;flex-direction:column;flex:1;min-width:0}
+.sp .lb{font-size:14px;color:var(--ink-2);font-weight:500}
+.sp .v{font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.25}
+.sp .v small{font-size:15px;font-weight:600;margin-left:2px}
+.sp .s{font-size:13px;color:var(--ink-3)}
+.sp.zero .v{color:var(--ink-4)}
+.twin{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+.lr .cnt2{font-size:15px;font-weight:700;white-space:nowrap}
+.lr .cnt2.red{color:var(--danger-ink)}
+.lr .chev{width:16px;height:16px;color:var(--ink-4);flex:none}
+.okline{display:flex;gap:10px;align-items:center;padding:12px 8px 2px;margin-top:6px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+.okline svg{width:18px;height:18px;color:var(--ok);flex:none}
+.newbox{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:6px 8px 16px;border-bottom:1px solid var(--line);margin-bottom:6px;border-radius:12px 12px 0 0}
+.newbox:hover .big span{color:var(--ink)}
+.newbox .big{display:flex;align-items:baseline;gap:8px}
+.newbox .big b{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.newbox .big span{color:var(--ink-3);font-size:14px}
+.bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:12px 0 10px;gap:2px}
+.bar i{display:block;height:100%}
+.chs{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.chs span{display:inline-flex;align-items:center;gap:6px}
+.chs span i{width:8px;height:8px;border-radius:2px}
+.chs b{font-weight:700;color:var(--ink)}
+.foot{font-size:13px;color:var(--ink-3)}
+.foot a{color:var(--ink-2);font-weight:600;text-decoration:none}
+.foot a:hover{text-decoration:underline}
 
-.main{min-width:0;padding:26px 32px 64px;display:flex;flex-direction:column;gap:18px}
-.pagehead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.pagehead h1{margin:0;font-size:24px;letter-spacing:-.02em}
-.pagehead p{margin:4px 0 0;color:var(--ink-3);font-size:13.5px}
-.btn{border:0;background:var(--surface-2);border-radius:10px;padding:9px 14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:var(--ink)}
-.btn:hover{background:var(--surface-3)}
-.btn.primary{background:var(--ink);color:#fff}
-.btn.primary:hover{background:#3E434B}
-.btn.line{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line-2)}
-.btn.line:hover{background:var(--surface-2)}
-.btn.danger{background:var(--danger-2);color:var(--danger-ink)}
-.btn.sm{padding:6px 11px;border-radius:8px;font-size:13px}
-.btn.anno-on{background:var(--accent);color:#fff}
-
-/* today + queue */
-.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:16px}
-.card{border:1px solid var(--line);border-radius:20px;padding:20px 22px;min-width:0;position:relative}
-.card h2{margin:0;font-size:16px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
-.card h2 .muted{color:var(--ink-3);font-weight:500;font-size:13px}
-.card h2 .r{margin-left:auto}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 12px}
-.stat{all:unset;cursor:pointer;background:var(--surface-2);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
-.stat:hover{background:var(--surface-3)}
-.stat .lb{font-size:13px;color:var(--ink-2);font-weight:500}
-.stat .v{font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-.02em}
-.stat .v small{font-size:13px;font-weight:500;color:var(--ink-3);margin-left:2px}
-.stat .s{font-size:12px;color:var(--ink-3)}
-.stat.zero .v{color:var(--ink-4)}
-.moves{display:flex;flex-direction:column}
-.mv{all:unset;cursor:pointer;display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;padding:8px 6px;border-radius:8px;font-size:13.5px}
-.mv:hover{background:var(--surface-2)}
-.mv .t{font-size:12px;font-weight:600;color:var(--ink-3)}
-.mv .t.out{color:var(--ink)}
-.mv .who{display:flex;align-items:center;gap:6px;min-width:0}
-.mv .who b{font-weight:600;white-space:nowrap}
-.mv .who .nm3{color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mv .st{font-size:12px;color:var(--ink-3)}
-.none{font-size:13px;color:var(--ink-3);padding:8px 6px}
-.newline{margin-top:10px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.newline b{color:var(--ink)}
-.chs{display:inline-flex;gap:10px;flex-wrap:wrap}
-.chs span{display:inline-flex;align-items:center;gap:5px}
-.chs i{width:7px;height:7px;border-radius:2px;display:inline-block}
-
-.q{display:flex;flex-direction:column;margin-top:10px;flex:1 1 0;height:0;min-height:0;overflow:auto}
-#queueCard{display:flex;flex-direction:column}
-.q{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 28px),transparent);padding-bottom:20px}
-.qi{all:unset;cursor:pointer;display:grid;grid-template-columns:10px 132px 1fr auto;gap:12px;align-items:center;padding:8px 8px;border-radius:10px;border-bottom:1px solid var(--line)}
-.qi:last-child{border-bottom:0}
-.qi:hover{background:var(--surface-2)}
-.qi .dt{width:8px;height:8px;border-radius:50%;background:var(--ink-4)}
-.qi.hot .dt{background:var(--danger)}
-.qi.warm .dt{background:var(--accent)}
-.qi .k{font-size:13px;font-weight:600;white-space:nowrap}
-.qi.hot .k{color:var(--danger-ink)}
-.qi .d{font-size:13px;color:var(--ink-2);min-width:0}
-.qi .d small{display:block;color:var(--ink-3);font-size:12px}
-.qi .go{font-size:12.5px;font-weight:600;background:var(--surface-2);border-radius:8px;padding:5px 10px;white-space:nowrap}
-.qi:hover .go{background:#fff}
-.qtabs{display:flex;gap:6px;margin-top:12px}
-.qtabs button{border:0;background:var(--surface-2);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
-.qtabs button.on{background:var(--ink);color:#fff}
-.moved{font-size:12.5px;color:var(--ink-3);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.moved b{color:var(--ink-2);font-weight:600}
-.moved a{color:var(--accent);font-weight:600}
-
-/* workspace */
-.work{border:1px solid var(--line);border-radius:20px;min-width:0;position:relative}
-.worktop{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}
-.seg button{border:0;background:transparent;padding:6px 14px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:13.5px}
-.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.datebar{display:flex;align-items:center;gap:8px}
-.datebar .range{font-weight:700;min-width:190px;text-align:center}
-.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
-.search{border:0;background:var(--surface-2);border-radius:10px;padding:8px 12px 8px 34px;min-width:300px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23768091' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+/* ===== workspace ===== */
+.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{border:0;background:var(--surface-2);border-radius:10px;height:36px;padding:0 12px 0 36px;min-width:280px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23768091' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
 .search::placeholder{color:var(--ink-4)}
-.fsel{border:0;background:var(--surface-2);border-radius:10px;padding:8px 12px;font-size:13.5px;font-weight:500}
-.chip{border:0;background:var(--surface-2);border-radius:999px;padding:6px 12px;font-size:13px;display:inline-flex;align-items:center;gap:6px;color:var(--ink-2);font-weight:500}
-.chip.on{background:var(--ink);color:#fff}
-.chip i{width:8px;height:8px;border-radius:2px;display:inline-block}
-.fsep{width:1px;height:20px;background:var(--line-2);margin:0 2px}
-.tgl{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);cursor:pointer;user-select:none}
-.tgl input{appearance:none;width:34px;height:20px;border-radius:10px;background:var(--line-2);position:relative;margin:0;cursor:pointer;transition:background .15s}
-.tgl input::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
-.tgl input:checked{background:var(--ink)}
-.tgl input:checked::after{left:16px}
-.reset{border:0;background:none;color:var(--ink-3);font-size:13px;text-decoration:underline;text-underline-offset:3px}
-.saved{font-size:12px;color:var(--ink-4);margin-left:auto}
+.fsep{width:1px;height:20px;background:var(--line-2);margin:0 4px}
+.reset{border:0;background:none;color:var(--ink-3);font-size:13px;font-weight:600}
+.reset:hover{color:var(--ink)}
 .dd{position:relative}
-.ddpanel{position:absolute;top:calc(100% + 6px);left:0;z-index:30;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:8px;min-width:240px}
-.ddpanel label{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;font-size:13.5px;cursor:pointer}
+.ddpanel{position:absolute;top:calc(100% + 6px);left:0;z-index:30;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px;min-width:240px}
+.ddpanel label{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;font-size:14px;cursor:pointer}
 .ddpanel label:hover{background:var(--surface-2)}
-.ddpanel .grp{font-size:11.5px;color:var(--ink-3);padding:8px 8px 2px;font-weight:600}
-.ddpanel .sw{width:9px;height:9px;border-radius:3px;margin-left:auto}
-.ddfoot{display:flex;justify-content:space-between;padding:8px 6px 2px;border-top:1px solid var(--line);margin-top:6px}
+.ddpanel .grp{font-size:12px;color:var(--ink-3);padding:8px 10px 2px;font-weight:600}
+.ddpanel .sw2{width:9px;height:9px;border-radius:3px;margin-left:auto}
+.ddfoot{display:flex;justify-content:space-between;gap:8px;padding:10px 4px 2px;border-top:1px solid var(--line);margin-top:6px}
+.fsel.on{background:var(--ink);color:#fff}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.datebar{display:flex;align-items:center;gap:6px}
+.datebar .range{font-weight:700;font-size:15px;min-width:200px;text-align:center}
+.icbtn{border:0;background:var(--surface-2);width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-2)}
+.icbtn:hover{background:var(--surface-3)}
+.icbtn svg{width:16px;height:16px}
+.panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
 
-/* timeline */
+/* board */
 .tlwrap{overflow:auto;position:relative}
-.tl{--w:120px;--name:208px;position:relative;min-width:max-content}
+.tl{--w:120px;--name:200px;position:relative;min-width:max-content}
 .tl-head{display:flex;position:sticky;top:0;z-index:6;background:#fff;border-bottom:1px solid var(--line)}
-.tl-corner{width:var(--name);flex:none;position:sticky;left:0;z-index:7;background:#fff;border-right:1px solid var(--line);padding:10px 16px;font-size:12.5px;color:var(--ink-3);display:flex;align-items:flex-end}
-.tl-day{width:var(--w);flex:none;padding:8px 8px 7px;border-left:1px solid var(--line);font-size:12px;color:var(--ink-3);display:flex;flex-direction:column;line-height:1.3}
-.tl-day b{font-size:15px;color:var(--ink)}
-.tl-day.sun b,.tl-day.sun{color:var(--danger-ink)}
+.tl-corner{width:var(--name);flex:none;position:sticky;left:0;z-index:7;background:#fff;border-right:1px solid var(--line);padding:10px 18px;font-size:13px;color:var(--ink-3);display:flex;align-items:flex-end}
+.tl-day{width:var(--w);flex:none;padding:9px 10px 8px;border-left:1px solid var(--line);font-size:12px;color:var(--ink-3);display:flex;flex-direction:column;line-height:1.3}
+.tl-day b{font-size:16px;color:var(--ink);font-weight:700}
+.tl-day.sun,.tl-day.sun b{color:var(--danger-ink)}
 .tl-day.today{background:var(--accent-soft)}
 .tl-day.today b,.tl-day.today .wd{color:var(--accent)}
-.tl-day .io{font-size:11px;color:var(--ink-3)}
-.tl-day .io em{font-style:normal;color:var(--ink);font-weight:600}
-.tl-grp{display:flex;background:var(--surface-2);border-bottom:1px solid var(--line)}
-.tl-grp button{all:unset;cursor:pointer;position:sticky;left:0;display:flex;gap:8px;align-items:center;padding:6px 16px;font-size:12.5px;font-weight:700;width:var(--name);box-sizing:border-box;background:var(--surface-2);z-index:4}
+.tl-day .io{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.tl-day .io em{font-style:normal;color:var(--ink);font-weight:700}
+.tl-grp{display:flex;background:#FAFAFB;border-bottom:1px solid var(--line)}
+.tl-grp button{all:unset;cursor:pointer;position:sticky;left:0;display:flex;gap:8px;align-items:center;padding:7px 18px;font-size:13px;font-weight:700;width:var(--name);box-sizing:border-box;background:#FAFAFB;z-index:4}
 .tl-grp button span{color:var(--ink-3);font-weight:500}
-.tl-grp .car{font-size:9px;color:var(--ink-3);transition:transform .15s}
-.tl-grp.shut .car{transform:rotate(-90deg)}
+.tl-grp .car{display:inline-flex;width:14px;height:14px;color:var(--ink-3);transition:transform .15s;transform:rotate(90deg)}
+.tl-grp .car svg{width:14px;height:14px}
+.tl-grp.shut .car{transform:rotate(0)}
 .tl-row{display:flex;border-bottom:1px solid var(--line)}
-.tl-name{width:var(--name);flex:none;position:sticky;left:0;z-index:4;background:#fff;border-right:1px solid var(--line);padding:8px 16px;display:flex;align-items:center;gap:10px}
-.tl-name .vc{width:4px;align-self:stretch;border-radius:2px;flex:none}
-.tl-name b{font-weight:600;font-size:14px;display:block}
+.tl-row:last-child{border-bottom:0}
+.tl-name{width:var(--name);flex:none;position:sticky;left:0;z-index:4;background:#fff;border-right:1px solid var(--line);padding:8px 18px;display:flex;flex-direction:column;justify-content:center}
+.tl-name b{font-weight:600;font-size:14.5px}
 .tl-name small{font-size:12px;color:var(--ink-3)}
 .tl-track{position:relative;flex:none;background-image:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--w) - 1px),var(--line) calc(var(--w) - 1px),var(--line) var(--w))}
-.tl-todaycol{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--accent) 6%,transparent);pointer-events:none}
-.tl-nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);pointer-events:none;z-index:2}
-.blk{all:unset;cursor:pointer;position:absolute;height:32px;border-radius:8px;box-sizing:border-box;padding:0 8px 0 10px;display:flex;align-items:center;gap:6px;font-size:12.5px;overflow:hidden;white-space:nowrap;background:#fff;border:1px solid var(--line-2);color:var(--ink)}
+.tl-todaycol{position:absolute;top:0;bottom:0;background:rgba(255,109,18,.05);pointer-events:none}
+.tl-now{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);pointer-events:none;z-index:2;border-radius:1px}
+.blk{all:unset;cursor:pointer;position:absolute;height:34px;border-radius:9px;box-sizing:border-box;padding:0 8px 0 12px;display:flex;align-items:center;gap:6px;font-size:13px;overflow:hidden;white-space:nowrap;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)}
 .blk::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--chc)}
-.blk:hover{box-shadow:0 3px 10px rgba(0,0,0,.12);z-index:3}
-.blk .ch{flex:none;font-size:10px;font-weight:700;color:#fff;border-radius:4px;padding:0 4px;line-height:16px;background:var(--chc)}
-.blk .nm{font-weight:600}
-.blk .mt{color:var(--ink-3);font-size:11.5px}
-.blk .tag{flex:none;font-size:10.5px;font-weight:700;border-radius:4px;padding:0 5px;line-height:17px}
-.blk .rd{flex:none;width:7px;height:7px;border-radius:50%;background:var(--danger);margin-left:auto}
-.blk.s-이용중{background:var(--surface-3);border-color:var(--surface-3)}
-.blk.s-이용완료{background:var(--surface-2);border-color:var(--surface-2);color:var(--ink-4)}
-.blk.s-이용완료 .ch{opacity:.55}
-.blk.s-이용완료::before{opacity:.4}
-.blk.s-취소요청{border:1.5px solid var(--danger);background:var(--danger-soft)}
-.blk.s-변경요청{border:1.5px solid var(--accent);background:var(--accent-soft)}
-.blk.s-예약취소{background:#fff;color:var(--ink-4);text-decoration:line-through;border-style:dashed}
-.blk.cf{box-shadow:0 0 0 2px var(--danger)}
+.blk:hover{box-shadow:inset 0 0 0 1px var(--ink-3),0 4px 12px rgba(26,26,30,.1);z-index:3}
+.blk .nm{font-weight:600;flex:none}
+.blk .mt{color:var(--ink-3);font-size:12px;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.blk .lbs{display:flex;gap:4px;margin-left:auto;padding-left:4px;flex:none}
+.blk .dt{width:7px;height:7px;border-radius:50%;flex:none;margin-left:auto}
+.blk.s-이용중{background:#EDEEF0;box-shadow:none}
+.blk.s-이용완료{background:var(--surface-2);box-shadow:none;color:var(--ink-4)}
+.blk.s-이용완료 .mt{color:var(--ink-4)}
+.blk.s-이용완료::before{opacity:.35}
+.blk.s-취소요청{background:var(--danger-soft);box-shadow:inset 0 0 0 1.5px var(--danger)}
+.blk.s-변경요청{background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.blk.s-예약취소{color:var(--ink-4);text-decoration:line-through;box-shadow:inset 0 0 0 1px var(--line)}
+.blk.cf{box-shadow:inset 0 0 0 2px var(--danger)}
 .blk.clipl{border-top-left-radius:0;border-bottom-left-radius:0}
 .blk.clipr{border-top-right-radius:0;border-bottom-right-radius:0}
-.t-red{background:var(--danger);color:#fff}
-.t-org{background:var(--accent);color:#fff}
-.t-new{background:var(--ink);color:#fff}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding:12px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2);align-items:center}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.sw{width:22px;height:12px;border-radius:3px;display:inline-block;border:1px solid var(--line-2);background:#fff}
-.legend .hint{color:var(--ink-3);margin-left:auto}
+.blk.nw .nm::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:4px;vertical-align:5px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:14px 18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2);align-items:center}
+.legend .grp2{display:inline-flex;gap:12px;align-items:center;padding-right:16px;border-right:1px solid var(--line)}
+.legend .grp2:last-of-type{border-right:0}
+.legend .it2{display:inline-flex;gap:6px;align-items:center}
+.legend i.c{width:4px;height:14px;border-radius:2px}
+.legend .sw{width:22px;height:14px;border-radius:4px;display:inline-block;box-shadow:inset 0 0 0 1px var(--line-2);background:#fff}
+.legend .t{color:var(--ink-3)}
 
 /* month */
 .month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
-.month .wd{padding:8px 10px;font-size:12.5px;color:var(--ink-3);border-bottom:1px solid var(--line);font-weight:600}
+.month .wd{padding:10px 12px;font-size:13px;color:var(--ink-3);border-bottom:1px solid var(--line);font-weight:600}
 .month .wd:first-child{color:var(--danger-ink)}
-.mc{min-height:132px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 9px;display:flex;flex-direction:column;gap:3px;font-size:12px;min-width:0}
+.mc{min-height:136px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 10px 8px;display:flex;flex-direction:column;gap:3px;font-size:12.5px;min-width:0}
 .mc:nth-child(7n){border-right:0}
-.mc .top2{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
-.mc .d{font-weight:700;font-size:13px}
-.mc .io{color:var(--ink-3);font-size:11px}
-.mc.out{background:#FCFCFD}
+.mc .top2{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.mc .d{font-weight:700;font-size:14px}
+.mc .io{color:var(--ink-3);font-size:11.5px}
 .mc.out .d{color:var(--ink-4)}
-.mc.today{box-shadow:inset 0 0 0 2px var(--accent);background:var(--accent-soft)}
-.mc.today .d{color:var(--accent)}
-.mc .it{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;white-space:nowrap;overflow:hidden;border-radius:5px;padding:1px 4px;min-width:0}
+.mc.today{background:var(--accent-soft)}
+.mc.today .d{color:#fff;background:var(--accent);border-radius:8px;padding:0 7px}
+.mc .it{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;white-space:nowrap;overflow:hidden;border-radius:6px;padding:2px 4px;min-width:0}
 .mc .it:hover{background:var(--surface-2)}
-.mc .it i{width:7px;height:7px;border-radius:50%;flex:none}
-.mc .it.o i{background:transparent!important;border:1.5px solid var(--vc);width:7px;height:7px;box-sizing:border-box}
+.mc .it i{width:7px;height:7px;border-radius:50%;flex:none;box-sizing:border-box}
 .mc .it.o{color:var(--ink-3)}
+.mc .it.o i{background:transparent!important;border:1.5px solid var(--vc)}
 .mc .it .vn{font-weight:600}
+.mc .it.o .vn{font-weight:500}
 .mc .it .nm2{color:var(--ink-3);overflow:hidden;text-overflow:ellipsis}
-.mc .more{all:unset;cursor:pointer;color:var(--ink-3);font-size:11.5px;padding:0 4px}
-.subnote{padding:10px 16px;font-size:12.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-.subnote .lg{display:inline-flex;gap:12px;flex-wrap:wrap}
-.subnote .lg span{display:inline-flex;gap:5px;align-items:center;color:var(--ink-2)}
+.mc .more{all:unset;cursor:pointer;color:var(--ink-3);font-size:12px;padding:2px 4px;font-weight:600}
+.subnote{padding:12px 18px;font-size:13px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.subnote .lg{display:inline-flex;gap:14px;flex-wrap:wrap}
+.subnote .lg span{display:inline-flex;gap:6px;align-items:center;color:var(--ink-2)}
 .subnote .lg i{width:8px;height:8px;border-radius:50%}
 
 /* list */
 .listbar{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border-radius:999px;padding:4px 6px 4px 12px;font-size:13px;font-weight:600}
-.fchip button{all:unset;cursor:pointer;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.2);font-size:10px}
+.fchip{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:999px;height:32px;padding:0 6px 0 14px;font-size:13.5px;font-weight:600}
+.fchip button{all:unset;cursor:pointer;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.2);font-size:10px}
 table{width:100%;border-collapse:collapse}
-th{font-size:12.5px;font-weight:600;color:var(--ink-3);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fff;position:sticky;top:0}
-td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
+th{font-size:13px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fff}
+td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:14px}
+tbody tr:last-child td{border-bottom:0}
 tbody tr{cursor:pointer}
-tbody tr:hover td{background:var(--surface-2)}
-td .sub{display:block;font-size:12px;color:var(--ink-3)}
+tbody tr:hover td{background:#FAFAFB}
+td .sub{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
 td.v b{font-weight:600}
-.vdot{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:6px;vertical-align:1px}
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 8px;border-radius:8px;white-space:nowrap}
-.p-ok{background:var(--ok-soft);color:var(--ok-ink)}
-.p-live{background:var(--ink);color:#fff}
-.p-done{background:var(--surface-2);color:var(--ink-3)}
-.p-red{background:var(--danger-2);color:var(--danger-ink)}
-.p-org{background:var(--accent-2);color:#C9560C}
-.p-mute{background:var(--surface-2);color:var(--ink-3)}
-.chb{display:inline-flex;align-items:center;font-size:11px;font-weight:700;border-radius:5px;padding:0 5px;line-height:18px;color:#fff;margin-left:6px;vertical-align:1px}
-.mem{font-size:11px;color:var(--ink-3);border:1px solid var(--line-2);border-radius:5px;padding:0 5px;margin-left:4px;line-height:16px;display:inline-block;vertical-align:1px}
-.flag{font-size:12.5px;color:var(--danger-ink);font-weight:500;display:block}
-.flag.o{color:#C9560C}
-.bad{color:var(--danger-ink)}
-.empty{padding:48px;text-align:center;color:var(--ink-3)}
+.lbl{display:flex;gap:4px;flex-wrap:wrap}
+.empty{padding:56px;text-align:center;color:var(--ink-3)}
 
 /* drawer */
-.scrim{position:fixed;inset:0;background:rgba(26,26,30,.28);z-index:40}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:#fff;z-index:41;box-shadow:var(--shadow);display:flex;flex-direction:column}
-.dr-head{padding:22px 24px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
-.dr-head .row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.dr-head h3{margin:4px 0 0;font-size:20px;letter-spacing:-.02em}
-.dr-head .when{color:var(--ink-2);font-size:14px}
-.x{all:unset;cursor:pointer;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-2);font-size:16px}
+.scrim{position:fixed;inset:0;background:rgba(26,26,30,.32);z-index:40}
+.drawer{position:fixed;top:12px;right:12px;bottom:12px;width:min(460px,calc(100% - 24px));background:#fff;z-index:41;box-shadow:var(--shadow);display:flex;flex-direction:column;border-radius:24px;overflow:hidden}
+.dr-head{padding:22px 24px 18px;display:flex;flex-direction:column;gap:6px}
+.dr-head .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.dr-head h3{margin:0;font-size:22px;font-weight:700;letter-spacing:-.03em}
+.dr-head .when{color:var(--ink-2);font-size:15px}
+.x{all:unset;cursor:pointer;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--ink-3)}
 .x:hover{background:var(--surface-2)}
-.dr-body{padding:18px 24px;overflow:auto;display:flex;flex-direction:column;gap:18px;flex:1}
-.dr-sec h4{margin:0 0 8px;font-size:13px;color:var(--ink-3);font-weight:600}
-.kv{display:grid;grid-template-columns:96px 1fr;gap:8px 12px;font-size:14px;margin:0}
-.kv dt{color:var(--ink-3)}
-.kv dd{margin:0;min-width:0}
-.alert{border-radius:12px;padding:11px 14px;font-size:13.5px;background:var(--danger-soft);color:var(--danger-ink);display:flex;flex-direction:column;gap:2px}
-.alert b{font-weight:600}
-.alert span{color:var(--ink-2);font-size:12.5px}
-.alert.o{background:var(--accent-soft);color:#C9560C}
-.raw{font-size:12px;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:1px 6px;margin-left:6px}
-.hist{list-style:none;margin:0;padding:0}
-.hist li{display:grid;grid-template-columns:14px 1fr;gap:10px;padding-bottom:12px;position:relative}
-.hist li::before{content:"";position:absolute;left:6px;top:14px;bottom:0;width:1px;background:var(--line-2)}
-.hist li:last-child::before{display:none}
-.hist .b{width:13px;height:13px;border-radius:50%;border:2px solid var(--line-2);background:#fff;margin-top:3px}
-.hist li.new .b{border-color:var(--accent);background:var(--accent)}
-.hist .t{font-size:13.5px}
-.hist .m{font-size:12px;color:var(--ink-3)}
-.memo{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:13.5px}
-.memo small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:2px}
-textarea{width:100%;border:0;border-radius:10px;padding:10px 12px;background:var(--surface-2);resize:vertical;min-height:60px}
-.nt{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13.5px;padding:7px 0;border-bottom:1px solid var(--line)}
-.nt:last-child{border-bottom:0}
-.nt small{display:block;font-size:12px;color:var(--ink-3)}
-.dr-foot{padding:14px 24px 20px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-size:13.5px;z-index:90;box-shadow:var(--shadow)}
+.x svg{width:18px;height:18px}
+.dr-body{padding:0 24px 18px;overflow:auto;display:flex;flex-direction:column;gap:18px;flex:1}
+.dr-foot{padding:12px 20px 20px;display:flex;gap:8px}
+.dr-link{display:flex;justify-content:center;padding:4px 0}
+.dr-link svg{width:14px;height:14px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fact{background:var(--surface-2);border-radius:14px;padding:12px 14px}
+.fact small{display:block;font-size:12px;color:var(--ink-3)}
+.fact b{font-size:15px;font-weight:600}
 
-/* improvement annotations */
-.mk{display:none;position:absolute;z-index:20;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;place-items:center;box-shadow:0 0 0 3px #fff,0 4px 10px rgba(255,109,18,.35);cursor:pointer;border:0;padding:0}
-body.anno .mk{display:grid}
-body.anno .app{margin-right:440px}
-.anp{position:fixed;top:0;right:0;bottom:0;width:440px;background:#fff;border-left:1px solid var(--line);z-index:35;display:flex;flex-direction:column}
-.anp-h{padding:22px 24px 14px;border-bottom:1px solid var(--line)}
-.anp-h h3{margin:0;font-size:18px;letter-spacing:-.02em;display:flex;justify-content:space-between;align-items:center}
-.anp-h p{margin:6px 0 0;font-size:13px;color:var(--ink-3)}
-.anp-b{overflow:auto;padding:12px 16px 24px;display:flex;flex-direction:column;gap:10px}
-.an{all:unset;cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:12px;padding:14px;border-radius:14px;border:1px solid var(--line)}
-.an:hover,.an.on{border-color:var(--ink)}
-.an .n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
-.an h5{margin:2px 0 8px;font-size:14.5px;letter-spacing:-.01em}
-.an .ab{display:grid;grid-template-columns:40px 1fr;gap:4px 8px;font-size:13px;line-height:1.5}
-.an .ab em{font-style:normal;font-size:11px;font-weight:700;border-radius:5px;text-align:center;line-height:18px;height:18px;margin-top:1px}
-.an .ab .as{background:var(--surface-2);color:var(--ink-3)}
-.an .ab .tb{background:var(--ink);color:#fff}
-.an .ab .asx{color:var(--ink-3)}
-.flash{animation:fl 1.4s ease}
-@keyframes fl{0%,100%{box-shadow:0 0 0 0 rgba(255,109,18,0)}25%,60%{box-shadow:0 0 0 4px rgba(255,109,18,.55)}}
+/* improvement panel */
+.anp{position:fixed;top:12px;right:12px;bottom:12px;width:420px;background:#fff;z-index:35;display:flex;flex-direction:column;border-radius:24px;box-shadow:var(--shadow)}
+.anp-h{padding:22px 24px 12px}
+.anp-h h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;justify-content:space-between;align-items:center}
+.anp-h p{margin:6px 0 0;font-size:13.5px;color:var(--ink-3)}
+.anp-b{overflow:auto;padding:4px 16px 20px;display:flex;flex-direction:column;gap:8px}
+.an{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;background:var(--surface-2)}
+.an:hover,.an.on{background:var(--surface-3)}
+.an h5{margin:0;font-size:15px;font-weight:700;letter-spacing:-.01em;display:flex;gap:8px;align-items:center}
+.an h5 .n{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center;flex:none}
+.an p{margin:0;font-size:13px;line-height:1.55;color:var(--ink-2);display:grid;grid-template-columns:34px 1fr;gap:6px}
+.an p em{font-style:normal;font-weight:700;font-size:12px;color:var(--ink-3)}
+.an p.tb em{color:var(--accent)}
+body.anno .main{margin-right:432px}
 
-@media (max-width:1280px){.top{grid-template-columns:1fr}.q{height:auto;max-height:420px}body.anno .app{margin-right:0}}
-@media (max-width:860px){
-  .app{grid-template-columns:1fr}.side{display:none}
-  .main{padding:16px 16px 48px}
-  .search{min-width:0;width:100%}
-  .qi{grid-template-columns:10px 1fr auto}.qi .d{grid-column:2 / 4}
-  .tl{--name:140px}
-  .anp{width:100%}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:1280px){.twin{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.sp:nth-child(2){border-right:0}.sp:nth-child(-n+2){border-bottom:1px solid var(--line)}body.anno .main{margin-right:0}}
+@media (max-width:860px){.tabs{gap:18px;overflow-x:auto}.tabs button{font-size:15px}.search{min-width:0;width:100%}.tl{--name:140px}.anp{left:12px;width:auto}.facts{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-
 <div class="app">
-  <aside class="side">
-    <div class="brand"><a href="reservations.html"><svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.43 119.25" role="img" aria-label="VACON house"><path fill="currentColor" d="M80.10000000000001 19.549999999999997C80.3 24.64999999999999 79.3 29.749999999999993 77.10000000000001 34.349999999999994L52.8 84.55L31.3 39.849999999999994C28.200000000000003 33.449999999999996 26.3 26.549999999999997 25.6 19.44999999999999H0.09999999999999998C6.7 27.449999999999996 12.3 36.14999999999999 16.8 45.449999999999996L37.9 89.35H55.2L78.8 40.24999999999999C82.5 32.64999999999999 87.3 25.549999999999997 93.0 19.349999999999994H80.10000000000001ZM142.60000000000002 63.449999999999996 121.4 19.549999999999997H104.1C106.9 25.25 106.9 31.849999999999994 104.2 37.55L89.2 68.75C85.5 76.35 80.7 83.45 75.0 89.64999999999999H88.0C87.7 84.55 88.7 79.44999999999999 90.9 74.85L92.4 71.85H129.2C131.6 77.55 133.2 83.55 133.8 89.64999999999999H159.3C152.7 81.64999999999999 147.10000000000002 72.85 142.60000000000002 63.55ZM94.6 67.35 111.0 33.55 127.2 67.35ZM196.4 86.35C179.10000000000002 86.35 170.3 72.14999999999999 167.5 59.05C164.70000000000002 45.949999999999996 166.9 26.14999999999999 182.9 22.549999999999997C197.0 19.349999999999994 213.5 31.449999999999996 209.8 45.05H218.9C223.7 45.05 226.8 40.05 224.9 35.64999999999999C220.0 24.549999999999997 205.20000000000002 17.64999999999999 189.3 17.64999999999999C165.5 17.64999999999999 150.9 33.949999999999996 150.9 54.349999999999994C150.9 74.75 165.3 91.45 189.10000000000002 91.45C206.8 91.45 220.3 82.05 225.20000000000002 68.85C225.20000000000002 68.85 211.8 86.25 196.5 86.25ZM270.7 17.64999999999999C245.4 17.64999999999999 232.0 34.14999999999999 232.0 54.55C232.0 74.94999999999999 245.4 91.45 270.7 91.45C296.0 91.45 309.4 74.94999999999999 309.4 54.55C309.4 34.14999999999999 296.0 17.64999999999999 270.7 17.64999999999999ZM281.8 85.14999999999999C269.1 89.75 255.7 81.05 248.9 62.55C242.1 44.05 246.7 28.849999999999994 259.4 24.25C272.1 19.64999999999999 285.1 27.349999999999994 292.2 46.849999999999994C298.9 65.35 294.3 80.64999999999999 281.6 85.25ZM377.7 19.549999999999997C377.7 19.549999999999997 381.9 24.14999999999999 381.9 35.05V74.14999999999999L342.0 22.549999999999997C340.5 20.64999999999999 338.2 19.549999999999997 335.8 19.549999999999997H316.5C316.5 19.549999999999997 320.7 24.14999999999999 320.7 35.05V74.05C320.7 82.95 318.0 87.64999999999999 316.9 89.14999999999999L316.5 89.64999999999999H329.3L328.9 89.14999999999999C327.8 87.64999999999999 325.1 82.95 325.1 74.05V26.249999999999993L371.8 86.55C373.3 88.45 375.6 89.55 378.0 89.55H386.3V35.05C386.3 24.14999999999999 390.5 19.549999999999997 390.5 19.549999999999997ZM429.66926 89.34992 429.46918 89.60002H441.47398L441.37394 89.49998C441.22388 89.2999 440.92376 88.89974 440.57362 88.24947999999999L440.5236 88.14944C439.97338 86.89894 439.37314 84.89814 439.37314 81.89694V75.19426C439.37314 66.89094 436.12184 60.138239999999996 425.96778 60.138239999999996C421.81612 60.138239999999996 419.76529999999997 62.08901999999999 418.0146 64.59002V56.386739999999996C418.0146 52.88533999999999 415.16346 50.0342 411.66206 50.0342H408.11064C408.11064 50.0342 410.21148 52.335119999999996 410.21148 57.787299999999995V81.84692C410.21148 86.2987 408.86093999999997 88.64963999999999 408.31072 89.39994L408.11064 89.65004H420.11544L420.0154 89.55C419.86534 89.34992 419.56522 88.94976 419.21508 88.2995L419.16506 88.19946C418.61484 86.94896 418.0146 84.94816 418.0146 81.94695999999999V74.84412C418.0146 67.39114 419.91535999999996 62.339119999999994 426.01779999999997 62.339119999999994C430.81972 62.339119999999994 431.62004 67.39114 431.62004 74.84412V81.94695999999999C431.62004 86.39874 430.2695 88.74968 429.71927999999997 89.49998ZM460.63163999999995 60.038199999999996C449.62724 60.038199999999996 444.5252 66.7909 444.5252 75.09421999999999C444.5252 83.39753999999999 449.62724 90.15024 460.63163999999995 90.15024C471.63604 90.15024 476.73807999999997 83.39753999999999 476.73807999999997 75.09421999999999C476.73807999999997 66.7909 471.63604 60.038199999999996 460.63163999999995 60.038199999999996ZM465.0334 87.19906C458.68086 89.49998 454.72927999999996 83.09742 452.87854 77.94536C451.02779999999996 72.79329999999999 449.92735999999996 65.2903 456.2799 62.98938C462.63244 60.68845999999999 466.58401999999995 67.14104 468.43476 72.2931C470.28549999999996 77.44516 471.33592 84.89814 464.98337999999995 87.19906ZM511.35191999999995 81.7969 511.3019 68.44156C511.3019 63.989779999999996 512.65244 61.638839999999995 513.2026599999999 60.88853999999999L513.40274 60.638439999999996H501.39794L501.49798 60.738479999999996C501.64804 60.938559999999995 501.94816 61.338719999999995 502.2983 61.98898L502.34832 62.08901999999999C502.89853999999997 63.33951999999999 503.49878 65.34031999999999 503.49878 68.34152L503.54879999999997 76.74488C503.54879999999997 84.14784 501.69806 87.89934 495.59562 87.89934C490.7937 87.89934 488.99298 84.14784 488.99298 76.74488V68.39153999999999C488.99298 63.93975999999999 490.34351999999996 61.58882 490.89374 60.838519999999995L491.09382 60.58842H479.78929999999997L479.88934 60.68845999999999C480.0394 60.88853999999999 480.33952 61.28869999999999 480.68966 61.938959999999994L480.73967999999996 62.038999999999994C481.2899 63.2895 481.89014 65.2903 481.89014 68.2915V74.99418C481.89014 83.2975 485.44156 90.0502 495.59562 90.0502C497.24627999999996 90.0502 499.39714 89.75008 500.59762 89.24987999999999C504.69926 87.49918 509.35112 87.59922 513.40274 89.39994C513.3027 89.24987999999999 512.85252 88.64963999999999 512.40234 87.49918C511.90214 86.19866 511.40193999999997 84.24788 511.40193999999997 81.69686ZM530.8096999999999 72.04299999999999C528.10862 71.64283999999999 524.7572799999999 70.89254 524.7572799999999 68.79169999999999C524.7572799999999 63.989779999999996 528.0586 62.2891 530.3095 62.2891C532.26028 62.2891 535.76168 63.989779999999996 535.76168 69.69206H540.3135C542.0641999999999 69.69206 543.4147399999999 67.89134 542.7144599999999 66.2907C540.7136599999999 61.838919999999995 534.2610799999999 60.138239999999996 530.2094599999999 60.138239999999996C524.8072999999999 60.338319999999996 517.0041799999999 62.739279999999994 517.0041799999999 68.84172C517.0041799999999 74.69406 522.7064599999999 76.84492 529.8593199999999 77.94536C533.5608 78.49557999999999 536.5119799999999 79.24588 536.5119799999999 81.39674C536.5119799999999 86.44876 532.86052 88.09942 530.35952 88.09942C527.70846 88.09942 524.4071399999999 86.44876 524.4071399999999 81.39674H520.10542C518.15464 81.39674 516.8041 83.5476 517.85452 85.19825999999999C520.00538 88.64963999999999 525.7576799999999 90.25028 530.3095 90.25028C537.2122599999999 90.25028 544.3150999999999 87.64923999999999 544.3150999999999 81.2967C544.3150999999999 74.7941 537.9125399999999 73.09342 530.8096999999999 71.99297999999999ZM566.4739599999999 87.49918C560.3214999999999 87.49918 557.02018 82.047 555.8697199999999 76.64484H575.1274199999999C578.12862 76.64484 580.2794799999999 73.99378 579.52918 71.0426C577.77848 64.23988 571.6260199999999 60.08821999999999 563.77288 60.08821999999999C553.86892 60.08821999999999 547.66644 66.74088 547.66644 75.04419999999999C547.66644 83.34752 553.86892 90.20026 563.77288 90.20026C571.12582 90.20026 577.17824 85.69846 579.22906 80.34631999999999C579.22906 80.34631999999999 574.02698 87.49918 566.4239399999999 87.49918ZM561.12182 62.58922C566.97416 60.98858 571.0257799999999 66.59082 571.9261399999999 72.2931C572.0762 73.2935 571.2758799999999 74.39394 570.22546 74.39394H555.41954C555.0694 69.542 555.9197399999999 63.989779999999996 561.0717999999999 62.58922Z"/></svg>
-</a><small>ADMIN</small></div>
-    <nav class="nav">
-      <div class="nav-label">핵심 업무</div>
-      <a href="#">회원 관리</a>
-      <a href="#">회원 상태</a>
-      <a href="#">숙소 관리</a>
-      <a href="#">숙소 운영</a>
-      <a href="#" class="on">예약 관리 <span class="cnt" id="navCnt">0</span></a>
-      <a href="#">예약 운영</a>
-      <div class="nav-label">정책/정산</div>
-      <a href="#">멤버십 관리</a>
-      <a href="#">결제 내역</a>
-      <a href="#">하이시즌</a>
-      <a href="#" data-stats>통계·매출 <span class="newm">신규</span></a>
-      <div class="nav-label">콘텐츠/기록</div>
-      <a href="#">CMS 관리</a>
-      <a href="#">숙박권</a>
-      <a href="#">예약 알림 설정</a>
-      <a href="#">알림톡 기록</a>
-    </nav>
-    <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../index.html" id="logout">로그아웃</a></div>
-  </aside>
-
+  <aside class="side"></aside>
   <main class="main">
     <div class="pagehead">
-      <div>
-        <h1>예약 관리</h1>
-        <p>2026년 9월 28일 (월) 오전 10:24 기준 · 채널 동기화 10:20</p>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn line" id="annoBtn">개선 포인트 보기</button>
+      <div><h1>예약 관리</h1><p>9월 28일 월요일 · 오전 10:24 기준</p></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn line" id="annoBtn">개선 포인트</button>
         <button class="btn line" id="syncBtn">채널 동기화</button>
         <button class="btn primary" id="addBtn">예약 등록</button>
       </div>
     </div>
-
-    <section class="top" id="topSec">
-      <div class="card" id="todayCard">
-        <button class="mk" data-mk="1" style="top:-10px;left:-10px">1</button>
-        <h2>오늘 <span class="muted">9.28 (월)</span></h2>
-        <div class="stats" id="stats"></div>
-        <div class="moves" id="moves"></div>
-        <div class="newline" id="newline"></div>
-      </div>
-      <div class="card" id="queueCard">
-        <button class="mk" data-mk="5" style="top:-10px;left:-10px">5</button>
-        <h2>처리 대기 <span class="muted" id="qCount"></span></h2>
-        <div class="qtabs" id="qtabs"></div>
-        <div class="q" id="queue"></div>
-      </div>
-    </section>
-    <div class="moved" id="moved"></div>
-
-    <section class="work" id="work">
-      <div class="worktop">
-        <div class="seg" id="viewSeg">
-          <button data-v="timeline" class="on">예약 보드</button>
-          <button data-v="list">예약 목록</button>
-          <button data-v="month">월간 달력</button>
-        </div>
-        <div class="datebar" id="dateBar">
-          <div class="seg" id="spanSeg">
-            <button data-s="w1">1주</button>
-            <button data-s="w2" class="on">2주</button>
-            <button data-s="m">한 달</button>
-          </div>
-          <button class="btn sm" id="prev" aria-label="이전">‹</button>
-          <span class="range num" id="range"></span>
-          <button class="btn sm" id="next" aria-label="다음">›</button>
-          <button class="btn sm" id="todayBtn">오늘</button>
-        </div>
-      </div>
-      <div class="fbar" id="fbar" style="position:relative"></div>
-      <div id="view" style="position:relative"></div>
-    </section>
+    <nav class="tabs" id="tabs">
+      <button data-t="today">오늘 할 일 <span class="n" id="tabN"></span></button>
+      <button data-t="board">예약 보드</button>
+      <button data-t="list">예약 목록</button>
+      <button data-t="month">월간 달력</button>
+    </nav>
+    <div id="pane" style="display:flex;flex-direction:column;gap:16px"></div>
   </main>
 </div>
-
 <aside class="anp" id="anp" hidden>
-  <div class="anp-h"><h3>개선 포인트 <button class="x" id="anpX" aria-label="닫기">✕</button></h3>
-    <p>현재 예약관리 화면의 문제와 이 시안의 해결 방식을 짝지었어요. 항목을 누르면 해당 위치로 이동해요.</p></div>
+  <div class="anp-h"><h3>개선 포인트 <button class="x" id="anpX" aria-label="닫기"></button></h3>
+    <p>지금 쓰는 예약관리 화면의 문제와 이 시안에서 푼 방식이에요. 누르면 해당 화면으로 이동해요.</p></div>
   <div class="anp-b" id="anpB"></div>
 </aside>
 <div id="layer"></div>
 
+<script src="data.js"></script>
 <script>
-/* ---------- time ---------- */
-const TODAY = new Date(2026, 8, 28);
-const WD = ['일','월','화','수','목','금','토'];
-const dOf = n => { const d = new Date(TODAY); d.setDate(d.getDate() + n); return d; };
-const md = n => { const d = dOf(n); return `${d.getMonth()+1}.${d.getDate()}`; };
-const mdw = n => { const d = dOf(n); return `${d.getMonth()+1}.${d.getDate()} (${WD[d.getDay()]})`; };
-const iso = n => { const d = dOf(n); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
-const offOf = s => Math.round((new Date(+s.slice(0,4), +s.slice(5,7)-1, +s.slice(8,10)) - TODAY) / 864e5);
+const $ = id => document.getElementById(id);
+const XI = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>';
+$('anpX').innerHTML = XI;
 
-/* ---------- master data (real villas) ---------- */
-const CH = {
-  '앱':       {c:'var(--ch-app)',    s:'앱'},
-  '네이버':   {c:'var(--ch-naver)',  s:'N'},
-  '에어비앤비':{c:'var(--ch-airbnb)', s:'A'},
-  '관리자':   {c:'var(--ch-admin)',  s:'관'},
+/* ---------- dashboard definitions (spec: 신규·처리 대기 / 오늘의 운영 / 확인·조치 필요) ---------- */
+const has = k => r => issues(r).includes(k);
+const COND = {
+  new:      {lb:'신규 예약', f:r => r.isNew},
+  unseen:   {lb:'미확인 예약', f:has('unseen')},
+  cancel:   {lb:'신규 취소 요청', f:has('cancel')},
+  change:   {lb:'신규 일정 변경 요청', f:has('change')},
+  in:       {lb:'오늘 체크인', f:r => ACTIVE(r) && r.in === 0},
+  out:      {lb:'오늘 체크아웃', f:r => ACTIVE(r) && r.out === 0},
+  stay:     {lb:'현재 투숙 중', f:r => ACTIVE(r) && st(r) === '이용 중'},
+  sameday:  {lb:'당일 예약', f:r => ACTIVE(r) && r.in === 0 && r.created.startsWith('2026-09-28')},
+  pay:      {lb:'결제 미완료', f:has('pay')},
+  conflict: {lb:'예약 충돌·중복 가능성', f:r => has('conflict')(r) || has('dup')(r)},
+  missing:  {lb:'예약 정보 누락', f:has('missing')},
+  sync:     {lb:'숙소 미배정·채널 연동 오류', f:r => has('sync')(r) || (r.flags.includes('syncdate') && r.out >= 0 && ACTIVE(r))},
+  notify:   {lb:'고객 알림 발송 실패', f:has('notify')},
+  clean:    {lb:'청소·객실 준비 미확인', f:has('clean')},
 };
-const REGIONS = ['가평','양평','홍천','마포'];
-const VILLAS = [
-  {id:'v1', name:'소석원',       region:'가평', cap:6, c:'#E86A33'},
-  {id:'v2', name:'캐빈 브리즈 A', region:'양평', cap:4, c:'#2F80ED'},
-  {id:'v3', name:'캐빈 브리즈 B', region:'양평', cap:4, c:'#27AE60'},
-  {id:'v4', name:'캐빈 브리즈 C', region:'양평', cap:4, c:'#9B51E0'},
-  {id:'v5', name:'캐빈 브리즈 D', region:'양평', cap:4, c:'#E2B000'},
-  {id:'v6', name:'그로브',       region:'홍천', cap:8, c:'#159A9C'},
-  {id:'v7', name:'르 아르젠',     region:'마포', cap:4, c:'#8E6C4E'},
-];
-const vById = Object.fromEntries(VILLAS.map(v => [v.id, v]));
-const vFull = id => `${vById[id].region} ${vById[id].name}`;
-
-/* Rows mirror the live table: raw name (channel baked in), account email, raw phone,
-   check-in/out (YYYY-MM-DD), adults/kids/infants, base status, payment, created, note, extra flags */
-const RAW = [
-  // September, completed
-  ['v1','김태리','taeri.k@gmail.com','01023418890','2026-09-04','2026-09-05',2,0,0,'확정','결제완료','2026-08-21 20:14',''],
-  ['v3','박준(네이버)',null,'010-3321-7781','2026-09-04','2026-09-05',2,0,0,'확정','채널정산','2026-08-30 09:12',''],
-  ['v2','서성인','grunui2@gmail.com','01077470334','2026-09-05','2026-09-06',2,0,0,'확정','결제완료','2026-09-06 11:00',''],
-  ['v3','Jang-Sung(에어비앤비)',null,'010-9352-0033','2026-09-05','2026-09-06',2,0,0,'확정','채널정산','2026-09-06 11:00',''],
-  ['v4','혜정(에어비앤비)',null,'010-9747-0981','2026-09-05','2026-09-06',3,0,0,'확정','채널정산','2026-09-06 11:00',''],
-  ['v5','주현(에어비앤비)',null,'010-3654-8314','2026-09-05','2026-09-06',3,0,0,'확정','채널정산','2026-09-06 11:00',''],
-  ['v6','명애',null,'010','2026-09-05','2026-09-06',5,0,0,'확정','결제완료','2026-09-06 11:00',''],
-  ['v1','조재영','prinsnim@naver.com','01094238087','2026-09-05','2026-09-06',2,2,0,'확정','결제완료','2026-09-06 11:00',''],
-  ['v1','이도현','dohyun.lee@naver.com','01055120931','2026-09-06','2026-09-07',2,0,0,'확정','결제완료','2026-08-28 13:40',''],
-  ['v6','최윤아(네이버)',null,'010-4410-2291','2026-09-07','2026-09-09',4,0,0,'확정','채널정산','2026-08-25 22:05',''],
-  ['v6','문지후','jihu.m@gmail.com','01088123310','2026-09-10','2026-09-11',3,0,0,'확정','결제완료','2026-09-01 10:22',''],
-  ['v2','강하람','haram@kakao.com','01033019923','2026-09-10','2026-09-12',2,0,0,'확정','결제완료','2026-09-02 18:31',''],
-  ['v1','정소윤','soyun.j@naver.com','01020034417','2026-09-12','2026-09-13',2,1,0,'확정','결제완료','2026-09-03 08:55',''],
-  ['v6','오태경(네이버)',null,'010-6620-1187','2026-09-12','2026-09-13',6,0,0,'확정','채널정산','2026-09-04 12:10',''],
-  ['v3','미오(에어비앤비)',null,'010-2281-9934','2026-09-12','2026-09-13',2,0,0,'확정','채널정산','2026-09-05 23:02',''],
-  ['v4','한결','hangyeol@gmail.com','01071189920','2026-09-12','2026-09-14',2,0,0,'확정','결제완료','2026-09-01 15:47',''],
-  ['v1','윤채원','chaewon.y@naver.com','01046672201','2026-09-13','2026-09-14',2,0,0,'확정','결제완료','2026-09-06 21:19',''],
-  ['v7','배서진','seojin.b@gmail.com','01099102283','2026-09-13','2026-09-14',2,0,0,'확정','결제완료','2026-09-07 11:36',''],
-  ['v5','노아(에어비앤비)',null,'010-7713-2210','2026-09-14','2026-09-15',2,0,0,'확정','채널정산','2026-09-08 19:44',''],
-  ['v6','송예준','yejun.s@naver.com','01012873390','2026-09-18','2026-09-19',4,0,0,'확정','결제완료','2026-09-10 09:31',''],
-  ['v7','류다온(네이버)',null,'010-5521-0082','2026-09-18','2026-09-19',2,0,0,'확정','채널정산','2026-09-11 14:20',''],
-  ['v1','임도하','doha.lim@gmail.com','01068812290','2026-09-19','2026-09-20',2,1,0,'확정','결제완료','2026-09-09 16:03',''],
-  ['v6','권시아','sia.k@naver.com','01030027711','2026-09-19','2026-09-20',5,0,0,'확정','결제완료','2026-09-12 20:41',''],
-  ['v7','남궁현','hyun.ng@gmail.com','01077203318','2026-09-19','2026-09-20',2,0,0,'확정','결제완료','2026-09-13 10:05',''],
-  ['v2','Emily(에어비앤비)',null,'010-4402-7719','2026-09-19','2026-09-21',2,0,0,'확정','채널정산','2026-09-10 03:22',''],
-  ['v7','차은호','eunho.c@naver.com','01056674412','2026-09-20','2026-09-21',2,0,0,'확정','결제완료','2026-09-14 12:48',''],
-  ['v1','백지안(네이버)',null,'010-8830-1276','2026-09-20','2026-09-21',3,0,0,'확정','채널정산','2026-09-15 17:33',''],
-  ['v6','유건','geon.y@gmail.com','01041185530','2026-09-20','2026-09-21',6,0,1,'확정','결제완료','2026-09-15 19:02',''],
-  ['v2','서하윤','hayun.s@kakao.com','01038820017','2026-09-23','2026-09-24',2,0,0,'확정','결제완료','2026-09-18 08:11',''],
-  ['v3','Lucas(에어비앤비)',null,'010-6612-3094','2026-09-23','2026-09-24',2,0,0,'확정','채널정산','2026-09-17 22:40',''],
-  ['v1','신유찬','yuchan@naver.com','01029981134','2026-09-24','2026-09-25',2,0,0,'확정','결제완료','2026-09-19 14:27',''],
-  ['v6','김나래(네이버)',null,'010-9031-5528','2026-09-24','2026-09-25',4,0,0,'확정','채널정산','2026-09-20 09:50',''],
-  ['v4','진서우','seowoo.j@gmail.com','01077018842','2026-09-24','2026-09-25',2,0,0,'확정','결제완료','2026-09-21 21:13',''],
-  ['v1','허준서','junseo.h@naver.com','01050083319','2026-09-25','2026-09-26',2,2,0,'확정','결제완료','2026-09-20 18:05',''],
-  ['v2','하은(에어비앤비)',null,'010-2239-6671','2026-09-25','2026-09-26',2,0,0,'확정','채널정산','2026-09-21 07:48',''],
-  ['v5','도경민','kyungmin.d@gmail.com','01011927730','2026-09-25','2026-09-26',3,0,0,'확정','결제완료','2026-09-22 12:30',''],
-  ['v3','양병은(네이버)',null,'010-8567-6523','2026-09-26','2026-09-27',2,0,0,'확정','채널정산','2026-09-27 11:00',''],
-  ['v4','지영(에어비앤비)',null,'010-9962-9841','2026-09-26','2026-09-27',2,0,0,'확정','채널정산','2026-09-27 11:00',''],
-  ['v5','연수빈','subin.y@naver.com','01047716602','2026-09-26','2026-09-27',2,0,0,'확정','결제완료','2026-09-23 20:36',''],
-  ['v1','정이안','ian.j@gmail.com','01063320048','2026-09-26','2026-09-27',4,0,0,'확정','결제완료','2026-09-24 11:52',''],
-  ['v6','마동하','dongha.m@naver.com','01024408816','2026-09-26','2026-09-27',6,0,0,'확정','결제완료','2026-09-22 16:18',''],
-  // staying, checking out today
-  ['v2','민지(에어비앤비)',null,'010-9977-4401','2026-09-27','2026-09-28',2,0,0,'확정','채널정산','2026-09-27 15:00',''],
-  ['v3','임미현','immh89@naver.com','01095696196','2026-09-27','2026-09-28',2,0,0,'확정','결제완료','2026-09-27 15:00',''],
-  ['v6','손지인','thswldls8585@naver.com','01091696585','2026-09-27','2026-09-28',2,0,0,'확정','결제완료','2026-09-27 15:00',''],
-  // upcoming
-  ['v7','정다은','daeun.j@gmail.com','01082204417','2026-09-29','2026-09-30',2,0,0,'확정','결제완료','2026-09-19 09:40','',{notify:true}],
-  ['v6','서준(네이버)',null,'010-4471-2093','2026-10-01','2026-10-03',4,0,0,'확정','채널정산','2026-09-27 22:30',''],
-  ['v5','박지성',null,'010-3302-8817','2026-10-01','2026-10-02',3,0,0,'확정','결제대기','2026-09-26 14:05','전화 예약 · 무통장 입금 대기'],
-  ['v1','조석현',null,'010-9218-1533','2026-10-02','2026-10-03',2,0,0,'확정','결제완료','2026-09-27 17:38','전화 예약',{conflict:true}],
-  ['v1','태오(에어비앤비)',null,'010-5580-2204','2026-10-02','2026-10-04',3,0,0,'확정','채널정산','2026-09-28 06:51','',{conflict:true}],
-  ['v3','이서연','seoyeon.l@naver.com','01073310028','2026-10-03','2026-10-04',2,1,0,'확정','결제완료','2026-09-24 19:22','대형견 1마리',{pet:true}],
-  ['v4','하윤(에어비앤비)',null,'010','2026-10-03','2026-10-05',2,0,0,'확정','채널정산','2026-09-28 07:12',''],
-  ['v2','김원기','wonki33@naver.com','01064134253','2026-10-04','2026-10-05',2,1,0,'취소','환불완료','2026-09-28 09:53','',{dup:true}],
-  ['v2','김원기','wonki33@naver.com','01064134253','2026-10-04','2026-10-05',2,1,0,'확정','결제완료','2026-09-28 09:57','',{dup:true}],
-  ['v7','오세훈','sehun.o@gmail.com','01039926650','2026-10-05','2026-10-06',2,0,0,'변경요청','결제완료','2026-09-15 13:08','10.6 – 10.7로 일정 변경 요청',{reqAt:'어제 21:15'}],
-  ['v6','최하은(네이버)',null,'010-2208-4419','2026-10-07','2026-10-09',5,0,0,'확정','채널정산','2026-09-23 10:44',''],
-  ['v3','한지민','jimin.han@kakao.com','01044087721','2026-10-09','2026-10-11',2,0,0,'취소요청','결제완료','2026-09-20 11:16','',{reqAt:'오늘 08:41'}],
-  ['v1','문가을','gaeul.m@naver.com','01028841103','2026-10-10','2026-10-11',2,2,0,'확정','결제완료','2026-09-25 15:39','바비큐 세트'],
-  ['v5','Olivia(에어비앤비)',null,'010-6614-2210','2026-10-10','2026-10-12',2,0,0,'확정','채널정산','2026-09-26 02:17',''],
-  ['v6','윤두현','yoonwt@naver.com','01083680500','2026-11-06','2026-11-07',4,0,0,'확정','결제완료','2026-09-27 18:48',''],
-  ['v7','진영호','wlsdudghzz@naver.com','01073075930','2026-11-10','2026-11-12',2,0,0,'취소','환불완료','2026-09-27 13:36',''],
-];
-
-const hex = i => { let x = (i + 7) * 2654435761 >>> 0, s = ''; for (let k = 0; k < 12; k++){ s += '0123456789ABCDEF'[(x >>> ((k * 3) % 29)) & 15]; x = (x * 1103515245 + 12345) >>> 0; } return s; };
-const fmtPhone = p => { const d = (p||'').replace(/\D/g,''); return d.length === 11 ? `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}` : d.length === 10 ? `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}` : d; };
-
-const R = RAW.map((a, i) => {
-  const [villa, raw, email, phone, ci, co, adults, kids, infants, base, pay, created, note, ex = {}] = a;
-  const m = raw.match(/^(.*)\((에어비앤비|네이버)\)$/);
-  const ch = m ? m[2] : email ? '앱' : '관리자';
-  const r = { idx:i, id:hex(i), villa, raw, name: m ? m[1] : raw, ch, email, phoneRaw:phone, phone:fmtPhone(phone),
-    in:offOf(ci), out:offOf(co), ci, co, adults, kids, infants, base, pay, created, note, pet:!!ex.pet, reqAt:ex.reqAt || '',
-    flags:[], seen:true, memos:[] };
-  r.nights = r.out - r.in;
-  if (ex.conflict) r.flags.push('conflict');
-  if (ex.notify) r.flags.push('notify');
-  if (ex.dup) r.flags.push('dup');
-  if (phone.replace(/\D/g,'').length < 10) r.flags.push('missing');
-  if (created === `${co} 11:00` || created === `${ci} 15:00`) r.flags.push('syncdate');
-  r.isNew = created >= '2026-09-27 18:00' && base !== '취소';
-  if (r.isNew) r.seen = false;
-  r.history = [{t:`예약 접수 (${ch === '관리자' ? '관리자 등록' : ch})`, m:`${created} · ${ch === '앱' ? '고객' : ch === '관리자' ? '운영자' : '채널 동기화'}`}];
-  if (base === '취소') r.history.unshift({t:'예약 취소 · 환불 완료', m:`${created.slice(0,10)} · 고객`});
-  if (base === '취소요청') r.history.unshift({t:'고객 취소 요청', m:`${r.reqAt} · 고객(앱)`, new:true});
-  if (base === '변경요청') r.history.unshift({t:`일정 변경 요청: ${note}`, m:`${r.reqAt} · 고객(앱)`, new:true});
-  r.notices = [{t:'예약 확정 알림톡', m:created.slice(5,16).replace('-','.'), ok:true}];
-  if (r.in >= 0 && r.in <= 1) r.notices.push({t:'입실 안내 알림톡', m:`${md(r.in - 1)} 10:00`, ok:!ex.notify});
-  return r;
-});
-R.find(r => r.name === '임미현').memos.push({t:'재방문 고객. 퇴실 시 온수 보일러 점검 요청.', m:'jelin · 9.27'});
-
-/* status as shown to the operator (live system values + 변경 요청) */
-function st(r){
-  if (r.base === '취소') return '예약 취소';
-  if (r.base === '취소요청') return '취소 요청';
-  if (r.base === '변경요청') return '변경 요청';
-  if (r.base === '이용완료' || r.out < 0) return '이용 완료';
-  if (r.in <= 0) return '이용 중';
-  return '예약 확정';
-}
-const ACTIVE = r => r.base !== '취소';
-const STAT_CLS = {'예약 확정':'p-ok','이용 중':'p-live','이용 완료':'p-done','예약 취소':'p-mute','취소 요청':'p-red','변경 요청':'p-org'};
-const pillSt = r => `<span class="pill ${STAT_CLS[st(r)]}">${st(r)}${st(r)==='이용 중' && r.out===0 ? ' · 오늘 퇴실' : ''}</span>`;
-const PAY_CLS = {'결제완료':'p-ok','채널정산':'p-mute','결제대기':'p-org','환불대기':'p-red','환불완료':'p-mute'};
-const PAY_LB = {'결제완료':'결제 완료','채널정산':'채널 정산','결제대기':'결제 대기','환불대기':'환불 대기','환불완료':'환불 완료'};
-const pillPay = r => `<span class="pill ${PAY_CLS[r.pay]}">${PAY_LB[r.pay]}</span>`;
-const chBadge = ch => `<span class="chb" style="background:${CH[ch].c}">${ch === '관리자' ? '관리자' : ch}</span>`;
-const FLAG_LB = {conflict:'예약 충돌', notify:'알림톡 실패', missing:'연락처 불완전', dup:'중복 가능성', syncdate:'신청일 기록 이상'};
-const flagsOf = r => r.flags.filter(f => f !== 'syncdate' || r.out >= -30);
-const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
-/* ---------- queue (what needs a human now) ---------- */
-function buildQueue(){
-  const Q = [];
-  const pairC = R.filter(r => r.flags.includes('conflict') && ACTIVE(r));
-  if (pairC.length > 1){
-    const [a, b] = pairC;
-    Q.push({g:'fix', lv:'hot', k:'예약 충돌', d:`${vFull(a.villa)} ${md(Math.max(a.in,b.in))} 겹침`, s:`${a.name} (${a.ch === '관리자' ? '관리자 등록' : a.ch}) ↔ ${b.name} (${b.ch})`, go:'보드에서 보기', act:{board:a.idx}});
+const pick = k => R.filter(COND[k].f);
+function reason(k){
+  const L = pick(k);
+  switch(k){
+    case 'unseen': return `가장 빠른 입실 ${mdw(Math.min(...L.map(r => r.in)))}`;
+    case 'cancel': return L.map(r => `${r.name} · ${md(r.in)} 입실 · ${r.reqAt} 요청`).join(', ');
+    case 'change': return L.map(r => `${r.name} · ${r.note}`).join(', ');
+    case 'pay': return L.map(r => `${r.name} · ${md(r.in)} 입실 · 무통장 입금 대기`).join(', ');
+    case 'conflict': { const c = L.filter(has('conflict')), d = L.filter(has('dup')); return [c.length ? `${vById[c[0].villa].name} ${md(Math.max(...c.map(r => r.in)))} 두 예약이 겹쳐요` : '', d.length ? `${d[0].name}님 4분 사이 취소 후 재예약` : ''].filter(Boolean).join(' · '); }
+    case 'missing': return L.map(r => `${r.name}님 연락처가 '${r.phoneRaw}'뿐이에요`).join(', ');
+    case 'sync': { const s = L.filter(has('sync')).length, d = L.length - s; return [s ? `에어비앤비 변경 ${s}건 미반영` : '', d ? `신청일 덮어쓰기 ${d}건` : ''].filter(Boolean).join(' · '); }
+    case 'notify': return L.map(r => `${r.name} · ${r.in === 1 ? '내일' : md(r.in)} 입실 안내`).join(', ');
+    case 'clean': return L.map(r => `${vFull(r.villa)} · ${r.in === 1 ? '내일' : md(r.in)} 입실`).join(', ');
   }
-  R.filter(r => r.flags.includes('notify') && ACTIVE(r)).forEach(r => Q.push({g:'fix', lv:'hot', k:'알림톡 실패', d:`${r.name} · ${vFull(r.villa)}`, s:`${r.in === 1 ? '내일' : mdw(r.in)} 입실 · 입실 안내 발송 실패`, go:'재발송', act:{r:r.idx}}));
-  R.filter(r => r.base === '취소요청').forEach(r => Q.push({g:'req', lv:'hot', k:'취소 요청', d:`${r.name} · ${vFull(r.villa)} ${md(r.in)} – ${md(r.out)}`, s:`${r.reqAt} 요청 · ${r.nights}박 · ${PAY_LB[r.pay]}`, go:'검토', act:{r:r.idx}}));
-  R.filter(r => r.base === '변경요청').forEach(r => Q.push({g:'req', lv:'warm', k:'변경 요청', d:`${r.name} · ${vFull(r.villa)}`, s:`${r.note} · ${r.reqAt}`, go:'검토', act:{r:r.idx}}));
-  R.filter(r => r.flags.includes('missing') && ACTIVE(r) && r.out >= 0).forEach(r => Q.push({g:'fix', lv:'warm', k:'연락처 불완전', d:`${r.name} (${r.ch}) · ${vFull(r.villa)} ${md(r.in)}`, s:`연락처가 '${esc(r.phoneRaw)}'로만 저장됨 · 입실 안내를 보낼 수 없어요`, go:'채널에서 확인', act:{r:r.idx}}));
-  R.filter(r => r.pay === '결제대기' && ACTIVE(r)).forEach(r => Q.push({g:'fix', lv:'warm', k:'결제 미완료', d:`${r.name} · ${vFull(r.villa)} ${md(r.in)}`, s:r.note || '결제 대기', go:'확인', act:{r:r.idx}}));
-  const dup = R.filter(r => r.flags.includes('dup'));
-  if (dup.length){
-    const live = dup.find(ACTIVE) || dup[0];
-    Q.push({g:'fix', lv:'warm', k:'중복 가능성', d:`${live.name} · ${vFull(live.villa)} ${md(live.in)} 같은 일정 ${dup.length}건`, s:`${dup.map(r => r.created.slice(11)).join(' 취소 → ')} 재예약 · 환불 처리 확인`, go:'비교', act:{list:'dup'}});
-  }
-  const fresh = R.filter(r => r.isNew && !r.seen);
-  if (fresh.length) Q.push({g:'new', lv:'', k:'신규 예약 확인', d:`어제 18시 이후 ${fresh.length}건`, s:Object.keys(CH).map(c => [c, fresh.filter(r=>r.ch===c).length]).filter(x=>x[1]).map(x=>`${x[0]} ${x[1]}`).join(' · '), go:'목록 보기', act:{list:'new'}});
-  const sd = R.filter(r => r.flags.includes('syncdate'));
-  if (sd.length) Q.push({g:'fix', lv:'', k:'신청일 기록 이상', d:`${sd.length}건 · 신청일이 체크인·체크아웃 시각으로 저장됨`, s:'예: 9.5 체크인 6건 모두 신청일 9.6 11:00 · 채널 동기화 점검 필요', go:'목록 보기', act:{list:'syncdate'}});
-  return Q;
+  return '';
 }
-let QTAB = 'all';
-function renderTop(){
-  // today stats
-  const outs = R.filter(r => ACTIVE(r) && r.out === 0);
-  const ins = R.filter(r => ACTIVE(r) && r.in === 0);
-  const stay = R.filter(r => ACTIVE(r) && r.in < 0 && r.out > 0);
-  const tmr = R.filter(r => ACTIVE(r) && r.in === 1);
-  document.getElementById('stats').innerHTML = [
-    ['out','퇴실', outs.length, '11:00까지'],
-    ['in','입실', ins.length, ins.length ? '15:00부터' : `내일 ${tmr.length}건`],
-    ['stay','이용 중', R.filter(r => ACTIVE(r) && r.in <= 0 && r.out >= 0).length, `${VILLAS.length}채 중`],
-  ].map(([k, lb, n, s]) => `<button class="stat ${n?'':'zero'}" data-today="${k}"><span class="lb">${lb}</span><span class="v">${n}<small>건</small></span><span class="s">${s}</span></button>`).join('');
-  const row = (r, t, cls) => `<button class="mv" data-r="${r.idx}"><span class="t ${cls}">${t}</span>
-      <span class="who"><span class="vdot" style="background:${vById[r.villa].c}"></span><b>${vFull(r.villa)}</b><span class="nm3">${esc(r.name)} · ${r.adults + r.kids + r.infants}명</span>${chBadge(r.ch)}</span>
-      <span class="st">${r.flags.length && flagsOf(r).some(f=>f!=='syncdate') ? `<span class="bad">${FLAG_LB[flagsOf(r).find(f=>f!=='syncdate')]}</span>` : r.memos.length ? '메모 있음' : ''}</span></button>`;
-  document.getElementById('moves').innerHTML =
-    outs.map(r => row(r, '퇴실 11:00', 'out')).join('') +
-    (ins.length ? ins.map(r => row(r, '입실 15:00', 'out')).join('') : `<div class="none">오늘 입실 예약은 없어요.</div>`) +
-    tmr.map(r => row(r, '내일 입실', '')).join('');
-  const fresh = R.filter(r => r.isNew);
-  document.getElementById('newline').innerHTML = `<span>어제 18시 이후 신규 <b>${fresh.length}건</b></span><span class="chs">${Object.keys(CH).map(c => [c, fresh.filter(r=>r.ch===c).length]).filter(x=>x[1]).map(x => `<span><i style="background:${CH[x[0]].c}"></i>${x[0]} ${x[1]}</span>`).join('')}</span>`;
+const SEV = {conflict:'red', notify:'red', cancel:'red', change:'orange', pay:'orange', missing:'orange', sync:'orange', clean:'orange', unseen:'orange'};
+const ICK = {conflict:'conflict', notify:'bell', cancel:'cancel', change:'calendar', pay:'card', missing:'info', sync:'sync', clean:'clean', unseen:'unseen'};
+const needCount = () => R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
 
-  const Q = buildQueue();
-  const tabs = [['all','전체'],['req','요청'],['fix','확인 필요']];
-  document.getElementById('qtabs').innerHTML = tabs.map(([k,lb]) => { const n = k==='all' ? Q.length : Q.filter(q=>q.g===k).length; return `<button data-qt="${k}" class="${QTAB===k?'on':''}">${lb} ${n}</button>`; }).join('');
-  const shown = Q.filter(q => QTAB === 'all' || q.g === QTAB);
-  document.getElementById('queue').innerHTML = shown.map((q, i) => `<button class="qi ${q.lv}" data-q="${Q.indexOf(q)}"><span class="dt"></span><span class="k">${q.k}</span><span class="d">${q.d}<small>${q.s}</small></span><span class="go">${q.go}</span></button>`).join('') || '<div class="none">처리할 항목이 없어요.</div>';
-  document.getElementById('qCount').textContent = `${Q.length}건`;
-  document.getElementById('navCnt').textContent = Q.filter(q => q.lv).length;
-  window.__Q = Q;
-
-  const done = R.filter(r => st(r) === '이용 완료').length;
-  document.getElementById('moved').innerHTML = `<span>누적 통계는 <a href="#" data-stats>통계·매출</a>(신규 메뉴)로 옮겼어요.</span><span>전체 예약 <b>564</b> · 취소 <b>152</b> · 이용 완료 <b>342</b></span>`;
-}
-document.getElementById('qtabs').addEventListener('click', e => { const b = e.target.closest('[data-qt]'); if (!b) return; QTAB = b.dataset.qt; renderTop(); });
-document.getElementById('queue').addEventListener('click', e => {
-  const b = e.target.closest('[data-q]'); if (!b) return;
-  const a = window.__Q[+b.dataset.q].act;
-  if (a.r != null) openDrawer(a.r);
-  else if (a.board != null){ const r = R[a.board]; S.view = 'timeline'; S.span = 'w2'; S.offset = r.in - 3; render(); workTo(); flashBlocks(R.filter(x => x.flags.includes('conflict')).map(x=>x.idx)); }
-  else if (a.list){ S.view = 'list'; S.listKey = a.list; S.period = 'all'; render(); workTo(); }
-});
-document.getElementById('stats').addEventListener('click', e => {
-  const b = e.target.closest('[data-today]'); if (!b) return;
-  S.view = 'list'; S.listKey = 'today-' + b.dataset.today; S.period = 'all'; render(); workTo();
-});
-document.getElementById('moves').addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (b) openDrawer(+b.dataset.r); });
-function workTo(){ document.getElementById('work').scrollIntoView({behavior:'smooth', block:'start'}); }
-function flashBlocks(ids){ setTimeout(() => ids.forEach(i => document.querySelectorAll(`.blk[data-r="${i}"]`).forEach(el => { el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); })), 350); }
-
-/* ---------- state & filters ---------- */
-const S = { view:'timeline', span:'w2', offset:-2, collapsed:new Set(), listKey:null, period:'upcoming', dd:null,
-  f:{q:'', villas:new Set(), status:'전체', channels:new Set(), withCancel:false}, cols:{no:false, created:false, email:false} };
+/* ---------- state ---------- */
+const S = { tab:'today', span:'w1', offset:-1, moff:0, openDay:null, collapsed:new Set(), key:null, period:'upcoming', dd:null,
+  f:{q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false},
+  cols:{no:false, created:false, email:false} };
 try {
-  const sv = JSON.parse(localStorage.getItem('vh-res-f2') || 'null');
-  if (sv){ S.f.villas = new Set(sv.villas||[]); S.f.status = sv.status||'전체'; S.f.channels = new Set(sv.channels||[]); S.f.withCancel = !!sv.withCancel; }
+  const sv = JSON.parse(localStorage.getItem('vh-res-f4') || 'null');
+  if (sv){ S.f.regions = new Set(sv.regions); S.f.villas = new Set(sv.villas); S.f.types = new Set(sv.types); S.f.channels = new Set(sv.channels); S.f.status = sv.status; S.f.withCancel = sv.withCancel; S.span = sv.span || 'w1'; S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; }
 } catch(e){}
-function persist(){ try { localStorage.setItem('vh-res-f2', JSON.stringify({villas:[...S.f.villas], status:S.f.status, channels:[...S.f.channels], withCancel:S.f.withCancel})); } catch(e){} }
-const villaOn = v => !S.f.villas.size || S.f.villas.has(v.id);
+function persist(){ try { localStorage.setItem('vh-res-f4', JSON.stringify({regions:[...S.f.regions], villas:[...S.f.villas], types:[...S.f.types], channels:[...S.f.channels], status:S.f.status, withCancel:S.f.withCancel, span:S.span})); } catch(e){} }
+const villaOn = v => (!S.f.regions.size || S.f.regions.has(v.region)) && (!S.f.types.size || S.f.types.has(v.type)) && (!S.f.villas.size || S.f.villas.has(v.id));
 function matchQ(r){
   const q = S.f.q.trim().toLowerCase(); if (!q) return true;
-  const dq = q.replace(/\D/g,'');
-  return [r.name, r.raw, vFull(r.villa), r.email, r.id, r.note, ...r.memos.map(m=>m.t)].join(' ').toLowerCase().includes(q) || (dq.length >= 3 && r.phoneRaw.replace(/\D/g,'').includes(dq));
+  const dq = q.replace(/\D/g, '');
+  return [r.name, r.raw, vFull(r.villa), r.email, r.id, r.note, ...r.memos.map(m => m.t)].join(' ').toLowerCase().includes(q) || (dq.length >= 3 && r.phoneRaw.replace(/\D/g, '').includes(dq));
 }
 function resOn(r){
   if (!villaOn(vById[r.villa])) return false;
@@ -647,355 +301,305 @@ function resOn(r){
   if (S.f.status !== '전체' && st(r) !== S.f.status) return false;
   return matchQ(r);
 }
-const STATUSES = ['예약 확정','이용 중','이용 완료','취소 요청','변경 요청','예약 취소'];
-function renderFilters(){
-  const vs = S.f.villas.size ? `숙소 ${S.f.villas.size}곳` : '숙소 전체';
-  const dirty = S.f.villas.size || S.f.channels.size || S.f.status !== '전체' || S.f.q || S.f.withCancel;
-  document.getElementById('fbar').innerHTML = `
-    <button class="mk" data-mk="6" style="top:-13px;left:-13px">6</button>
-    <input class="search" id="q" placeholder="예약자, 연락처, 이메일, 메모, 예약번호" value="${esc(S.f.q)}">
-    <div class="dd">
-      <button class="fsel" data-dd="villas">${vs} ▾</button>
-      ${S.dd === 'villas' ? `<div class="ddpanel">${REGIONS.map(rg => `<div class="grp">${rg}</div>` + VILLAS.filter(v => v.region === rg).map(v => `<label><input type="checkbox" data-villa="${v.id}" ${S.f.villas.has(v.id)?'checked':''}> ${v.name}<i class="sw" style="background:${v.c};border:0;width:9px;height:9px;border-radius:3px;margin-left:auto"></i></label>`).join('')).join('')}
-        <div class="ddfoot"><button class="btn sm" data-act="vclear">전체 해제</button><button class="btn sm primary" data-dd="villas">적용</button></div></div>` : ''}
+
+/* ---------- 오늘 할 일 ---------- */
+function paneToday(){
+  const n = needCount();
+  const fresh = pick('new');
+  const chN = Object.keys(CH).map(c => [c, fresh.filter(r => r.ch === c).length]).filter(x => x[1]);
+  const stripItem = (k, ic, sub) => { const c = pick(k).length; return `<button class="sp ${c ? '' : 'zero'}" data-k="${k}"><span class="ico sm">${ICON[ic]}</span><span class="tx"><span class="lb">${COND[k].lb}</span><span class="v num">${c}<small>건</small></span><span class="s">${sub}</span></span></button>`; };
+  const row = k => { const c = pick(k).length, col = SEV[k] || '';
+    return `<button class="lr" data-k="${k}"><span class="ico ${col}">${ICON[ICK[k]]}</span><span class="tx"><b>${COND[k].lb}</b><small>${esc(reason(k))}</small></span><span class="cnt2 ${col === 'red' ? 'red' : ''} num">${c}건</span><span class="chev">${ICON.chev}</span></button>`; };
+  const act = ['conflict','notify','pay','missing','sync','clean'];
+  const actOn = act.filter(k => pick(k).length), actOff = act.filter(k => !pick(k).length);
+  const req = ['cancel','change','unseen'];
+  const reqOn = req.filter(k => pick(k).length), reqOff = req.filter(k => !pick(k).length);
+  const okLine = off => off.length ? `<div class="okline">${ICON.check}<span>${off.map(k => COND[k].lb).join(', ')}은 이상 없어요</span></div>` : '';
+  return `
+    <div class="hero">
+      <h2>${n ? `확인이 필요한 예약이 <em>${n}건</em> 있어요` : '지금 처리할 예약이 없어요'}</h2>
+      <p>빨간 항목은 고객에게 바로 영향이 가요. 항목을 누르면 해당 예약만 모아서 보여줘요.</p>
     </div>
-    <select class="fsel" id="fStatus" aria-label="예약 상태"><option value="전체">상태 전체</option>${STATUSES.map(s => `<option ${S.f.status===s?'selected':''}>${s}</option>`).join('')}</select>
-    <span class="fsep"></span>
-    ${Object.keys(CH).map(c => `<button class="chip ${S.f.channels.has(c)?'on':''}" data-ch="${c}"><i style="background:${CH[c].c}"></i>${c === '관리자' ? '관리자 등록' : c}</button>`).join('')}
-    <span class="fsep"></span>
-    <label class="tgl"><input type="checkbox" id="wc" ${S.f.withCancel?'checked':''}>취소 포함</label>
-    ${dirty ? '<button class="reset" data-act="reset">초기화</button>' : ''}
-    <span class="saved">필터는 다음 방문에도 유지돼요</span>`;
-  bindMarks();
+    <div class="strip" id="strip">
+      ${stripItem('in','in', pick('in').length ? '15:00부터' : `내일 ${R.filter(r => ACTIVE(r) && r.in === 1).length}건`)}
+      ${stripItem('out','out','11:00까지')}
+      ${stripItem('stay','bed', `${VILLAS.length}채 중 ${new Set(pick('stay').map(r => r.villa)).size}채`)}
+      ${stripItem('sameday','sameday','오늘 접수 · 오늘 입실')}
+    </div>
+    <div class="twin">
+      <section class="card" id="actCard"><h3>확인·조치 필요</h3>${actOn.map(row).join('') || '<div class="mut" style="padding:8px">모두 정상이에요.</div>'}${okLine(actOff)}</section>
+      <section class="card" id="newCard"><h3>새 예약과 요청 <span class="r mut" style="font-size:13px;font-weight:500">어제 18시 이후</span></h3>
+        <button class="newbox" data-k="new">
+          <div class="big"><b class="num">${fresh.length}건</b><span>새 예약이 들어왔어요 ›</span></div>
+          <div class="bar">${chN.map(([c, k]) => `<i style="flex:${k};background:${CH[c].c}"></i>`).join('')}</div>
+          <div class="chs">${chN.map(([c, k]) => `<span><i style="background:${CH[c].c}"></i>${CH[c].lb} <b>${k}</b></span>`).join('')}</div>
+        </button>
+        ${reqOn.map(row).join('')}${okLine(reqOff)}
+      </section>
+    </div>
+    <div class="foot">전체 예약 수, 취소율, 가동률 같은 누적 통계는 <a href="#" data-soon2>통계·매출</a>에서 볼 수 있어요.</div>`;
 }
-const fbar = document.getElementById('fbar');
-fbar.addEventListener('click', e => {
-  const t = e.target;
-  if (t.dataset.dd){ S.dd = S.dd === t.dataset.dd ? null : t.dataset.dd; renderFilters(); if (!S.dd){ persist(); renderView(); } return; }
-  if (t.dataset.act === 'vclear'){ S.f.villas.clear(); renderFilters(); return; }
-  if (t.dataset.act === 'reset'){ S.f = {q:'', villas:new Set(), status:'전체', channels:new Set(), withCancel:false}; persist(); renderFilters(); renderView(); return; }
-  const ch = t.closest('[data-ch]');
-  if (ch){ const c = ch.dataset.ch; S.f.channels.has(c) ? S.f.channels.delete(c) : S.f.channels.add(c); persist(); renderFilters(); renderView(); }
-});
-fbar.addEventListener('change', e => {
-  const t = e.target;
-  if (t.dataset.villa){ t.checked ? S.f.villas.add(t.dataset.villa) : S.f.villas.delete(t.dataset.villa); return; }
-  if (t.id === 'fStatus') S.f.status = t.value;
-  if (t.id === 'wc') S.f.withCancel = t.checked;
-  persist(); renderFilters(); renderView();
-});
-fbar.addEventListener('input', e => {
-  if (e.target.id !== 'q') return;
-  S.f.q = e.target.value;
-  if (S.f.q && S.view === 'timeline'){ /* search is most useful as a list */ }
-  renderView();
-});
-fbar.addEventListener('keydown', e => { if (e.target.id === 'q' && e.key === 'Enter' && S.view !== 'list'){ S.view = 'list'; S.period = 'all'; render(); document.getElementById('q').focus(); } });
+
+/* ---------- filters ---------- */
+function ddMulti(key, label, groups){
+  const set = S.f[key];
+  return `<div class="dd"><button class="fsel ${set.size ? 'on' : ''}" data-dd="${key}">${set.size ? `${label} ${set.size}` : `${label} 전체`} ▾</button>
+    ${S.dd === key ? `<div class="ddpanel">${groups.map(([g, items]) => (g ? `<div class="grp">${g}</div>` : '') + items.map(([v, t, c]) => `<label><input type="checkbox" data-set="${key}" value="${v}" ${set.has(v) ? 'checked' : ''}> ${t}${c ? `<i class="sw2" style="background:${c}"></i>` : ''}</label>`).join('')).join('')}
+      <div class="ddfoot"><button class="btn sm" data-clear="${key}">전체 해제</button><button class="btn sm primary" data-dd="${key}">적용</button></div></div>` : ''}</div>`;
+}
+function fbarHTML(){
+  const dirty = S.f.q || S.f.regions.size || S.f.villas.size || S.f.types.size || S.f.channels.size || S.f.status !== '전체' || S.f.withCancel;
+  return `<div class="fbar" id="fbar">
+    <input class="search" id="q" placeholder="예약자, 연락처, 이메일, 메모, 예약번호" value="${esc(S.f.q)}">
+    ${ddMulti('regions','지역',[['', REGIONS.map(r => [r, r])]])}
+    ${ddMulti('villas','숙소', REGIONS.map(rg => [rg, VILLAS.filter(v => v.region === rg).map(v => [v.id, v.name, v.c])]))}
+    ${ddMulti('types','운영 유형',[['', TYPES.map(t => [t, t])]])}
+    <select class="fsel" id="fStatus" aria-label="예약 상태"><option value="전체">상태 전체</option>${['예약 확정','이용 중','이용 완료','취소 요청','변경 요청','예약 취소'].map(s => `<option ${S.f.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+    <span class="fsep"></span>
+    ${Object.keys(CH).map(c => `<button class="chip ${S.f.channels.has(c) ? 'on' : ''}" data-ch="${c}"><i style="background:${CH[c].c}"></i>${CH[c].lb}</button>`).join('')}
+    <span class="fsep"></span>
+    <label class="tgl"><input type="checkbox" id="wc" ${S.f.withCancel ? 'checked' : ''}>취소 포함</label>
+    ${dirty ? '<button class="reset" data-reset>초기화</button>' : ''}
+  </div>`;
+}
 
 /* ---------- board ---------- */
-const SPAN = {w1:{n:7,min:132}, w2:{n:14,min:92}, m:{n:31,min:48}};
-function rangeLabel(){
-  if (S.view === 'month'){ const d = dOf(S.moff); return `${d.getFullYear()}년 ${d.getMonth()+1}월`; }
-  const n = SPAN[S.span].n; return `${mdw(S.offset)} – ${mdw(S.offset + n - 1)}`;
-}
+const SPAN = {d1:{n:1,min:600,lb:'일간'}, w1:{n:7,min:132,lb:'주간'}, w2:{n:14,min:94,lb:'2주'}, m:{n:31,min:50,lb:'월간'}};
+const rangeLabel = () => S.tab === 'month' ? `${dOf(S.moff).getFullYear()}년 ${dOf(S.moff).getMonth()+1}월` : SPAN[S.span].n === 1 ? mdw(S.offset) : `${mdw(S.offset)} – ${mdw(S.offset + SPAN[S.span].n - 1)}`;
 function blockHTML(r, start, n, w, lane){
   const a = Math.max(r.in + 0.5, start), b = Math.min(r.out + 0.5, start + n);
   if (b <= a) return '';
   const left = (a - start) * w + 2, width = (b - a) * w - 4;
-  const s = st(r).replace(' ','');
-  const tags = [];
-  if (r.flags.includes('conflict') && ACTIVE(r)) tags.push('<span class="tag t-red">충돌</span>');
-  if (r.base === '취소요청') tags.push('<span class="tag t-red">취소 요청</span>');
-  if (r.base === '변경요청') tags.push('<span class="tag t-org">변경 요청</span>');
-  if (r.isNew && !r.seen) tags.push('<span class="tag t-new">신규</span>');
-  const issue = ACTIVE(r) && r.out >= 0 && r.flags.some(f => ['notify','missing','dup'].includes(f)) || (r.pay === '결제대기' && ACTIVE(r));
-  const title = `${r.name} · ${vFull(r.villa)} · ${mdw(r.in)} – ${mdw(r.out)} ${r.nights}박 · ${r.ch} · ${st(r)}`;
-  const tiny = width < 70;
-  return `<button class="blk s-${s} ${r.flags.includes('conflict') && ACTIVE(r) ? 'cf' : ''} ${r.in + .5 < start ? 'clipl' : ''} ${r.out + .5 > start + n ? 'clipr' : ''}" style="--chc:${CH[r.ch].c};left:${left}px;width:${width}px;top:${7 + lane*38}px" data-r="${r.idx}" title="${esc(title)}">
-    ${tiny ? `<span class="nm">${esc(r.name.slice(0,2))}</span>` : `<span class="ch">${CH[r.ch].s}</span><span class="nm">${esc(r.name)}</span>
-    ${width > 150 ? `<span class="mt">${r.nights}박 · ${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}</span>` : ''}${tags.join('')}`}
-    ${issue ? '<span class="rd" aria-label="확인 필요"></span>' : ''}
+  const is = issues(r).filter(k => !['syncdate','unseen','cancel','change'].includes(k));
+  const lbs = [];
+  if (r.base === '취소요청') lbs.push(BD('취소 요청','red','xs'));
+  if (r.base === '변경요청') lbs.push(BD('변경 요청','orange','xs'));
+  is.forEach(k => lbs.push(BD(k === 'conflict' ? '충돌' : ISSUE[k].lb, ISSUE[k].c, 'xs' + (k === 'conflict' ? ' fill' : ''))));
+  const room = width - 24 - r.name.length * 13;
+  const need = lbs.slice(0, 2).reduce((a, l) => a + l.replace(/<[^>]+>/g, '').length * 11 + 14, 0);
+  const showLbs = lbs.length && room > need;
+  const showMeta = room - (showLbs ? need : 0) > 90;
+  const dot = !showLbs && lbs.length ? `<span class="dt" style="background:${is.some(k => ISSUE[k].c === 'red') || r.base === '취소요청' ? 'var(--danger)' : 'var(--accent)'}"></span>` : '';
+  const title = `${r.name} · ${vFull(r.villa)} · ${mdw(r.in)} – ${mdw(r.out)} ${r.out - r.in}박 · ${CH[r.ch].lb} · ${st(r)}${r.note ? ' · ' + r.note : ''}`;
+  return `<button class="blk s-${st(r).replace(' ', '')} ${is.includes('conflict') ? 'cf' : ''} ${r.isNew && !r.seen ? 'nw' : ''} ${r.in + .5 < start ? 'clipl' : ''} ${r.out + .5 > start + n ? 'clipr' : ''}" style="--chc:${CH[r.ch].c};left:${left}px;width:${width}px;top:${8 + lane * 40}px" data-r="${r.idx}" title="${esc(title)}">
+    <span class="nm">${esc(width < 64 ? r.name.slice(0, 2) : r.name)}</span>
+    ${showMeta ? `<span class="mt">${r.out - r.in}박 · ${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}${r.note && !r.pet && r.base !== '변경요청' ? ' · ' + esc(r.note) : ''}</span>` : ''}
+    ${showLbs ? `<span class="lbs">${lbs.slice(0, 2).join('')}</span>` : dot}
   </button>`;
 }
-function renderBoard(){
+function toolbar(){
+  return `<div class="toolbar">
+    ${S.tab === 'board' ? `<div class="seg">${Object.entries(SPAN).map(([k, v]) => `<button data-s="${k}" class="${S.span === k ? 'on' : ''}">${v.lb}</button>`).join('')}</div>` : '<span></span>'}
+    <div class="datebar"><button class="icbtn" id="prev" aria-label="이전">${ICON.back}</button><span class="range num">${rangeLabel()}</span><button class="icbtn" id="next" aria-label="다음">${ICON.chev}</button><button class="btn sm" id="todayBtn">오늘</button></div>
+  </div>`;
+}
+function paneBoard(){
   const {n, min} = SPAN[S.span];
-  const avail = (document.getElementById('work').clientWidth || 1400) - (innerWidth < 860 ? 142 : 210);
+  const avail = Math.max(600, document.querySelector('.main').clientWidth - 64 - 202);
   const w = Math.max(min, Math.floor(avail / n));
   const start = S.offset, days = [...Array(n)].map((_, i) => start + i);
-  const vis = VILLAS.filter(villaOn);
-  const rs = R.filter(resOn);
-  let html = `<div class="tl" style="--w:${w}px"><div class="tl-head"><div class="tl-corner">숙소 ${vis.length}채</div>
+  const vis = VILLAS.filter(villaOn), rs = R.filter(resOn);
+  let h = `<div class="tl" style="--w:${w}px"><div class="tl-head"><div class="tl-corner">숙소 ${vis.length}채</div>
     ${days.map(o => { const d = dOf(o);
-      const ci = rs.filter(r => r.in === o && ACTIVE(r) && vis.some(v=>v.id===r.villa)).length, co = rs.filter(r => r.out === o && ACTIVE(r) && vis.some(v=>v.id===r.villa)).length;
-      return `<div class="tl-day ${d.getDay()===0?'sun':''} ${o===0?'today':''}">
-        ${S.span === 'm' ? `<span class="wd">${WD[d.getDay()]}</span><b>${d.getDate()}</b>` :
-        `<span class="wd">${d.getMonth()+1}월 ${WD[d.getDay()]}${o===0?' · 오늘':''}</span><b>${d.getDate()}</b><span class="io">${ci||co ? `입실 <em>${ci}</em> · 퇴실 <em>${co}</em>` : '&nbsp;'}</span>`}</div>`; }).join('')}
-  </div>`;
+      const ci = rs.filter(r => r.in === o && ACTIVE(r)).length, co = rs.filter(r => r.out === o && ACTIVE(r)).length;
+      return `<div class="tl-day ${d.getDay() === 0 ? 'sun' : ''} ${o === 0 ? 'today' : ''}">${S.span === 'm' ? `<span class="wd">${WD[d.getDay()]}</span><b>${d.getDate()}</b>` :
+        `<span class="wd">${d.getMonth() + 1}월 ${WD[d.getDay()]}${o === 0 ? ' · 오늘' : ''}</span><b>${d.getDate()}</b><span class="io">${ci || co ? `입실 <em>${ci}</em> · 퇴실 <em>${co}</em>` : '&nbsp;'}</span>`}</div>`; }).join('')}</div>`;
   REGIONS.forEach(rg => {
     const vv = vis.filter(v => v.region === rg); if (!vv.length) return;
     const shut = S.collapsed.has(rg);
-    html += `<div class="tl-grp ${shut?'shut':''}"><button data-grp="${rg}" aria-expanded="${!shut}"><span class="car">▼</span>${rg} <span>${vv.length}채</span></button><div style="width:${n*w}px"></div></div>`;
+    h += `<div class="tl-grp ${shut ? 'shut' : ''}"><button data-grp="${rg}" aria-expanded="${!shut}"><span class="car">${ICON.chev}</span>${rg} <span>${vv.length}채</span></button><div style="width:${n * w}px"></div></div>`;
     if (shut) return;
     vv.forEach(v => {
-      const mine = rs.filter(r => r.villa === v.id).sort((a,b) => (ACTIVE(b) - ACTIVE(a)) || a.in - b.in);
+      const mine = rs.filter(r => r.villa === v.id).sort((a, b) => (ACTIVE(b) - ACTIVE(a)) || a.in - b.in);
       const lanes = [];
       const placed = mine.map(r => { let l = lanes.findIndex(end => end <= r.in); if (l < 0){ l = lanes.length; lanes.push(r.out); } else lanes[l] = r.out; return [r, l]; });
-      const h = Math.max(1, lanes.length) * 38 + 8;
-      html += `<div class="tl-row"><div class="tl-name" style="height:${h}px"><span class="vc" style="background:${v.c}"></span><span><b>${v.name}</b><small>${v.region} · 최대 ${v.cap}인</small></span></div>
-        <div class="tl-track" style="width:${n*w}px;height:${h}px">
-          ${days.includes(0) ? `<div class="tl-todaycol" style="left:${(0-start)*w}px;width:${w}px"></div><div class="tl-nowline" style="left:${(0-start)*w + w*0.43}px"></div>` : ''}
+      const ht = Math.max(1, lanes.length) * 40 + 10;
+      h += `<div class="tl-row"><div class="tl-name" style="height:${ht}px"><b>${v.name}</b><small>${v.type} · 최대 ${v.cap}인</small></div>
+        <div class="tl-track" style="width:${n * w}px;height:${ht}px">
+          ${days.includes(0) ? `<div class="tl-todaycol" style="left:${(0 - start) * w}px;width:${w}px"></div><div class="tl-now" style="left:${(0 - start) * w + w * .43}px"></div>` : ''}
           ${placed.map(([r, l]) => blockHTML(r, start, n, w, l)).join('')}
         </div></div>`;
     });
   });
-  html += '</div>';
-  return `<button class="mk" data-mk="2" style="top:10px;left:260px">2</button><button class="mk" data-mk="3" style="top:90px;left:10px">3</button>
-    <div class="tlwrap">${html}</div>
+  h += '</div>';
+  return `${toolbar()}${fbarHTML()}
+    <div class="panel" id="boardPanel"><div class="tlwrap">${h}</div>
     <div class="legend">
-      <span><i class="sw"></i>예약 확정</span>
-      <span><i class="sw" style="background:var(--surface-3);border-color:var(--surface-3)"></i>이용 중</span>
-      <span><i class="sw" style="background:var(--surface-2);border-color:var(--surface-2)"></i>이용 완료</span>
-      <span><i class="sw" style="background:var(--danger-soft);border:1.5px solid var(--danger)"></i>취소 요청</span>
-      <span><i class="sw" style="background:var(--accent-soft);border:1.5px solid var(--accent)"></i>변경 요청</span>
-      <span><i class="sw" style="box-shadow:0 0 0 2px var(--danger);border-color:transparent"></i>예약 충돌</span>
-      <span><i style="width:7px;height:7px;border-radius:50%;background:var(--danger);display:inline-block"></i>확인 필요</span>
-      <span class="hint">막대 왼쪽 색은 예약 채널 · 체크인 15:00부터 체크아웃 11:00까지 · 빈 칸은 공실</span>
-    </div>`;
+      <span class="grp2"><span class="t">막대 색은 예약 경로</span>${Object.keys(CH).map(c => `<span class="it2"><i class="c" style="background:${CH[c].c}"></i>${CH[c].lb}</span>`).join('')}</span>
+      <span class="grp2"><span class="it2"><i class="sw"></i>예약 확정</span><span class="it2"><i class="sw" style="background:#EDEEF0;box-shadow:none"></i>이용 중</span><span class="it2"><i class="sw" style="background:var(--surface-2);box-shadow:none"></i>이용 완료</span></span>
+      <span class="grp2"><span class="t">라벨은 확인 필요</span>${BD('충돌','red','xs fill')}${BD('취소 요청','red','xs')}${BD('변경 요청','orange','xs')}<span class="it2"><i style="width:6px;height:6px;border-radius:50%;background:var(--accent)"></i>미확인 신규</span></span>
+      <span class="t" style="margin-left:auto">체크인 15:00 → 체크아웃 11:00 · 빈 칸은 공실</span>
+    </div></div>`;
 }
 
-/* ---------- month (kept as secondary view, fixed) ---------- */
-function renderMonth(){
-  const base = dOf(S.moff);
-  const first = new Date(base.getFullYear(), base.getMonth(), 1);
+/* ---------- month ---------- */
+function paneMonth(){
+  const base = dOf(S.moff), first = new Date(base.getFullYear(), base.getMonth(), 1);
   const s0 = new Date(first); s0.setDate(1 - first.getDay());
   const rs = R.filter(r => resOn(r) && ACTIVE(r));
   let cells = '';
   for (let i = 0; i < 42; i++){
     const d = new Date(s0); d.setDate(s0.getDate() + i);
     const o = Math.round((d - TODAY) / 864e5);
-    const ins = rs.filter(r => r.in === o), outs = rs.filter(r => r.out === o);
-    const items = [...ins.map(r => [r,'i']), ...outs.map(r => [r,'o'])];
-    const open = S.openDay === o;
-    const lim = open ? 99 : 4;
-    cells += `<div class="mc ${d.getMonth()!==base.getMonth()?'out':''} ${o===0?'today':''}">
-      <div class="top2"><span class="d">${d.getDate()}</span>${items.length ? `<span class="io">입실 ${ins.length} · 퇴실 ${outs.length}</span>` : ''}</div>
-      ${items.slice(0, lim).map(([r, k]) => `<button class="it ${k}" data-r="${r.idx}" style="--vc:${vById[r.villa].c}" title="${esc(vFull(r.villa))} · ${esc(r.name)}"><i style="background:${vById[r.villa].c}"></i><span class="vn">${k==='o'?'퇴실 ':''}${vById[r.villa].name}</span><span class="nm2">${esc(r.name)}</span></button>`).join('')}
+    const items = [...rs.filter(r => r.in === o).map(r => [r, 'i']), ...rs.filter(r => r.out === o).map(r => [r, 'o'])];
+    const lim = S.openDay === o ? 99 : 4;
+    cells += `<div class="mc ${d.getMonth() !== base.getMonth() ? 'out' : ''} ${o === 0 ? 'today' : ''}">
+      <div class="top2"><span class="d">${d.getDate()}</span>${items.length ? `<span class="io">입실 ${items.filter(x => x[1] === 'i').length} · 퇴실 ${items.filter(x => x[1] === 'o').length}</span>` : ''}</div>
+      ${items.slice(0, lim).map(([r, k]) => `<button class="it ${k}" data-r="${r.idx}" style="--vc:${vById[r.villa].c}"><i style="background:${vById[r.villa].c}"></i><span class="vn">${k === 'o' ? '퇴실 · ' : ''}${vById[r.villa].name}</span><span class="nm2">${esc(r.name)}</span></button>`).join('')}
       ${items.length > lim ? `<button class="more" data-day="${o}">+${items.length - lim}건 더보기</button>` : ''}
     </div>`;
   }
-  return `<div class="subnote"><span>보조 보기예요. 숙소마다 색이 고정되고, 입실(●)과 퇴실(○)을 모두 표시해요.</span>
-      <span class="lg">${VILLAS.filter(villaOn).map(v => `<span><i style="background:${v.c}"></i>${v.region} ${v.name}</span>`).join('')}</span></div>
-    <div class="month">${WD.map(w => `<div class="wd">${w}</div>`).join('')}${cells}</div>`;
+  return `${toolbar()}${fbarHTML()}<div class="panel">
+    <div class="subnote"><span>보조 보기예요. 숙소마다 색이 고정되고 입실(●)과 퇴실(○)을 함께 보여줘요.</span><span class="lg">${VILLAS.filter(villaOn).map(v => `<span><i style="background:${v.c}"></i>${v.name}</span>`).join('')}</span></div>
+    <div class="month">${WD.map(x => `<div class="wd">${x}</div>`).join('')}${cells}</div></div>`;
 }
 
 /* ---------- list ---------- */
-const LISTKEY = {
-  new:{lb:'어제 18시 이후 신규', f:r => r.isNew},
-  dup:{lb:'중복 가능성', f:r => r.flags.includes('dup')},
-  syncdate:{lb:'신청일 기록 이상', f:r => r.flags.includes('syncdate')},
-  'today-out':{lb:'오늘 퇴실', f:r => ACTIVE(r) && r.out === 0},
-  'today-in':{lb:'오늘 입실', f:r => ACTIVE(r) && r.in === 0},
-  'today-stay':{lb:'이용 중', f:r => ACTIVE(r) && r.in <= 0 && r.out >= 0},
-};
-function renderList(){
-  let rows = R.filter(r => S.listKey ? LISTKEY[S.listKey].f(r) && villaOn(vById[r.villa]) && matchQ(r) : resOn(r));
-  if (!S.listKey){
-    if (S.period === 'upcoming') rows = rows.filter(r => r.out >= 0);
-    if (S.period === 'past') rows = rows.filter(r => r.out < 0);
-  }
-  rows.sort((a, b) => S.period === 'past' ? b.in - a.in : a.in - b.in || a.villa.localeCompare(b.villa));
+function paneList(){
+  let rows = R.filter(r => S.key ? COND[S.key].f(r) && villaOn(vById[r.villa]) && matchQ(r) : resOn(r));
+  if (!S.key){ if (S.period === 'upcoming') rows = rows.filter(r => r.out >= 0); if (S.period === 'past') rows = rows.filter(r => r.out < 0); }
+  rows.sort((a, b) => S.period === 'past' && !S.key ? b.in - a.in : a.in - b.in || a.villa.localeCompare(b.villa));
   const C = S.cols;
-  return `<button class="mk" data-mk="7" style="top:52px;left:10px">7</button>
+  return `${fbarHTML()}<div class="panel" id="listPanel">
     <div class="listbar">
-      ${S.listKey ? `<span class="fchip">${LISTKEY[S.listKey].lb} ${rows.length}건<button data-act="clearKey" aria-label="조건 해제">✕</button></span>` :
-      `<div class="seg" id="perSeg">${[['upcoming','다가오는 예약'],['past','지난 예약'],['all','전체']].map(([k,lb]) => `<button data-per="${k}" class="${S.period===k?'on':''}">${lb}</button>`).join('')}</div><span style="font-size:13px;color:var(--ink-3)">${rows.length}건</span>`}
-      <div class="dd" style="margin-left:auto">
-        <button class="btn sm line" data-dd2="cols">열 설정 ▾</button>
+      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">✕</button></span>` :
+        `<div class="seg">${[['upcoming','다가오는 예약'],['past','지난 예약'],['all','전체']].map(([k, lb]) => `<button data-per="${k}" class="${S.period === k ? 'on' : ''}">${lb}</button>`).join('')}</div><span class="mut">${rows.length}건</span>`}
+      <div class="dd" style="margin-left:auto"><button class="btn sm line" data-cols>열 설정</button>
         ${S.dd === 'cols' ? `<div class="ddpanel" style="left:auto;right:0;min-width:200px"><div class="grp">보조 정보</div>
-          <label><input type="checkbox" data-col="no" ${C.no?'checked':''}> 예약번호</label>
-          <label><input type="checkbox" data-col="created" ${C.created?'checked':''}> 예약 신청일</label>
-          <label><input type="checkbox" data-col="email" ${C.email?'checked':''}> 계정 이메일</label></div>` : ''}
-      </div>
+          <label><input type="checkbox" data-col="no" ${C.no ? 'checked' : ''}> 예약번호</label><label><input type="checkbox" data-col="created" ${C.created ? 'checked' : ''}> 예약 신청일</label><label><input type="checkbox" data-col="email" ${C.email ? 'checked' : ''}> 계정 이메일</label></div>` : ''}</div>
       <button class="btn sm line">엑셀 내려받기</button>
     </div>
     <div style="overflow-x:auto"><table>
-      <thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>예약자</th><th>인원</th><th>결제</th><th>예약 상태</th><th>확인 필요 · 특이사항</th>${C.no?'<th>예약번호</th>':''}${C.created?'<th>예약 신청일</th>':''}${C.email?'<th>계정 이메일</th>':''}</tr></thead>
-      <tbody>${rows.length ? rows.map(r => { const v = vById[r.villa]; const fl = flagsOf(r).filter(f => ACTIVE(r) || f === 'dup');
+      <thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>예약자</th><th>인원</th><th>예약 경로</th><th>결제</th><th>예약 상태</th><th>특이사항</th>${C.no ? '<th>예약번호</th>' : ''}${C.created ? '<th>신청일</th>' : ''}${C.email ? '<th>계정 이메일</th>' : ''}</tr></thead>
+      <tbody>${rows.length ? rows.map(r => { const v = vById[r.villa]; const is = issues(r).filter(k => k !== 'cancel' && k !== 'change' && k !== 'pay' && (k !== 'syncdate' || C.created));
         return `<tr data-r="${r.idx}">
-        <td class="v"><span class="vdot" style="background:${v.c}"></span><b>${v.name}</b><span class="sub">${v.region}</span></td>
-        <td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.nights}박${r.in===0?' · 오늘 입실':''}${r.out===0?' · 오늘 퇴실':''}</span></td>
-        <td>${esc(r.name)}${chBadge(r.ch)}${r.email ? '<span class="mem">회원</span>' : ''}<span class="sub num">${r.phone.length >= 12 ? r.phone : `<span class="bad">${esc(r.phoneRaw)} · 번호 불완전</span>`}</span></td>
-        <td class="num">${r.adults + r.kids + r.infants}명<span class="sub">성인 ${r.adults}${r.kids?` · 아동 ${r.kids}`:''}${r.infants?` · 유아 ${r.infants}`:''}</span></td>
-        <td>${pillPay(r)}</td>
-        <td>${pillSt(r)}</td>
-        <td>${fl.map(f => `<span class="flag ${f==='syncdate'||f==='dup'?'o':''}">${FLAG_LB[f]}</span>`).join('')}${r.pay==='결제대기'&&ACTIVE(r)?'<span class="flag o">결제 미완료</span>':''}${r.note ? `<span class="sub">${esc(r.note)}</span>` : ''}${!fl.length && !r.note && !(r.pay==='결제대기') ? '<span style="color:var(--ink-4)">–</span>' : ''}</td>
-        ${C.no?`<td class="num" style="color:var(--ink-3);font-size:12.5px">${r.id}</td>`:''}
-        ${C.created?`<td class="num" style="font-size:12.5px;${r.flags.includes('syncdate')?'color:#C9560C':'color:var(--ink-3)'}">${r.created}</td>`:''}
-        ${C.email?`<td style="color:var(--ink-3);font-size:12.5px">${r.email || '–'}</td>`:''}
-      </tr>`; }).join('') : `<tr><td colspan="10" class="empty">조건에 맞는 예약이 없어요.</td></tr>`}</tbody>
-    </table></div>`;
+        <td class="v"><span class="vdot" style="background:${v.c}"></span><b>${v.name}</b><span class="sub">${v.region} · ${v.type}</span></td>
+        <td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박${r.in === 0 ? ' · 오늘 입실' : ''}${r.out === 0 ? ' · 오늘 퇴실' : ''}</span></td>
+        <td>${esc(r.name)}<span class="sub num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)}</span>`}</span></td>
+        <td class="num">${r.adults + r.kids + r.infants}명<span class="sub">성인 ${r.adults}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}${r.pet ? ' · 반려견' : ''}</span></td>
+        <td>${chDot(r.ch)}<span class="sub">${r.email ? '회원' : '비회원'}</span></td>
+        <td>${payHTML(r)}</td>
+        <td>${stHTML(r)}</td>
+        <td><div class="lbl">${is.map(k => BD(ISSUE[k].lb, ISSUE[k].c, 'xs' + (k === 'conflict' ? ' fill' : ''))).join('')}</div>${r.note ? `<span class="sub">${esc(r.note)}</span>` : ''}${!is.length && !r.note ? '<span style="color:var(--ink-4)">–</span>' : ''}</td>
+        ${C.no ? `<td class="num mut">${r.id}</td>` : ''}${C.created ? `<td class="num" style="font-size:13px;color:${r.flags.includes('syncdate') ? 'var(--accent-ink)' : 'var(--ink-3)'}">${r.created}</td>` : ''}${C.email ? `<td class="mut">${r.email || '–'}</td>` : ''}
+      </tr>`; }).join('') : `<tr><td colspan="11" class="empty">조건에 맞는 예약이 없어요.</td></tr>`}</tbody>
+    </table></div></div>`;
 }
 
 /* ---------- render ---------- */
-S.moff = 0;
-function renderView(){
-  const el = document.getElementById('view');
-  document.getElementById('range').textContent = rangeLabel();
-  document.getElementById('spanSeg').style.display = S.view === 'timeline' ? '' : 'none';
-  document.getElementById('dateBar').style.visibility = S.view === 'list' ? 'hidden' : '';
-  el.innerHTML = S.view === 'timeline' ? renderBoard() : S.view === 'month' ? renderMonth() : renderList();
-  bindMarks();
-}
 function render(){
-  document.querySelectorAll('#viewSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
-  document.querySelectorAll('#spanSeg button').forEach(b => b.classList.toggle('on', b.dataset.s === S.span));
-  renderTop(); renderFilters(); renderView();
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === S.tab));
+  const n = needCount(); $('tabN').textContent = n; $('tabN').hidden = !n;
+  $('pane').innerHTML = S.tab === 'today' ? paneToday() : S.tab === 'board' ? paneBoard() : S.tab === 'list' ? paneList() : paneMonth();
+  mountSide();
+  try { history.replaceState(null, '', '#' + S.tab); } catch(e){}
 }
-document.getElementById('viewSeg').addEventListener('click', e => { const v = e.target.dataset.v; if (!v) return; S.view = v; S.listKey = null; S.dd = null; if (v === 'month') S.moff = 0; render(); });
-document.getElementById('spanSeg').addEventListener('click', e => { const s = e.target.dataset.s; if (!s) return; S.span = s; S.offset = s === 'm' ? -7 : -2; render(); });
-const step = dir => { if (S.view === 'month'){ const d = dOf(S.moff); S.moff = Math.round((new Date(d.getFullYear(), d.getMonth() + dir, 15) - TODAY) / 864e5); S.openDay = null; } else S.offset += dir * SPAN[S.span].n; renderView(); };
-document.getElementById('prev').onclick = () => step(-1);
-document.getElementById('next').onclick = () => step(1);
-document.getElementById('todayBtn').onclick = () => { if (S.view === 'month') S.moff = 0; else S.offset = S.span === 'm' ? -7 : -2; renderView(); };
-const view = document.getElementById('view');
-view.addEventListener('click', e => {
-  const g = e.target.closest('[data-grp]'); if (g){ const k = g.dataset.grp; S.collapsed.has(k) ? S.collapsed.delete(k) : S.collapsed.add(k); renderView(); return; }
-  if (e.target.closest('[data-act="clearKey"]')){ S.listKey = null; renderView(); return; }
-  const per = e.target.closest('[data-per]'); if (per){ S.period = per.dataset.per; renderView(); return; }
-  if (e.target.dataset.dd2){ S.dd = S.dd === 'cols' ? null : 'cols'; renderView(); return; }
-  const more = e.target.closest('[data-day]'); if (more){ S.openDay = +more.dataset.day; renderView(); return; }
-  const b = e.target.closest('[data-r]'); if (b) openDrawer(+b.dataset.r);
+function go(tab, key){ S.tab = tab; S.key = key || null; S.dd = null; if (key) S.period = 'all'; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+$('tabs').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) go(b.dataset.t); });
+const pane = $('pane');
+pane.addEventListener('click', e => {
+  const t = e.target;
+  const k = t.closest('[data-k]'); if (k){ go('list', k.dataset.k); return; }
+  if (t.closest('[data-soon2]')){ e.preventDefault(); toast('통계·매출 화면은 준비 중이에요', false); return; }
+  const dd = t.closest('[data-dd]'); if (dd){ S.dd = S.dd === dd.dataset.dd ? null : dd.dataset.dd; if (!S.dd) persist(); render(); return; }
+  const cl = t.closest('[data-clear]'); if (cl){ S.f[cl.dataset.clear].clear(); render(); return; }
+  if (t.closest('[data-reset]')){ S.f = {q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false}; persist(); render(); return; }
+  const ch = t.closest('[data-ch]'); if (ch){ const c = ch.dataset.ch; S.f.channels.has(c) ? S.f.channels.delete(c) : S.f.channels.add(c); persist(); render(); return; }
+  const sp = t.closest('[data-s]'); if (sp){ S.span = sp.dataset.s; S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; persist(); render(); return; }
+  if (t.closest('#prev') || t.closest('#next')){ const dir = t.closest('#prev') ? -1 : 1;
+    if (S.tab === 'month'){ const d = dOf(S.moff); S.moff = Math.round((new Date(d.getFullYear(), d.getMonth() + dir, 15) - TODAY) / 864e5); S.openDay = null; } else S.offset += dir * SPAN[S.span].n; render(); return; }
+  if (t.closest('#todayBtn')){ if (S.tab === 'month') S.moff = 0; else S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; render(); return; }
+  const g = t.closest('[data-grp]'); if (g){ const x = g.dataset.grp; S.collapsed.has(x) ? S.collapsed.delete(x) : S.collapsed.add(x); render(); return; }
+  if (t.closest('[data-clearkey]')){ S.key = null; render(); return; }
+  const per = t.closest('[data-per]'); if (per){ S.period = per.dataset.per; render(); return; }
+  if (t.closest('[data-cols]')){ S.dd = S.dd === 'cols' ? null : 'cols'; render(); return; }
+  const more = t.closest('[data-day]'); if (more){ S.openDay = +more.dataset.day; render(); return; }
+  const r = t.closest('[data-r]'); if (r) openDrawer(+r.dataset.r);
 });
-view.addEventListener('change', e => { const c = e.target.dataset.col; if (c){ S.cols[c] = e.target.checked; renderView(); } });
+pane.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.set){ t.checked ? S.f[t.dataset.set].add(t.value) : S.f[t.dataset.set].delete(t.value); return; }
+  if (t.dataset.col){ S.cols[t.dataset.col] = t.checked; render(); return; }
+  if (t.id === 'fStatus') S.f.status = t.value;
+  if (t.id === 'wc') S.f.withCancel = t.checked;
+  persist(); render();
+});
+pane.addEventListener('input', e => {
+  if (e.target.id !== 'q') return;
+  S.f.q = e.target.value; const pos = e.target.selectionStart; render();
+  const q = $('q'); if (q){ q.focus(); q.setSelectionRange(pos, pos); }
+});
+pane.addEventListener('keydown', e => { if (e.target.id === 'q' && e.key === 'Enter' && S.tab !== 'list'){ S.period = 'all'; go('list'); $('q').focus(); } });
 
-/* ---------- drawer: summary + actions + memo + history in one place ---------- */
-const layer = document.getElementById('layer');
-const now = () => '9.28 ' + new Date().toTimeString().slice(0,5);
+/* ---------- drawer: 요약 → 한 가지 다음 행동 → 상세 ---------- */
+const layer = $('layer');
 function openDrawer(i){
-  const r = R[i]; const wasNew = r.isNew && !r.seen; r.seen = true;
-  const v = vById[r.villa];
-  const al = [];
-  if (r.base === '취소요청') al.push(['', '고객이 취소를 요청했어요', `${r.reqAt} 요청 · 환불 규정상 ${r.in >= 7 ? '전액' : '50%'} 환불 대상`]);
-  if (r.base === '변경요청') al.push(['o', '일정 변경 요청', `${esc(r.note)} · 해당 일정 공실 ${R.some(x => x.villa === r.villa && ACTIVE(x) && x !== r && x.in < r.in + 2 && x.out > r.in + 1) ? '없음' : '있음'}`]);
-  if (r.flags.includes('conflict') && ACTIVE(r)){ const o = R.find(x => x !== r && x.flags.includes('conflict')); al.push(['', '예약 충돌', `같은 숙소 ${md(Math.max(r.in, o.in))}에 ${esc(o.name)} (${o.ch === '관리자' ? '관리자 등록' : o.ch}) 예약이 겹쳐요. 관리자 등록 건이 ${o.ch}에 막히지 않은 것으로 보여요.`]); }
-  if (r.flags.includes('notify') && ACTIVE(r)) al.push(['', '입실 안내 알림톡 발송 실패', '수신 거부 또는 번호 오류 · 재발송하거나 전화로 안내해 주세요']);
-  if (r.flags.includes('missing')) al.push(['', '연락처 불완전', `저장된 값이 '${esc(r.phoneRaw)}'뿐이에요. ${r.ch === '에어비앤비' || r.ch === '네이버' ? r.ch + ' 예약 상세에서 번호를 확인해 주세요.' : '고객 정보를 다시 받아 주세요.'}`]);
-  if (r.flags.includes('dup')){ const o = R.find(x => x !== r && x.flags.includes('dup')); al.push(['o', '중복 가능성', `같은 예약자·같은 일정 예약이 ${o.created.slice(11)}에 ${o.base === '취소' ? '취소' : '접수'}됐어요. 이중 결제와 환불 여부를 확인해 주세요.`]); }
-  if (r.flags.includes('syncdate')) al.push(['o', '신청일 기록 이상', `신청일이 ${r.created}로 ${r.created.endsWith('11:00') ? '체크아웃' : '체크인'} 시각과 같아요. 채널 동기화가 값을 덮어쓴 것으로 보여요.`]);
-  if (r.pay === '결제대기' && ACTIVE(r)) al.push(['o', '결제 미완료', esc(r.note) || '결제 대기']);
-  const acts = [];
-  if (r.base === '취소요청') acts.push('<button class="btn danger" data-do="cancelOk">취소 승인</button><button class="btn line" data-do="cancelNo">요청 거절</button>');
-  if (r.base === '변경요청') acts.push('<button class="btn primary" data-do="changeOk">변경 승인</button><button class="btn line" data-do="changeNo">거절</button>');
-  if (r.flags.includes('notify') && ACTIVE(r)) acts.push('<button class="btn primary" data-do="resend">알림톡 재발송</button>');
-  if (st(r) === '이용 중' && r.out === 0) acts.push('<button class="btn primary" data-do="checkout">퇴실 처리</button>');
-  if (r.pay === '결제대기' && ACTIVE(r)) acts.push('<button class="btn primary" data-do="paid">입금 확인</button>');
+  const r = R[i], is = issues(r), p = price(r);
+  const [sec, pri] = nextStep(r);
   layer.innerHTML = `<div class="scrim" data-close></div>
-  <aside class="drawer" role="dialog" aria-label="예약 상세">
-    <button class="mk" data-mk="8" style="top:12px;left:-13px">8</button>
+  <aside class="drawer" role="dialog" aria-label="예약 요약">
     <div class="dr-head">
-      <div class="row"><div style="display:flex;gap:6px;flex-wrap:wrap">${pillSt(r)} ${pillPay(r)}${wasNew ? '<span class="pill p-live">신규</span>' : ''}</div><button class="x" data-close aria-label="닫기">✕</button></div>
-      <h3>${esc(r.name)}${chBadge(r.ch)}</h3>
-      <div class="when num"><b>${vFull(r.villa)}</b> · ${mdw(r.in)} 15:00 → ${mdw(r.out)} 11:00 · ${r.nights}박</div>
+      <div class="row"><div style="display:flex;gap:8px;align-items:center">${stHTML(r)}${r.isNew ? BD('신규','grey') : ''}</div><button class="x" data-close aria-label="닫기">${XI}</button></div>
+      <h3>${esc(r.name)}님</h3>
+      <div class="when"><b>${vFull(r.villa)}</b><br><span class="num">${mdw(r.in)} 15:00 → ${mdw(r.out)} 11:00 · ${r.out - r.in}박</span></div>
     </div>
     <div class="dr-body">
-      ${al.map(([c, t, s]) => `<div class="alert ${c}"><b>${t}</b><span>${s}</span></div>`).join('')}
-      <div class="dr-sec"><h4>예약 정보</h4><dl class="kv">
-        <dt>예약자</dt><dd>${esc(r.name)}${r.raw !== r.name ? `<span class="raw" title="현재 시스템에 저장된 값">원본 ${esc(r.raw)}</span>` : ''}</dd>
-        <dt>예약 경로</dt><dd>${r.ch === '관리자' ? '관리자 등록' : r.ch}${r.email ? ' · 회원 계정' : ' · 비회원'}</dd>
-        <dt>연락처</dt><dd class="num">${r.phone.length >= 12 ? r.phone : `<span class="bad">${esc(r.phoneRaw)} (불완전)</span>`}</dd>
-        ${r.email ? `<dt>계정</dt><dd>${esc(r.email)}</dd>` : ''}
-        <dt>인원</dt><dd>성인 ${r.adults}${r.kids?` · 아동 ${r.kids}`:''}${r.infants?` · 유아 ${r.infants}`:''}${r.pet?' · 반려견 동반':''}</dd>
-        <dt>특이사항</dt><dd>${esc(r.note) || '<span style="color:var(--ink-4)">없음</span>'}</dd>
-        <dt>예약번호</dt><dd class="num" style="color:var(--ink-3)">${r.id}</dd>
-        <dt>신청일</dt><dd class="num" style="color:var(--ink-3)">${r.created}</dd>
-      </dl></div>
-      <div class="dr-sec"><h4>알림톡 기록</h4>${r.notices.map(n => `<div class="nt"><span>${n.t}<small>${n.m}</small></span>${n.ok ? '<span class="pill p-ok">발송</span>' : '<span class="pill p-red">실패</span>'}</div>`).join('')}</div>
-      <div class="dr-sec"><h4>관리자 메모</h4>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
-        <textarea id="memoIn" placeholder="운영팀에 남길 메모 (예약 검색에도 걸려요)"></textarea>
-        <div style="display:flex;justify-content:flex-end;margin-top:6px"><button class="btn sm" id="memoAdd">메모 저장</button></div></div>
-      <div class="dr-sec"><h4>변경 이력 ${r.history.length}건</h4><ul class="hist">${r.history.map(h => `<li class="${h.new?'new':''}"><span class="b"></span><div><div class="t">${esc(h.t)}</div><div class="m">${h.m}</div></div></li>`).join('')}</ul></div>
+      ${is.filter(k => k !== 'syncdate').map(k => `<div class="callout ${ISSUE[k].c}"><span class="ico sm ${ISSUE[k].c}" style="background:#fff">${ICON[ISSUE[k].ic]}</span><div class="tx"><b>${ISSUE[k].lb}</b><span>${issueDesc(r, k)}</span></div></div>`).join('')}
+      <div class="facts">
+        <div class="fact"><small>인원</small><b>${r.adults + r.kids + r.infants}명${r.pet ? ' · 반려견' : ''}</b></div>
+        <div class="fact"><small>예약 경로</small><b>${CH[r.ch].lb}</b></div>
+        <div class="fact"><small>결제 금액</small><b class="num">${won(p.sub)}</b></div>
+      </div>
+      <dl class="kv">
+        <dt>연락처</dt><dd class="num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)} · 불완전</span>`}</dd>
+        <dt>결제 상태</dt><dd>${payHTML(r)}</dd>
+        <dt>특이사항</dt><dd>${esc(r.note) || '<span class="mut">없음</span>'}</dd>
+        ${r.memos.length ? `<dt>관리자 메모</dt><dd>${esc(r.memos[0].t)}</dd>` : ''}
+      </dl>
     </div>
-    <div class="dr-foot">${acts.join('')}<button class="btn line" style="margin-left:auto" data-do="edit">일정·숙소 변경</button></div>
+    <div class="dr-link"><a class="tbtn" href="reservation.html?id=${r.idx}">결제·이력까지 전체 보기 ${ICON.chev}</a></div>
+    <div class="dr-foot">
+      ${sec ? `<button class="btn xl" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
+      ${pri ? `<button class="btn xl ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : `<a class="btn xl primary" href="reservation.html?id=${r.idx}">예약 상세 보기</a>`}
+    </div>
   </aside>`;
-  layer.querySelectorAll('[data-do]').forEach(b => b.onclick = () => act(r, b.dataset.do));
-  document.getElementById('memoAdd').onclick = () => { const t = document.getElementById('memoIn').value.trim(); if (!t) return; r.memos.unshift({t, m:`jelin · ${now()}`}); r.history.unshift({t:'관리자 메모 추가', m:`${now()} · jelin`, new:true}); openDrawer(i); toast('메모를 저장했어요'); };
-  bindMarks();
-  renderTop(); if (S.view === 'timeline') renderView();
+  layer.querySelectorAll('[data-do]').forEach(b => b.onclick = () => { const m = runAct(r, b.dataset.do); layer.innerHTML = ''; render(); toast(m); });
 }
-function act(r, k){
-  const log = t => r.history.unshift({t, m:`${now()} · jelin`, new:true});
-  const M = {
-    cancelOk:() => { r.base = '취소'; r.pay = '환불대기'; log('취소 승인 · 환불 요청'); return '취소를 승인하고 환불을 요청했어요'; },
-    cancelNo:() => { r.base = '확정'; log('취소 요청 거절'); return '취소 요청을 거절했어요'; },
-    changeOk:() => { r.in += 1; r.out += 1; r.base = '확정'; log('일정 변경 승인: ' + md(r.in) + ' – ' + md(r.out)); return '일정을 변경했어요'; },
-    changeNo:() => { r.base = '확정'; log('일정 변경 거절'); return '변경 요청을 거절했어요'; },
-    resend:() => { r.flags = r.flags.filter(f => f !== 'notify'); r.notices.push({t:'입실 안내 알림톡 (재발송)', m:now(), ok:true}); log('입실 안내 알림톡 재발송'); return '알림톡을 다시 보냈어요'; },
-    checkout:() => { r.base = '이용완료'; log('퇴실 처리'); return `${r.name}님 퇴실 처리했어요`; },
-    paid:() => { r.pay = '결제완료'; log('입금 확인'); return '입금을 확인했어요'; },
-    edit:() => '일정·숙소 변경 화면은 준비 중이에요',
-  };
-  const msg = M[k]();
-  if (k !== 'edit') layer.innerHTML = '';
-  render(); toast(msg);
-}
-function toast(msg){ const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
 layer.addEventListener('click', e => { if (e.target.closest('[data-close]')) layer.innerHTML = ''; });
-document.addEventListener('keydown', e => { if (e.key === 'Escape'){ layer.innerHTML = ''; if (S.dd){ S.dd = null; renderFilters(); renderView(); } } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ layer.innerHTML = ''; if (S.dd){ S.dd = null; render(); } } });
 
-/* ---------- improvement points (as-is ↔ to-be) ---------- */
+/* ---------- 개선 포인트 ---------- */
 const ANNO = [
-  {n:1, t:'누적 통계 8칸 → 오늘 할 일', as:'전체 예약 564, 체크아웃 완료 342 같은 누적 숫자가 첫 화면을 차지해요. 취소 관련 두 칸은 값이 비어 있어요.', tb:'첫 화면에는 오늘 퇴실·입실·이용 중과 그 예약 목록만 둬요. 누적 숫자는 한 줄로 줄이고 통계·매출 메뉴로 옮겨요.', go:'#todayCard'},
-  {n:2, t:'체크인 날에만 찍히는 달력 → 기간 막대', as:'9.27 체크인·9.28 체크아웃 예약이 27일에만 보여요. 오늘 퇴실이 3건인데 오늘 칸은 비어 있어요.', tb:'체크인 15:00부터 체크아웃 11:00까지 막대로 이어요. 오늘 퇴실 예약이 오늘 칸에서 끝나고, 날짜 머리에 입실·퇴실 수가 보여요.', go:'#view', view:'timeline'},
-  {n:3, t:'잘리는 숙소명, 예약마다 다른 색 → 숙소가 행', as:'"양평, 캐빈 브리…"로 잘려 캐빈 A–D가 구분되지 않아요. 점 색이 예약마다 달라 색으로도 알 수 없어요.', tb:'숙소 7채를 지역별 행으로 고정하고 전체 이름을 보여줘요. 월간 달력에서도 숙소마다 색을 고정했어요.', go:'#view', view:'timeline'},
-  {n:4, t:'이름에 섞인 채널 → 채널 배지·필터', as:'"민지(에어비앤비)"처럼 채널이 이름 괄호에 들어 있어 채널별로 거르거나 셀 수 없어요.', tb:'괄호에서 채널을 분리해 배지로 보여주고 필터와 신규 채널별 건수를 만들어요. 원본 값은 상세에 남겨요. 실제 적용 시 채널 필드 추가가 필요해요.', go:'#newline'},
-  {n:5, t:'숨어 있는 데이터 오류 → 처리 대기 목록', as:'연락처 "010", 체크아웃 시각으로 덮인 신청일, 4분 간격 취소·재예약이 표 안에 그냥 섞여 있어요.', tb:'충돌, 알림톡 실패, 취소·변경 요청, 연락처 불완전, 중복 가능성, 신청일 이상을 이유와 함께 한 목록에 모아요. 누르면 바로 처리 화면으로 가요.', go:'#queueCard'},
-  {n:6, t:'큰 필터 패널 → 한 줄 필터', as:'검색·월·상태·숙소·"날짜별 최대 표시 수"·취소 제외가 화면 1/3을 차지해요.', tb:'검색, 숙소, 상태, 채널, 취소 포함을 한 줄로 줄였어요. 표시 수 설정은 없애고 조건은 다음 방문에도 유지돼요.', go:'#fbar'},
-  {n:7, t:'관리번호 중심 표 → 운영 순서 표', as:'예약번호·신청일이 앞에 있고 숙소는 오른쪽 끝에서 잘려요. 인원이 3칸이고 연락처 형식이 섞여 있어요.', tb:'숙소 → 일정 → 예약자(채널·회원) → 인원 → 결제 → 상태 → 확인 필요 순서로 바꿨어요. 번호는 010-0000-0000으로 맞추고 예약번호·신청일·이메일은 열 설정으로 옮겼어요.', go:'#view', view:'list'},
-  {n:8, t:'날짜 → 표 → 상세 3단계 → 바로 드로어', as:'날짜를 누르고, 아래 표에서 찾고, 다시 상세로 들어가야 해요.', tb:'막대나 행을 누르면 오른쪽에서 바로 열려요. 경고, 승인·거절, 재발송, 퇴실 처리, 메모, 변경 이력을 한곳에서 처리해요.', go:'drawer'},
+  {t:'누적 통계 8칸 → 오늘 할 일', as:'전체 예약 564, 체크아웃 완료 342 같은 누적 숫자가 첫 화면을 차지하고 두 칸은 비어 있어요.', tb:'첫 탭을 "오늘 할 일"로 두고 처리할 것만 보여줘요. 0건 항목은 한 줄로 접고, 누적 통계는 통계·매출로 옮겨요.', go:['today','#actCard']},
+  {t:'숫자만 있는 타일 → 이유가 붙은 목록', as:'"취소 요청 상태 예약 수"처럼 건수만 있어 무엇부터 봐야 할지 알 수 없어요.', tb:'항목마다 확인이 필요한 이유를 붙이고, 누르면 그 조건의 예약 목록으로 바로 이동해요.', go:['today','#newCard']},
+  {t:'체크인 날에만 찍히는 달력 → 기간 막대', as:'9.27 체크인·9.28 체크아웃 예약이 27일에만 보여 오늘 퇴실 3건이 달력에 없어요.', tb:'숙소별 보드에 체크인부터 체크아웃까지 막대로 이어요. 날짜 머리에 입실·퇴실 수가 보여요.', go:['board','#boardPanel']},
+  {t:'잘리는 숙소명, 예약마다 다른 색 → 숙소가 행', as:'"양평, 캐빈 브리…"로 잘려 캐빈 A–D를 구분할 수 없어요.', tb:'숙소를 지역별 행으로 고정해요. 막대 색은 예약 경로 하나만 뜻하고, 월간 달력은 숙소마다 색을 고정했어요.', go:['board','#boardPanel']},
+  {t:'이름에 섞인 채널 → 예약 경로 열', as:'"민지(에어비앤비)"처럼 채널이 이름 괄호에 들어 있어 거르거나 셀 수 없어요.', tb:'채널을 분리해 예약 경로 열, 필터, 신규 채널별 건수로 써요. 원본 값은 상세 화면에 남겨요.', go:['list','#listPanel']},
+  {t:'모두 같은 모양의 표 → 이상만 라벨', as:'예약번호·신청일이 앞에 있고 숙소는 끝에서 잘려요. 정상과 이상이 같은 모양이에요.', tb:'숙소부터 특이사항까지 운영 순서로 정렬했어요. 정상 상태는 텍스트로, 확인이 필요한 것만 라벨로 보여줘요.', go:['list','#listPanel']},
+  {t:'큰 필터 패널 → 한 줄 필터', as:'"날짜별 최대 표시 수" 같은 설정이 검색과 같은 크기로 화면 1/3을 차지해요.', tb:'검색, 지역, 숙소, 운영 유형, 상태, 채널을 한 줄에 두고 조건을 다음 방문에도 유지해요.', go:['board','#fbar']},
+  {t:'날짜 → 표 → 상세 3단계 → 요약과 한 가지 행동', as:'날짜를 누르고, 아래 표에서 찾고, 다시 상세로 들어가야 해요.', tb:'막대나 행을 누르면 요약이 열리고 지금 할 한 가지 행동만 버튼으로 보여줘요. 결제·이력 같은 전체 정보는 예약 상세 화면에 있어요.', go:['drawer']},
 ];
-function renderAnno(){
-  document.getElementById('anpB').innerHTML = ANNO.map(a => `<button class="an" data-an="${a.n}"><span class="n">${a.n}</span><div><h5>${a.t}</h5><div class="ab"><em class="as">현재</em><span class="asx">${a.as}</span><em class="tb">개선</em><span>${a.tb}</span></div></div></button>`).join('');
-}
-function goAnno(n){
-  const a = ANNO.find(x => x.n === n);
-  document.querySelectorAll('.an').forEach(el => el.classList.toggle('on', +el.dataset.an === n));
-  if (a.go === 'drawer'){ openDrawer((R.find(r => r.base === '취소요청') || R.find(r => r.flags.includes('conflict'))).idx); return; }
-  if (a.view && S.view !== a.view){ S.view = a.view; S.listKey = null; render(); }
-  layer.innerHTML = '';
-  const el = document.querySelector(a.go);
-  el.scrollIntoView({behavior:'smooth', block:'center'});
-  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
-}
-function setAnno(on){
-  document.body.classList.toggle('anno', on);
-  document.getElementById('anp').hidden = !on;
-  const b = document.getElementById('annoBtn'); b.classList.toggle('anno-on', on); b.textContent = on ? '개선 포인트 닫기' : '개선 포인트 보기';
-  try { localStorage.setItem('vh-anno', on ? '1' : '0'); } catch(e){}
-  if (S.view === 'timeline') renderView();
-}
-function bindMarks(){ document.querySelectorAll('.mk').forEach(m => m.onclick = e => { e.stopPropagation(); if (!document.body.classList.contains('anno')) return; goAnno(+m.dataset.mk); document.querySelector(`.an[data-an="${m.dataset.mk}"]`)?.scrollIntoView({block:'nearest', behavior:'smooth'}); }); }
-document.getElementById('annoBtn').onclick = () => setAnno(!document.body.classList.contains('anno'));
-document.getElementById('anpX').onclick = () => setAnno(false);
-document.getElementById('anpB').addEventListener('click', e => { const b = e.target.closest('[data-an]'); if (b) goAnno(+b.dataset.an); });
-renderAnno();
+$('anpB').innerHTML = ANNO.map((a, i) => `<button class="an" data-an="${i}"><h5><span class="n">${i + 1}</span>${a.t}</h5><p><em>현재</em><span>${a.as}</span></p><p class="tb"><em>개선</em><span>${a.tb}</span></p></button>`).join('');
+$('anpB').addEventListener('click', e => {
+  const b = e.target.closest('[data-an]'); if (!b) return;
+  document.querySelectorAll('.an').forEach(x => x.classList.toggle('on', x === b));
+  const [tab, sel] = ANNO[+b.dataset.an].go;
+  if (tab === 'drawer'){ openDrawer((R.find(r => r.base === '취소요청') || R.find(r => r.flags.includes('conflict')) || R[45]).idx); return; }
+  layer.innerHTML = ''; go(tab);
+  setTimeout(() => { const el = document.querySelector(sel); if (!el) return; el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }, 60);
+});
+function setAnno(on){ document.body.classList.toggle('anno', on); $('anp').hidden = !on; $('annoBtn').classList.toggle('on', on); try { localStorage.setItem('vh-anno', on ? '1' : '0'); } catch(e){} if (S.tab === 'board') render(); }
+$('annoBtn').onclick = () => setAnno(!document.body.classList.contains('anno'));
+$('anpX').onclick = () => setAnno(false);
+$('syncBtn').onclick = () => toast('네이버·에어비앤비와 동기화했어요. 새 변경은 없어요.');
+$('addBtn').onclick = () => toast('예약 등록 화면은 준비 중이에요', false);
 
-/* ---------- chrome ---------- */
-try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
-document.getElementById('logout').addEventListener('click', () => { try { localStorage.removeItem('vh-admin-session'); } catch(err){} });
-document.querySelectorAll('.nav a:not(.on)').forEach(a => a.addEventListener('click', e => { e.preventDefault(); toast(`${a.textContent.replace('신규','').trim()} 화면은 준비 중이에요`); }));
-document.getElementById('moved').addEventListener('click', e => { if (e.target.closest('[data-stats]')){ e.preventDefault(); toast('통계·매출 화면은 준비 중이에요'); } });
-document.getElementById('syncBtn').onclick = () => toast('네이버·에어비앤비 예약을 동기화했어요 · 변경 0건');
-document.getElementById('addBtn').onclick = () => toast('예약 등록 화면은 준비 중이에요');
-
-const H = location.hash;
-if (/list/.test(H)) S.view = 'list';
-if (/month/.test(H)) S.view = 'month';
+const H = location.hash.slice(1);
+if (['today','board','list','month'].includes(H.split('&')[0])) S.tab = H.split('&')[0];
 render();
-(() => { const nl = document.getElementById('todayCard'); const m = document.createElement('button'); m.className = 'mk'; m.dataset.mk = '4'; m.textContent = '4'; m.style.cssText = 'bottom:14px;right:14px'; nl.appendChild(m); bindMarks(); })();
-try { if (localStorage.getItem('vh-anno') === '1' || location.hash === '#anno') setAnno(true); } catch(e){}
 { const m = H.match(/d=(\d+)/); if (m) openDrawer(+m[1]); }
-addEventListener('resize', () => { if (S.view === 'timeline') renderView(); });
+try { if (localStorage.getItem('vh-anno') === '1' || /anno/.test(H)) setAnno(true); } catch(e){}
+addEventListener('resize', () => { if (S.tab === 'board') render(); });
 </script>
 </body>
 </html>

@@ -5,7 +5,8 @@
 | 화면 | 경로 |
 | --- | --- |
 | 관리자 로그인 | `/` |
-| 관리자 예약 관리 | `/admin/reservations.html` |
+| 관리자 예약 관리 (오늘 할 일 · 보드 · 목록 · 달력) | `/admin/reservations.html` |
+| 관리자 예약 상세 | `/admin/reservation.html?id=48` |
 | 기업 관리페이지 | `/corp/` |
 | 앱 선물 사용 내역 | `/app/gift.html` |
 

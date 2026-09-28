@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
+<title>VACON house 예약 상세</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="admin.css">
+<style>
+.wrap{max-width:1480px;width:100%;display:flex;flex-direction:column;gap:20px}
+.back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:14px;text-decoration:none;align-self:flex-start;margin-left:-4px}
+.back svg{width:18px;height:18px}
+.back:hover{color:var(--ink)}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.head .lbls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.head h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.3}
+.head p{margin:6px 0 0;font-size:16px;color:var(--ink-2)}
+.head .acts{display:flex;gap:8px}
+.head .acts .btn{height:48px;padding:0 22px;border-radius:12px;font-size:15px}
+.calls{display:flex;flex-direction:column;gap:8px}
+.callout .act{margin-left:auto;align-self:center}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.fact{padding:18px 22px;border-right:1px solid var(--line)}
+.fact:last-child{border-right:0}
+.fact small{display:block;font-size:13px;color:var(--ink-3);margin-bottom:2px}
+.fact b{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.fact span{display:block;font-size:13px;color:var(--ink-3);margin-top:2px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card > h3 .tbtn{margin-left:auto}
+.money{display:grid;grid-template-columns:1fr auto;gap:10px 16px;font-size:14.5px}
+.money .sum{font-weight:700;font-size:17px}
+.money .m2{color:var(--ink-3);font-size:13.5px}
+.opt{display:flex;justify-content:space-between;font-size:14.5px;padding:10px 0;border-bottom:1px solid var(--line)}
+.opt:last-child{border-bottom:0}
+.nt{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;padding:10px 0;border-bottom:1px solid var(--line)}
+.nt:last-child{border-bottom:0}
+.nt small{display:block;font-size:12.5px;color:var(--ink-3)}
+.form{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;align-items:center;font-size:14px}
+.form label{color:var(--ink-3)}
+.stepper{display:inline-flex;align-items:center;gap:0;background:var(--surface-2);border-radius:10px;overflow:hidden}
+.stepper button{border:0;background:none;width:36px;height:36px;font-size:18px;color:var(--ink-2)}
+.stepper span{min-width:28px;text-align:center;font-weight:600}
+.frow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.frow small{color:var(--ink-3);margin-right:4px}
+.formfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.raw{font-size:12px;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
+.meta{font-size:12.5px;color:var(--ink-3);display:grid;grid-template-columns:72px 1fr;gap:4px 8px;padding:0 4px}
+.stnow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.stnow .big{font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.stnow .big i{width:10px;height:10px;border-radius:50%}
+.hint{font-size:12.5px;color:var(--ink-3);margin-top:8px}
+@media (max-width:1180px){.grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}.pair{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side"></aside>
+  <main class="main"><div class="wrap" id="wrap"></div></main>
+</div>
+<script src="data.js"></script>
+<script>
+const id = +(new URLSearchParams(location.search).get('id') ?? 42);
+const r = R[id] || R[42];
+let edit = null;
+const $ = x => document.getElementById(x);
+const STATES = [['확정','예약 확정'],['변경요청','변경 요청'],['취소요청','취소 요청'],['이용완료','이용 완료'],['취소','예약 취소']];
+
+function render(){
+  const v = vById[r.villa], p = price(r), is = issues(r);
+  const [sec, pri] = nextStep(r);
+  const cur = st(r);
+  const inline = {conflict:'conflictOk', notify:'resend', pay:'paid', clean:'clean', sync:'resync', dup:'dupOk', unseen:'seen'};
+  $('wrap').innerHTML = `
+    <a class="back" href="reservations.html#board">${ICON.back}예약 관리</a>
+    <div class="head">
+      <div>
+        <div class="lbls">${stHTML(r)}${is.filter(k => k !== 'cancel' && k !== 'change').map(k => BD(ISSUE[k].lb, ISSUE[k].c, k === 'conflict' ? 'fill' : '')).join('')}</div>
+        <h1>${esc(r.name)}님의 예약</h1>
+        <p>${vFull(r.villa)} · <span class="num">${mdw(r.in)} – ${mdw(r.out)}</span> · ${r.out - r.in}박</p>
+      </div>
+      <div class="acts">
+        ${sec ? `<button class="btn" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
+        ${pri ? `<button class="btn ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : ''}
+      </div>
+    </div>
+
+    ${is.length ? `<div class="calls">${is.map(k => `<div class="callout ${ISSUE[k].c}"><span class="ico sm ${ISSUE[k].c}" style="background:#fff">${ICON[ISSUE[k].ic]}</span><div class="tx"><b>${ISSUE[k].lb}</b><span>${issueDesc(r, k)}</span></div>${inline[k] && inline[k] !== pri ? `<button class="btn sm line act" data-do="${inline[k]}">${ACT[inline[k]].lb}</button>` : ''}</div>`).join('')}</div>` : ''}
+
+    <div class="facts">
+      <div class="fact"><small>이용 일정</small><b class="num">${md(r.in)} – ${md(r.out)}</b><span>${r.out - r.in}박 · 15:00 입실 · 11:00 퇴실</span></div>
+      <div class="fact"><small>인원</small><b>${r.adults + r.kids + r.infants}명</b><span>성인 ${r.adults}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}${r.pet ? ' · 반려견' : ''}</span></div>
+      <div class="fact"><small>예약 경로</small><b>${CH[r.ch].lb}</b><span>${r.email ? '회원 계정' : '비회원'} · ${r.created.slice(5, 16).replace('-', '.')} 접수</span></div>
+      <div class="fact"><small>결제 금액</small><b class="num">${won(p.sub)}</b><span>${PAY_LB[r.pay]} · ${p.method}</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="col">
+        <div class="pair">
+          <section class="card"><h3>숙소 및 이용 일정 <button class="tbtn" data-soon>변경</button></h3>
+            <dl class="kv">
+              <dt>숙소</dt><dd>${vFull(r.villa)}</dd>
+              <dt>운영</dt><dd>${v.type} · 최대 ${v.cap}인</dd>
+              <dt>체크인</dt><dd class="num">${mdw(r.in)} 15:00</dd>
+              <dt>체크아웃</dt><dd class="num">${mdw(r.out)} 11:00</dd>
+              <dt>객실 준비</dt><dd>${r.flags.includes('clean') ? '<span class="bad">청소 완료 확인 전</span>' : st(r) === '이용 완료' ? '<span class="mut">퇴실 완료</span>' : '확인됨'}</dd>
+            </dl></section>
+          <section class="card" id="guest"><h3>예약자·동반 인원 ${edit === 'guest' ? '' : '<button class="tbtn" data-edit="guest">수정</button>'}</h3>
+            ${edit === 'guest' ? `<div class="form">
+                <label for="fPhone">연락처</label><input class="inp num" id="fPhone" value="${esc(phoneOk(r) ? fmtPhone(r.phoneRaw) : r.phoneRaw)}">
+                <label>인원</label><div class="frow">${[['adults','성인'],['kids','아동'],['infants','유아']].map(([k, lb]) => `<span><small>${lb}</small><span class="stepper"><button data-step="${k}:-1">−</button><span id="n_${k}">${r[k]}</span><button data-step="${k}:1">+</button></span></span>`).join('')}</div>
+                <label>반려동물</label><label class="tgl" style="color:var(--ink)"><input type="checkbox" id="fPet" ${r.pet ? 'checked' : ''}>동반</label>
+              </div>
+              <div class="formfoot"><button class="btn sm" data-edit="">취소</button><button class="btn sm primary" id="saveGuest">저장</button></div>` : `
+            <dl class="kv">
+              <dt>예약자</dt><dd>${esc(r.name)}${r.raw !== r.name ? `<span class="raw" title="현재 시스템에 저장된 값">원본 ${esc(r.raw)}</span>` : ''}</dd>
+              <dt>연락처</dt><dd class="num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)} · 불완전</span>`}</dd>
+              <dt>계정</dt><dd>${r.email ? esc(r.email) : '<span class="mut">비회원</span>'}</dd>
+              <dt>동반 인원</dt><dd>성인 ${Math.max(0, r.adults - 1)}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}</dd>
+              <dt>반려동물</dt><dd>${r.pet ? '동반' : '<span class="mut">없음</span>'}</dd>
+            </dl>`}</section>
+        </div>
+        <section class="card"><h3>결제</h3>
+          <div class="money">
+            <span>객실 요금 · ${r.out - r.in}박</span><span class="num">${won(p.room)}</span>
+            ${p.opts.map(o => `<span>${o[0]}</span><span class="num">${won(o[1])}</span>`).join('')}
+            <hr style="grid-column:1/-1;border:0;border-top:1px solid var(--line);margin:2px 0"><span class="sum">결제 금액</span><span class="sum num">${won(p.sub)}</span>
+            <span class="m2">결제 수단</span><span class="m2">${p.method}</span>
+            <span class="m2">결제 상태</span><span>${payHTML(r)}</span>
+            ${p.fee ? `<span class="m2">${r.ch} 수수료</span><span class="m2 num">−${won(p.fee)}</span><span class="m2">정산 예정 금액</span><span class="num" style="font-weight:600">${won(p.net)}</span>` : ''}
+          </div></section>
+        <div class="pair">
+          <section class="card"><h3>추가 옵션</h3>
+            ${p.opts.length ? p.opts.map(o => `<div class="opt"><span>${o[0]}</span><span class="num">${won(o[1])}</span></div>`).join('') : '<div class="mut">선택한 옵션이 없어요.</div>'}</section>
+          <section class="card"><h3>운영 특이사항 ${edit === 'note' ? '' : '<button class="tbtn" data-edit="note">수정</button>'}</h3>
+            ${edit === 'note' ? `<textarea class="inp" id="fNote" placeholder="청소·입실 시 참고할 내용">${esc(r.note)}</textarea><div class="formfoot"><button class="btn sm" data-edit="">취소</button><button class="btn sm primary" id="saveNote">저장</button></div>`
+              : `<div style="font-size:14.5px">${esc(r.note) || '<span class="mut">없어요.</span>'}</div>`}</section>
+        </div>
+        <section class="card"><h3>고객 알림 발송 기록 <button class="tbtn" data-do="resend">입실 안내 다시 보내기</button></h3>
+          ${r.notices.map(n => `<div class="nt"><span>${n.t}<small>${n.m}</small></span>${n.ok ? '<span class="mut">발송 완료</span>' : BD('발송 실패','red')}</div>`).join('')}</section>
+      </div>
+
+      <div class="col">
+        <section class="card"><h3>예약 상태</h3>
+          <div class="stnow"><span class="big"><i style="background:${cur === '취소 요청' ? 'var(--danger)' : cur === '변경 요청' ? 'var(--accent)' : ST_DOT[cur]}"></i>${cur}</span></div>
+          <div style="display:flex;gap:8px"><select class="fsel" id="stSel" style="flex:1;height:40px">${STATES.map(([k, lb]) => `<option value="${k}" ${r.base === k || (k === '확정' && cur === '예약 확정') ? 'selected' : ''}>${lb}</option>`).join('')}</select><button class="btn" id="stSave">변경</button></div>
+          <div class="hint">바꾸면 고객 알림과 변경 이력이 함께 남아요.</div></section>
+        <section class="card"><h3>관리자 메모</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
+          <textarea class="inp" id="memoIn" placeholder="운영팀에 남길 메모. 예약 검색에도 걸려요."></textarea>
+          <div class="formfoot" style="margin-top:8px"><button class="btn sm primary" id="memoAdd">메모 남기기</button></div></section>
+        <section class="card"><h3>취소·변경 이력 <span class="mut" style="font-weight:500;font-size:13px">${r.history.length}건</span></h3>
+          <ul class="hist">${r.history.map(h => `<li class="${h.new ? 'new' : ''}"><span class="b"></span><div><div class="t">${esc(h.t)}</div><div class="m">${h.m}</div></div></li>`).join('')}</ul></section>
+        <div class="meta"><span>예약번호</span><span class="num">${r.id}</span><span>신청일</span><span class="num" style="${r.flags.includes('syncdate') ? 'color:var(--accent-ink)' : ''}">${r.created}${r.flags.includes('syncdate') ? ' · 기록 이상' : ''}</span></div>
+      </div>
+    </div>`;
+  document.title = `${r.name}님 예약 · VACON house`;
+  mountSide();
+}
+
+$('wrap').addEventListener('click', e => {
+  const t = e.target;
+  const d = t.closest('[data-do]'); if (d){ const m = runAct(r, d.dataset.do); render(); toast(m); return; }
+  const ed = t.closest('[data-edit]'); if (ed){ edit = ed.dataset.edit || null; render(); return; }
+  if (t.closest('[data-soon]')){ toast('일정·숙소 변경은 공실 확인 화면과 함께 준비 중이에요', false); return; }
+  const stp = t.closest('[data-step]'); if (stp){ const [k, dv] = stp.dataset.step.split(':'); const el = $('n_' + k); el.textContent = Math.max(k === 'adults' ? 1 : 0, +el.textContent + +dv); return; }
+  if (t.id === 'saveGuest'){
+    const ph = $('fPhone').value.trim(), nA = +$('n_adults').textContent, nK = +$('n_kids').textContent, nI = +$('n_infants').textContent, pet = $('fPet').checked;
+    const ch = [];
+    if (ph.replace(/\D/g, '') !== r.phoneRaw.replace(/\D/g, '')){ ch.push(`연락처 ${r.phoneRaw} → ${ph}`); r.phoneRaw = ph; }
+    if (nA !== r.adults || nK !== r.kids || nI !== r.infants){ ch.push(`인원 ${r.adults + r.kids + r.infants}명 → ${nA + nK + nI}명`); r.adults = nA; r.kids = nK; r.infants = nI; }
+    if (pet !== r.pet){ ch.push(`반려동물 ${pet ? '동반' : '없음'}`); r.pet = pet; }
+    edit = null;
+    if (ch.length){ log(r, '예약자 정보 수정 · ' + ch.join(', ')); save(r); toast('예약자 정보를 바꿨어요'); }
+    render(); return;
+  }
+  if (t.id === 'saveNote'){ const v = $('fNote').value.trim(); if (v !== r.note){ log(r, `특이사항 수정 · ${v || '삭제'}`); r.note = v; save(r); toast('특이사항을 저장했어요'); } edit = null; render(); return; }
+  if (t.id === 'stSave'){ const v = $('stSel').value; if (v !== r.base){ const before = st(r); r.base = v; if (v === '취소') r.pay = '환불대기'; log(r, `상태 변경 · ${before} → ${st(r)}`); save(r); toast(`예약 상태를 '${st(r)}'(으)로 바꿨어요`); } render(); return; }
+  if (t.id === 'memoAdd'){ const v = $('memoIn').value.trim(); if (!v) return; r.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); log(r, '관리자 메모 추가'); save(r); render(); toast('메모를 남겼어요'); }
+});
+render();
+</script>
+</body>
+</html>
