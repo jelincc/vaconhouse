@@ -4,525 +4,271 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
-<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>VACON house 기업 관리</title>
+<title>VACON house 기업 숙박권</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../admin/admin.css">
 <style>
-:root,:root[data-theme="dark"]{
-  color-scheme:light;
-  --bg:#F6F7F8; --surface:#FFFFFF; --surface-2:#F6F7F8; --surface-3:#E6E8EA; --line:#E6E8EA; --line-2:#D5D8DC;
-  --ink:#1A1A1E; --ink-2:#575F6C; --ink-3:#768091;
-  --accent:#FF6D12; --accent-ink:#FFFFFF; --accent-soft:#FBF4EF; --accent-2:#FAEAE0;
-  --corp:#FF6D12; --corp-soft:#FBF4EF;
-  --danger:#E8322F; --danger-soft:#FAE6E6; --warn:#C9560C; --warn-soft:#FAEAE0;
-  --info:#3E434B; --info-soft:#E6E8EA; --ok:#0A9A66; --ok-soft:#EAFAF4;
-  --ch-app:#FF6D12; --ch-naver:#0DBC7C; --ch-airbnb:#E0457B; --ch-admin:#768091; --ch-corp:#6B5CE7;
-  --phone:#1A1A1E; --shadow:0 12px 36px rgba(26,26,30,.10);
-  --font:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-  --mono:"Pretendard","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
-}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-button,input,select{font:inherit;color:inherit}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.bar-top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);height:64px;display:flex;align-items:center;gap:14px;padding:0 32px}
+.bar-top .logo-svg{width:124px}
+.bar-top .biz{font-size:11px;letter-spacing:.14em;color:var(--ink-3);font-weight:600}
+.bar-top .co{font-size:13px;font-weight:600;background:var(--surface-2);border-radius:8px;padding:4px 10px}
+.bar-top .me{margin-left:auto;font-size:13.5px;color:var(--ink-2);display:flex;gap:14px;align-items:center}
+.bar-top .me a{color:var(--ink-3)}
+.wrap{max-width:1120px;margin:0 auto;padding:36px 24px 80px;display:flex;flex-direction:column;gap:20px}
 
-.top{background:var(--surface);border-bottom:1px solid var(--line);padding:12px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700}
-.brand-mark{width:28px;height:28px;border-radius:7px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:13px}
-.co{display:inline-flex;align-items:center;gap:6px;background:var(--corp-soft);color:var(--corp);font-weight:600;border-radius:999px;padding:3px 11px;font-size:13px}
-.me{margin-left:auto;color:var(--ink-2);font-size:13px;display:flex;gap:12px;align-items:center}
-.me a{color:var(--ink-3)}
-
-.wrap{max-width:1180px;margin:0 auto;padding:24px 28px 64px;display:flex;flex-direction:column;gap:20px}
-h1{margin:0;font-size:22px;letter-spacing:-.02em}
-.sub{color:var(--ink-3);margin:2px 0 0}
-
-.summary{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:14px}
-.sbox{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
-.sbox .lb{font-size:12.5px;color:var(--ink-3)}
-.sbox .v{font-family:var(--mono);font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.sbox .v small{font-family:var(--font);font-size:13px;color:var(--ink-3);font-weight:500;margin-left:3px}
-.meter{height:8px;border-radius:4px;background:var(--surface-3);overflow:hidden;display:flex}
+/* hero */
+.hero small{font-size:15px;color:var(--ink-3);font-weight:500}
+.hero h1{margin:6px 0 0;font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.3}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.meter{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--surface-2);margin:20px 0 12px;gap:2px}
 .meter i{display:block;height:100%}
-.mleg{display:flex;gap:14px;font-size:12px;color:var(--ink-2);flex-wrap:wrap}
-.mleg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
-.hq{font-size:12px;color:var(--ink-3)}
+.mleg{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.mleg span{display:inline-flex;align-items:center;gap:7px}
+.mleg i{width:9px;height:9px;border-radius:3px}
+.mleg b{color:var(--ink);font-weight:700}
+.hq{font-size:13px;color:var(--ink-3);margin-top:8px}
 
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
-.tabs button{all:unset;cursor:pointer;padding:10px 14px;font-weight:600;color:var(--ink-3);border-bottom:2px solid transparent;margin-bottom:-1px}
-.tabs button.on{color:var(--ink);border-color:var(--ink)}
-.tabs button span{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-left:4px}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.step{all:unset;box-sizing:border-box;cursor:pointer;padding:18px 20px 18px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line);position:relative;min-width:0}
+.step:last-child{border-right:0}
+.step:hover{background:var(--surface-2)}
+.step .no{width:24px;height:24px;border-radius:50%;background:var(--surface-3);color:var(--ink-2);font-size:12.5px;font-weight:700;display:grid;place-items:center;margin-bottom:6px}
+.step.hot .no{background:var(--accent);color:#fff}
+.step b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.step span{font-size:13px;color:var(--ink-3)}
+.step .k{font-size:13.5px;color:var(--ink);font-weight:600;margin-top:6px}
+.step.hot .k{color:var(--accent-ink)}
+.step .who{position:absolute;top:18px;right:18px;font-size:11.5px;color:var(--ink-4);font-weight:600}
 
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px}
-.bar{display:flex;gap:8px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.search{border:1px solid var(--line-2);border-radius:7px;padding:6px 10px;background:var(--surface);min-width:240px}
-.seg{display:inline-flex;background:var(--surface-2);border-radius:8px;padding:3px;gap:2px}
-.seg button{border:0;background:transparent;padding:5px 11px;border-radius:6px;font-weight:500;color:var(--ink-2);font-size:13px}
-.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.seg button span{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin-left:3px}
-.btn{border:1px solid var(--line-2);background:var(--surface);border-radius:7px;padding:7px 12px;font-weight:500;white-space:nowrap}
-.btn:hover{background:var(--surface-2)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn.danger{color:var(--danger)}
-.btn.sm{padding:4px 10px;font-size:13px}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.ml{margin-left:auto}
+/* request */
+.req{border:0;background:var(--accent-soft);border-radius:20px;padding:20px 22px}
+.req h3{margin:0;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+.req p{margin:4px 0 12px;font-size:13.5px;color:var(--ink-2)}
+.rq{display:flex;align-items:center;gap:14px;background:#fff;border-radius:14px;padding:12px 14px;margin-top:8px}
+.av{width:40px;height:40px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-weight:700;color:var(--ink-2);flex:none}
+.rq .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.rq .tx b{font-size:15px}
+.rq .tx small{font-size:13px;color:var(--ink-3)}
 
-.tablewrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:760px}
-th{font-size:12px;font-weight:600;color:var(--ink-3);text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+/* tabs */
+.tabs{display:flex;gap:28px;border-bottom:1px solid var(--line);align-items:flex-end}
+.tabs button{all:unset;cursor:pointer;padding:12px 2px 13px;font-size:16px;font-weight:600;color:var(--ink-3);position:relative}
+.tabs button span{font-size:14px;color:var(--ink-4);margin-left:4px;font-weight:500}
+.tabs button.on{color:var(--ink)}
+.tabs button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink);border-radius:2px}
+.tabs .r{margin-left:auto;padding-bottom:12px}
+.panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.tb{display:flex;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.search{border:0;background:var(--surface-2);border-radius:10px;height:40px;padding:0 12px 0 36px;min-width:280px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23768091' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+.search::placeholder{color:var(--ink-4)}
+table{width:100%;border-collapse:collapse}
+th{font-size:13px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 18px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px 18px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:14.5px}
 tbody tr:last-child td{border-bottom:0}
-td .s{display:block;font-size:12px;color:var(--ink-3)}
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
-.pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
-.p-ok{background:var(--ok-soft);color:var(--ok)}
-.p-mute{background:var(--surface-2);color:var(--ink-3)}
-.p-warn{background:var(--warn-soft);color:var(--warn)}
-.p-info{background:var(--info-soft);color:var(--info)}
-.p-danger{background:var(--danger-soft);color:var(--danger)}
-.acts{display:flex;gap:6px;justify-content:flex-end}
-.empty{padding:36px;text-align:center;color:var(--ink-3)}
-.foot{padding:10px 14px;font-size:12px;color:var(--ink-3);border-top:1px solid var(--line)}
-.new td{animation:hl 2.4s ease-out}
-@keyframes hl{from{background:var(--accent-soft)}to{background:transparent}}
+td .sub{display:block;font-size:12.5px;color:var(--ink-3)}
+.who{display:flex;align-items:center;gap:12px}
+.who .av{width:36px;height:36px;font-size:14px}
+.who b{font-weight:600}
+tr.flash td{animation:bg 1.6s ease}
+@keyframes bg{0%,40%{background:var(--accent-soft)}100%{background:transparent}}
+.sw{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-3)}
+.foot{padding:14px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+.empty{padding:48px;text-align:center;color:var(--ink-3)}
 
-/* modal */
-.scrim{position:fixed;inset:0;background:rgba(10,16,14,.4);z-index:40;display:grid;place-items:center;padding:16px}
-.modal{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);width:min(520px,100%);max-height:90vh;display:flex;flex-direction:column;border:1px solid var(--line)}
-.mh{padding:18px 20px 10px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.mh h3{margin:0;font-size:17px}
-.mh p{margin:4px 0 0;color:var(--ink-3);font-size:13px}
-.mb{padding:6px 20px 16px;overflow:auto;display:flex;flex-direction:column;gap:10px}
-.mf{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
-.x{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border-radius:7px;color:var(--ink-2)}
-.x:hover{background:var(--surface-2)}
-.res{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
-.av{width:34px;height:34px;border-radius:50%;background:var(--surface-3);display:grid;place-items:center;font-weight:600;color:var(--ink-2);flex:none}
-.res .who{flex:1;min-width:0}
-.res .who b{display:block}
-.res .who span{font-size:12.5px;color:var(--ink-3)}
-.warnbox{background:var(--danger-soft);color:var(--danger);border-radius:9px;padding:10px 12px;font-size:13px}
-.chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-2)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:8px;font-size:13px;z-index:80}
+/* dialog */
+.scrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:40;display:grid;place-items:center;padding:16px}
+.dlg{background:#fff;border-radius:24px;width:min(460px,100%);box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 32px)}
+.dlg .h{padding:26px 24px 6px}
+.dlg h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.4}
+.dlg .h p{margin:8px 0 0;font-size:14.5px;color:var(--ink-2);line-height:1.55}
+.dlg .b{padding:14px 24px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.dlg .f{padding:10px 20px 20px;display:flex;gap:8px}
+.res{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--line)}
+.res:last-child{border-bottom:0}
+.res .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.res .tx small{color:var(--ink-3);font-size:13px}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink-2);cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--ink)}
 
-/* employee app */
-.appintro{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
-.appintro p{margin:0;color:var(--ink-2);max-width:62ch}
-.phones{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;padding:28px 18px 32px;background:var(--surface-2);border-radius:0 0 12px 12px}
-.pcol{display:flex;flex-direction:column;gap:10px;align-items:center}
-.pcap{font-size:12.5px;color:var(--ink-2);font-weight:600}
-.phone{width:300px;max-width:100%;height:610px;border-radius:40px;background:var(--phone);padding:10px;box-shadow:var(--shadow)}
-.screen{height:100%;border-radius:31px;background:#F7F8F7;color:#15201B;overflow:hidden;display:flex;flex-direction:column;position:relative;font-size:13px}
-.sbar{display:flex;justify-content:space-between;padding:10px 22px 4px;font-size:11.5px;font-weight:600}
-.ah{padding:8px 18px 10px;display:flex;justify-content:space-between;align-items:center}
-.ah b{font-size:16px}
-.ascroll{flex:1;overflow:auto;padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
-.corpcard{border-radius:16px;padding:14px 16px;background:linear-gradient(150deg,#C9560C,#FF6D12);color:#fff;display:flex;flex-direction:column;gap:8px}
-.corpcard .t{font-size:11.5px;opacity:.8}
-.corpcard .big{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1}
-.corpcard .big small{font-family:var(--font);font-size:13px;font-weight:500;opacity:.85}
-.corpcard .row{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;opacity:.85}
-.corpcard button{all:unset;cursor:pointer;background:#fff;color:#C9560C;font-weight:700;text-align:center;border-radius:10px;padding:9px;font-size:13px}
-.acard{background:#fff;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;border:1px solid #E3E8E5}
-.acard h5{margin:0;font-size:13px}
-.vth{display:flex;gap:10px;align-items:center}
-.vimg{width:54px;height:54px;border-radius:10px;flex:none}
-.vth b{display:block;font-size:13px}
-.vth span{font-size:11.5px;color:#6B7772}
-.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:11.5px}
-.cal .h{color:#8A9690;font-size:10.5px}
-.cal .d{padding:6px 0;border-radius:7px;font-family:var(--mono)}
-.cal .d.x{color:#B9C1BD;text-decoration:line-through}
-.cal .d.sel{background:#FF6D12;color:#fff}
-.cal .d.mid{background:#FBF4EF;color:#C9560C}
-.abtn{all:unset;cursor:pointer;display:block;text-align:center;border-radius:12px;padding:12px;font-weight:700;background:#FF6D12;color:#fff}
-.abtn.ghost{background:#fff;color:#15201B;border:1px solid #D6DDD9;padding:9px;font-weight:600;font-size:12.5px}
-.tagc{display:inline-block;font-size:10.5px;font-weight:700;background:#FBF4EF;color:#FF6D12;border-radius:5px;padding:1px 6px}
-.kvs{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px}
-.kvs dt{color:#6B7772}
-.kvs dd{margin:0;text-align:right}
-.tabbar{display:flex;justify-content:space-around;border-top:1px solid #E3E8E5;padding:8px 0 14px;font-size:10.5px;color:#8A9690;background:#fff}
-.tabbar span.on{color:#15201B;font-weight:700}
-.chips2{display:flex;gap:6px;overflow:hidden}
-.chips2 span{font-size:11.5px;border:1px solid #D6DDD9;border-radius:999px;padding:3px 9px;white-space:nowrap;background:#fff}
-.chips2 span.on{border-color:#15201B;font-weight:600}
-
-@media (max-width:860px){
-  .top{padding:10px 16px}.wrap{padding:16px 16px 48px}
-  .summary{grid-template-columns:1fr}
-  .search{min-width:0;flex:1}
-}
-@media (prefers-reduced-motion:reduce){.new td{animation:none}}
-
-/* ===== Toss-style restyle on BH palette ===== */
-body{letter-spacing:-.01em}
-.num{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.brand-mark{background:var(--accent);color:#fff;border-radius:9px}
-.side{border-right:0}
-.nav a{border-radius:10px;padding:10px 12px}
-.nav a.on{background:var(--accent-soft);color:var(--accent)}
-.dgroup,.work,.card,.dt-sum,.sbox,.panel{border:0;border-radius:20px;box-shadow:0 1px 2px rgba(26,26,30,.04)}
-.dgroup{padding:20px}
-.dgroup h2{font-size:15px;letter-spacing:-.01em;color:var(--ink);font-weight:700}
-.dgroup h2 span{color:var(--ink-3);font-size:13px}
-.dcard{border-radius:14px;padding:14px}
-.dcard .lb{font-size:13px;font-weight:500}
-.dcard .v{font-size:26px;font-weight:700}
-.dcard.warm{background:var(--accent-soft)}
-.dcard.warm .v{color:var(--accent)}
-.btn{border:0;background:var(--surface-2);border-radius:10px;padding:9px 14px;font-weight:600;color:var(--ink)}
-.btn:hover{background:var(--surface-3)}
-.btn.sm{padding:6px 11px;border-radius:8px}
-.btn.primary{background:var(--accent);color:#fff}
-.btn.danger{background:var(--danger-soft);color:var(--danger)}
-.seg{border-radius:12px;padding:4px}
-.seg button{border-radius:9px;font-weight:600}
-.fsel,.search{border:0;background:var(--surface-2);border-radius:10px;padding:8px 12px}
-.chip{border:0;background:var(--surface-2);padding:6px 12px;font-weight:500}
-.chip.on{background:var(--ink);color:var(--surface)}
-.filters{background:var(--surface)}
-.worktop,.filters,.listbar,.bar{border-bottom-color:var(--line)}
-.pill{border-radius:8px;padding:3px 8px}
-.p-accent{background:var(--accent-soft);color:var(--accent)}
-.fchip{background:var(--accent);color:#fff}
-.tl-day.today{background:var(--accent-soft)}
-.tl-day.today b{color:var(--accent)}
-.tl-todaycol{background:color-mix(in srgb,var(--accent) 6%,transparent)}
-.tl-grp,.tl-grp button{background:var(--surface-2)}
-.blk{border-radius:8px}
-.blk.s-투숙중{background:var(--ink);border-color:var(--ink);color:var(--surface)}
-.blk.s-투숙중 .mt{color:color-mix(in srgb,var(--surface) 70%,transparent)}
-.blk.s-미확인{border-color:var(--ink-3)}
-.t-info{background:var(--ink-2);color:var(--surface)}
-.blk.s-변경요청{border-color:var(--accent);background:var(--accent-soft)}
-.t-warn{background:var(--accent)}
-.mc.today{box-shadow:inset 0 0 0 2px var(--accent)}
-.mc.today .d{color:var(--accent)}
-.tabs button.on{color:var(--ink);border-color:var(--accent)}
-.co{background:var(--corp-soft);color:var(--corp)}
-.modal{border:0;border-radius:24px}
-.drawer{border-left:0}
-.memo{background:var(--accent-soft)}
-.hist li.new .b{border-color:var(--accent);background:var(--accent)}
-.alert.w{background:var(--accent-soft);color:var(--warn)}
-.dcard.hot{background:var(--danger-soft)}
-.corpcard{background:linear-gradient(150deg,#FF6D12,#F58C4B)}
-.corpcard button{color:#C9560C}
-.p-info{background:var(--accent-soft);color:var(--accent)}
-.moved a{color:var(--accent)}
-
-/* ===== White / black mood (light only) ===== */
-:root{--bg:#FFFFFF}
-.dgroup,.work,.card,.dt-sum,.sbox,.panel{border:1px solid var(--line);box-shadow:none}
-.btn.primary{background:#1A1A1E;border-color:#1A1A1E;color:#fff}
-.btn.primary:hover{background:#3E434B;filter:none}
-.fchip{background:#1A1A1E}
-.wordmark{font-family:"Cormorant","Cormorant Garamond",Georgia,serif;font-weight:500;font-size:28px;line-height:1;color:var(--ink);display:flex;align-items:baseline;gap:5px;letter-spacing:.01em;text-decoration:none}
-.wordmark span{font-size:16px;color:var(--ink-2)}
-.top{border-bottom:1px solid var(--line)}
-.logo-svg{display:block;width:124px;height:auto;color:var(--ink)}
+@media (max-width:900px){.flow{grid-template-columns:1fr 1fr}.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--line)}.bar-top{padding:0 16px}.bar-top .co{display:none}.search{min-width:0;flex:1}}
 </style>
 </head>
 <body>
-
-
-<header class="top">
-  <a class="wordmark" href="./"><svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.43 119.25" role="img" aria-label="VACON house"><path fill="currentColor" d="M80.10000000000001 19.549999999999997C80.3 24.64999999999999 79.3 29.749999999999993 77.10000000000001 34.349999999999994L52.8 84.55L31.3 39.849999999999994C28.200000000000003 33.449999999999996 26.3 26.549999999999997 25.6 19.44999999999999H0.09999999999999998C6.7 27.449999999999996 12.3 36.14999999999999 16.8 45.449999999999996L37.9 89.35H55.2L78.8 40.24999999999999C82.5 32.64999999999999 87.3 25.549999999999997 93.0 19.349999999999994H80.10000000000001ZM142.60000000000002 63.449999999999996 121.4 19.549999999999997H104.1C106.9 25.25 106.9 31.849999999999994 104.2 37.55L89.2 68.75C85.5 76.35 80.7 83.45 75.0 89.64999999999999H88.0C87.7 84.55 88.7 79.44999999999999 90.9 74.85L92.4 71.85H129.2C131.6 77.55 133.2 83.55 133.8 89.64999999999999H159.3C152.7 81.64999999999999 147.10000000000002 72.85 142.60000000000002 63.55ZM94.6 67.35 111.0 33.55 127.2 67.35ZM196.4 86.35C179.10000000000002 86.35 170.3 72.14999999999999 167.5 59.05C164.70000000000002 45.949999999999996 166.9 26.14999999999999 182.9 22.549999999999997C197.0 19.349999999999994 213.5 31.449999999999996 209.8 45.05H218.9C223.7 45.05 226.8 40.05 224.9 35.64999999999999C220.0 24.549999999999997 205.20000000000002 17.64999999999999 189.3 17.64999999999999C165.5 17.64999999999999 150.9 33.949999999999996 150.9 54.349999999999994C150.9 74.75 165.3 91.45 189.10000000000002 91.45C206.8 91.45 220.3 82.05 225.20000000000002 68.85C225.20000000000002 68.85 211.8 86.25 196.5 86.25ZM270.7 17.64999999999999C245.4 17.64999999999999 232.0 34.14999999999999 232.0 54.55C232.0 74.94999999999999 245.4 91.45 270.7 91.45C296.0 91.45 309.4 74.94999999999999 309.4 54.55C309.4 34.14999999999999 296.0 17.64999999999999 270.7 17.64999999999999ZM281.8 85.14999999999999C269.1 89.75 255.7 81.05 248.9 62.55C242.1 44.05 246.7 28.849999999999994 259.4 24.25C272.1 19.64999999999999 285.1 27.349999999999994 292.2 46.849999999999994C298.9 65.35 294.3 80.64999999999999 281.6 85.25ZM377.7 19.549999999999997C377.7 19.549999999999997 381.9 24.14999999999999 381.9 35.05V74.14999999999999L342.0 22.549999999999997C340.5 20.64999999999999 338.2 19.549999999999997 335.8 19.549999999999997H316.5C316.5 19.549999999999997 320.7 24.14999999999999 320.7 35.05V74.05C320.7 82.95 318.0 87.64999999999999 316.9 89.14999999999999L316.5 89.64999999999999H329.3L328.9 89.14999999999999C327.8 87.64999999999999 325.1 82.95 325.1 74.05V26.249999999999993L371.8 86.55C373.3 88.45 375.6 89.55 378.0 89.55H386.3V35.05C386.3 24.14999999999999 390.5 19.549999999999997 390.5 19.549999999999997ZM429.66926 89.34992 429.46918 89.60002H441.47398L441.37394 89.49998C441.22388 89.2999 440.92376 88.89974 440.57362 88.24947999999999L440.5236 88.14944C439.97338 86.89894 439.37314 84.89814 439.37314 81.89694V75.19426C439.37314 66.89094 436.12184 60.138239999999996 425.96778 60.138239999999996C421.81612 60.138239999999996 419.76529999999997 62.08901999999999 418.0146 64.59002V56.386739999999996C418.0146 52.88533999999999 415.16346 50.0342 411.66206 50.0342H408.11064C408.11064 50.0342 410.21148 52.335119999999996 410.21148 57.787299999999995V81.84692C410.21148 86.2987 408.86093999999997 88.64963999999999 408.31072 89.39994L408.11064 89.65004H420.11544L420.0154 89.55C419.86534 89.34992 419.56522 88.94976 419.21508 88.2995L419.16506 88.19946C418.61484 86.94896 418.0146 84.94816 418.0146 81.94695999999999V74.84412C418.0146 67.39114 419.91535999999996 62.339119999999994 426.01779999999997 62.339119999999994C430.81972 62.339119999999994 431.62004 67.39114 431.62004 74.84412V81.94695999999999C431.62004 86.39874 430.2695 88.74968 429.71927999999997 89.49998ZM460.63163999999995 60.038199999999996C449.62724 60.038199999999996 444.5252 66.7909 444.5252 75.09421999999999C444.5252 83.39753999999999 449.62724 90.15024 460.63163999999995 90.15024C471.63604 90.15024 476.73807999999997 83.39753999999999 476.73807999999997 75.09421999999999C476.73807999999997 66.7909 471.63604 60.038199999999996 460.63163999999995 60.038199999999996ZM465.0334 87.19906C458.68086 89.49998 454.72927999999996 83.09742 452.87854 77.94536C451.02779999999996 72.79329999999999 449.92735999999996 65.2903 456.2799 62.98938C462.63244 60.68845999999999 466.58401999999995 67.14104 468.43476 72.2931C470.28549999999996 77.44516 471.33592 84.89814 464.98337999999995 87.19906ZM511.35191999999995 81.7969 511.3019 68.44156C511.3019 63.989779999999996 512.65244 61.638839999999995 513.2026599999999 60.88853999999999L513.40274 60.638439999999996H501.39794L501.49798 60.738479999999996C501.64804 60.938559999999995 501.94816 61.338719999999995 502.2983 61.98898L502.34832 62.08901999999999C502.89853999999997 63.33951999999999 503.49878 65.34031999999999 503.49878 68.34152L503.54879999999997 76.74488C503.54879999999997 84.14784 501.69806 87.89934 495.59562 87.89934C490.7937 87.89934 488.99298 84.14784 488.99298 76.74488V68.39153999999999C488.99298 63.93975999999999 490.34351999999996 61.58882 490.89374 60.838519999999995L491.09382 60.58842H479.78929999999997L479.88934 60.68845999999999C480.0394 60.88853999999999 480.33952 61.28869999999999 480.68966 61.938959999999994L480.73967999999996 62.038999999999994C481.2899 63.2895 481.89014 65.2903 481.89014 68.2915V74.99418C481.89014 83.2975 485.44156 90.0502 495.59562 90.0502C497.24627999999996 90.0502 499.39714 89.75008 500.59762 89.24987999999999C504.69926 87.49918 509.35112 87.59922 513.40274 89.39994C513.3027 89.24987999999999 512.85252 88.64963999999999 512.40234 87.49918C511.90214 86.19866 511.40193999999997 84.24788 511.40193999999997 81.69686ZM530.8096999999999 72.04299999999999C528.10862 71.64283999999999 524.7572799999999 70.89254 524.7572799999999 68.79169999999999C524.7572799999999 63.989779999999996 528.0586 62.2891 530.3095 62.2891C532.26028 62.2891 535.76168 63.989779999999996 535.76168 69.69206H540.3135C542.0641999999999 69.69206 543.4147399999999 67.89134 542.7144599999999 66.2907C540.7136599999999 61.838919999999995 534.2610799999999 60.138239999999996 530.2094599999999 60.138239999999996C524.8072999999999 60.338319999999996 517.0041799999999 62.739279999999994 517.0041799999999 68.84172C517.0041799999999 74.69406 522.7064599999999 76.84492 529.8593199999999 77.94536C533.5608 78.49557999999999 536.5119799999999 79.24588 536.5119799999999 81.39674C536.5119799999999 86.44876 532.86052 88.09942 530.35952 88.09942C527.70846 88.09942 524.4071399999999 86.44876 524.4071399999999 81.39674H520.10542C518.15464 81.39674 516.8041 83.5476 517.85452 85.19825999999999C520.00538 88.64963999999999 525.7576799999999 90.25028 530.3095 90.25028C537.2122599999999 90.25028 544.3150999999999 87.64923999999999 544.3150999999999 81.2967C544.3150999999999 74.7941 537.9125399999999 73.09342 530.8096999999999 71.99297999999999ZM566.4739599999999 87.49918C560.3214999999999 87.49918 557.02018 82.047 555.8697199999999 76.64484H575.1274199999999C578.12862 76.64484 580.2794799999999 73.99378 579.52918 71.0426C577.77848 64.23988 571.6260199999999 60.08821999999999 563.77288 60.08821999999999C553.86892 60.08821999999999 547.66644 66.74088 547.66644 75.04419999999999C547.66644 83.34752 553.86892 90.20026 563.77288 90.20026C571.12582 90.20026 577.17824 85.69846 579.22906 80.34631999999999C579.22906 80.34631999999999 574.02698 87.49918 566.4239399999999 87.49918ZM561.12182 62.58922C566.97416 60.98858 571.0257799999999 66.59082 571.9261399999999 72.2931C572.0762 73.2935 571.2758799999999 74.39394 570.22546 74.39394H555.41954C555.0694 69.542 555.9197399999999 63.989779999999996 561.0717999999999 62.58922Z"/></svg></a><span style="font-size:11px;letter-spacing:.14em;color:var(--ink-3);font-weight:600">BUSINESS</span>
-  <span class="co">(주)노을랩스</span>
-  <div class="me">인사팀 김하늘 <a href="../index.html">로그아웃</a></div>
+<header class="bar-top">
+  <a href="./" id="logo"></a><span class="biz">BUSINESS</span><span class="co" id="co"></span>
+  <div class="me"><span id="adm"></span><a href="../index.html" id="out">로그아웃</a></div>
 </header>
-
-<main class="wrap">
-  <div>
-    <h1>기업 숙박권 관리</h1>
-    <p class="sub">직원에게 이용 권한을 주면 베이컨하우스 앱에서 회사 숙박권으로 직접 예약할 수 있어요.</p>
-  </div>
-
-  <section class="summary">
-    <div class="sbox">
-      <span class="lb">회사 잔여 숙박권</span>
-      <span class="v" id="remain">38<small>박 남음 / 계약 60박</small></span>
-      <div class="meter" aria-hidden="true"><i style="width:31.7%;background:var(--corp)"></i><i style="width:5%;background:color-mix(in srgb,var(--corp) 45%,transparent)"></i></div>
-      <div class="mleg"><span><i style="background:var(--corp)"></i>사용 19박</span><span><i style="background:color-mix(in srgb,var(--corp) 45%,transparent)"></i>예약 대기 3박</span><span><i style="background:var(--surface-3)"></i>잔여 38박</span></div>
-      <span class="hq">계약 기간 2026.03.01 – 2027.02.28 · 숙박권 지급과 계약 조건은 베이컨하우스 본사에서 관리해요</span>
-    </div>
-    <div class="sbox">
-      <span class="lb">이용 권한이 있는 직원</span>
-      <span class="v" id="permCnt">0<small>명</small></span>
-      <span class="hq" id="permSub"></span>
-    </div>
-    <div class="sbox">
-      <span class="lb">다가오는 예약</span>
-      <span class="v" id="upCnt">0<small>건</small></span>
-      <span class="hq" id="upSub"></span>
-    </div>
-  </section>
-
-  <nav class="tabs" role="tablist">
-    <button data-tab="emp" class="on">직원 계정 관리<span id="tEmp"></span></button>
-    <button data-tab="res">예약 내역<span id="tRes"></span></button>
-    <button data-tab="app">직원 앱 화면</button>
-  </nav>
-
-  <section id="tab"></section>
-</main>
-
+<main class="wrap" id="wrap"></main>
 <div id="layer"></div>
 
+<script src="../admin/data.js"></script>
+<script src="corp-data.js"></script>
 <script>
-const EMP = [
-  {name:'김도하', phone:'010-2381-4410', email:'doha.kim@noeul.io', joined:true, perm:true, since:'2026.03.04'},
-  {name:'오시우', phone:'010-5521-9083', email:'siwoo.oh@noeul.io', joined:true, perm:true, since:'2026.03.04'},
-  {name:'류건우', phone:'010-7710-3321', email:'gunwoo.ryu@noeul.io', joined:true, perm:true, since:'2026.03.11'},
-  {name:'이서윤', phone:'010-4402-1187', email:'seoyun.lee@noeul.io', joined:true, perm:true, since:'2026.04.02'},
-  {name:'박지훈', phone:'010-9934-2210', email:'jihoon.park@noeul.io', joined:true, perm:false, since:''},
-  {name:'정하린', phone:'010-3019-5562', email:'harin.jung@noeul.io', joined:true, perm:true, since:'2026.05.19'},
-  {name:'최유진', phone:'010-6674-0931', email:'yujin.choi@noeul.io', joined:false, perm:false, since:''},
-  {name:'한도윤', phone:'010-2255-7784', email:'doyun.han@noeul.io', joined:true, perm:true, since:'2026.06.01'},
-  {name:'강민지', phone:'010-8120-4476', email:'minji.kang@noeul.io', joined:true, perm:false, since:'', removed:'2026.08.30'},
-  {name:'윤재원', phone:'010-4418-9920', email:'jaewon.yoon@noeul.io', joined:true, perm:true, since:'2026.07.14'},
-  {name:'서예나', phone:'010-5063-1128', email:'yena.seo@noeul.io', joined:false, perm:false, since:''},
-  {name:'임태오', phone:'010-7349-6605', email:'taeo.lim@noeul.io', joined:true, perm:true, since:'2026.09.01'},
-];
-const APP_USERS = [
-  {name:'문가온', phone:'010-3381-2204', email:'gaon.moon@gmail.com'},
-  {name:'문서진', phone:'010-6612-0917', email:'seojin.m@naver.com'},
-  {name:'백하율', phone:'010-2290-4471', email:'hayul.baek@noeul.io'},
-  {name:'신우석', phone:'010-9102-3358', email:'wooseok.shin@noeul.io'},
-  {name:'김도하', phone:'010-2381-4410', email:'doha.kim@noeul.io'},
-];
-const RES = [
-  {who:'오시우', villa:'가평 계곡하우스', in:'2026.09.30', out:'2026.10.02', st:'예정', n:2},
-  {who:'류건우', villa:'강릉 경포하우스', in:'2026.09.26', out:'2026.10.01', st:'이용 중', n:5},
-  {who:'이서윤', villa:'제주 애월돌집', in:'2026.10.17', out:'2026.10.18', st:'예정', n:1},
-  {who:'한도윤', villa:'양평 리버하우스', in:'2026.11.06', out:'2026.11.08', st:'예정', n:2},
-  {who:'김도하', villa:'강릉 솔밭별장', in:'2026.09.05', out:'2026.09.07', st:'완료', n:2},
-  {who:'정하린', villa:'가평 숲속별장', in:'2026.08.22', out:'2026.08.24', st:'완료', n:2},
-  {who:'임태오', villa:'제주 중문빌라', in:'2026.09.12', out:'2026.09.15', st:'완료', n:3},
-  {who:'윤재원', villa:'가평 호수뷰하우스', in:'2026.07.25', out:'2026.07.27', st:'완료', n:2},
-  {who:'오시우', villa:'강릉 오션스테이', in:'2026.06.13', out:'2026.06.15', st:'완료', n:2},
-  {who:'이서윤', villa:'양평 소나무집', in:'2026.05.02', out:'2026.05.04', st:'완료', n:2},
-  {who:'강민지', villa:'제주 한림스테이', in:'2026.09.19', out:'2026.09.21', st:'취소', n:2, note:'권한 삭제 전 본인 취소'},
-  {who:'한도윤', villa:'가평 계곡하우스', in:'2026.08.08', out:'2026.08.09', st:'취소', n:1},
-];
-const S = {tab:'emp', q:'', ef:'전체', rf:'예정', flash:null};
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const $ = id => document.getElementById(id);
-const permState = e => !e.joined ? '미가입' : e.perm ? '이용 가능' : '권한 없음';
+$('logo').innerHTML = LOGO; $('co').textContent = COMPANY.name; $('adm').textContent = COMPANY.admin;
+$('out').onclick = () => resetDemo();
+const S = {tab:'emp', q:'', ef:'전체', rf:'예정', flash:null, grantOnConfirm:true};
+const dd = o => mdw(o);
+const upOf = e => corpRes().filter(r => r.email === e.email && cst(r) === '예정');
 
-function head(){
-  const p = EMP.filter(e => e.perm).length;
-  $('permCnt').innerHTML = `${p}<small>명 / 소속 ${EMP.length}명</small>`;
-  $('permSub').textContent = `미가입 ${EMP.filter(e=>!e.joined).length}명 · 권한 없음 ${EMP.filter(e=>e.joined&&!e.perm).length}명`;
-  const up = RES.filter(r => r.st === '예정' || r.st === '이용 중');
-  $('upCnt').innerHTML = `${up.length}<small>건</small>`;
-  $('upSub').textContent = `이용 중 ${RES.filter(r=>r.st==='이용 중').length}건 · 다음 입실 9.30 오시우님`;
-  $('tEmp').textContent = EMP.length; $('tRes').textContent = RES.length;
-  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === S.tab));
+function page(){
+  const N = nights();
+  const req = EMP.filter(e => e.req);
+  const joined = EMP.filter(e => e.joined).length, perm = EMP.filter(e => e.perm).length;
+  const up = corpRes().filter(r => cst(r) === '예정' || cst(r) === '이용 중').sort((a, b) => a.in - b.in);
+  const pct = x => (x / COMPANY.contract * 100).toFixed(1) + '%';
+  return `
+  <section class="hero">
+    <small>${COMPANY.name} 기업 숙박권</small>
+    <h1>회사 숙박권이 <em>${N.left}박</em> 남았어요</h1>
+    <div class="meter"><i style="width:${pct(N.used)};background:var(--ink)"></i><i style="width:${pct(N.booked)};background:var(--accent)"></i></div>
+    <div class="mleg"><span><i style="background:var(--ink)"></i>사용 <b>${N.used}박</b></span><span><i style="background:var(--accent)"></i>예약됨 <b>${N.booked}박</b></span><span><i style="background:var(--surface-3)"></i>남음 <b>${N.left}박</b></span></div>
+    <div class="hq">계약 ${COMPANY.contract}박 · ${COMPANY.until}까지 · 숙박권 지급과 계약 조건은 베이컨하우스 본사에서 관리해요</div>
+  </section>
+
+  <section class="flow" aria-label="직원이 회사 숙박권을 쓰기까지">
+    <button class="step" data-go="emp:미가입"><span class="who">직원</span><span class="no">1</span><b>앱 가입</b><span>기존 베이컨하우스 앱에 가입해요</span><span class="k">${joined}명 가입 · 미가입 ${EMP.length - joined}명</span></button>
+    <button class="step ${req.length ? 'hot' : ''}" data-go="req"><span class="who">관리자</span><span class="no">2</span><b>소속 확인</b><span>회사 직원이 맞는지 확인해요</span><span class="k">${req.length ? `확인 요청 ${req.length}건` : '확인할 요청이 없어요'}</span></button>
+    <button class="step" data-go="emp:이용 가능"><span class="who">관리자</span><span class="no">3</span><b>이용 권한 부여</b><span>권한을 켜면 앱에 회사 숙박권이 보여요</span><span class="k">${perm}명 이용 가능</span></button>
+    <a class="step" href="../app/corp.html"><span class="who">직원</span><span class="no">4</span><b>앱에서 직접 예약</b><span>승인 없이 바로 확정돼요</span><span class="k">다가오는 예약 ${up.length}건 · 직원 앱 보기 ›</span></a>
+  </section>
+
+  ${req.length ? `<section class="req" id="reqBox">
+    <h3>소속 확인 요청 ${req.length}건</h3>
+    <p>회사 이메일(@${COMPANY.domain})로 인증한 직원이에요. 우리 회사 직원이 맞는지 확인해 주세요.</p>
+    <label class="chk"><input type="checkbox" id="grantOn" ${S.grantOnConfirm ? 'checked' : ''}>확인하면서 이용 권한도 함께 줄게요</label>
+    ${req.map(e => `<div class="rq"><span class="av">${e.name[0]}</span><span class="tx"><b>${esc(e.name)}</b><small class="num">${e.email} · ${e.phone} · ${e.req} 요청</small></span>
+      <button class="btn sm" data-deny="${EMP.indexOf(e)}">우리 직원이 아니에요</button><button class="btn sm primary" data-ok="${EMP.indexOf(e)}">확인</button></div>`).join('')}
+  </section>` : ''}
+
+  <nav class="tabs"><button data-tab="emp" class="${S.tab === 'emp' ? 'on' : ''}">직원<span>${EMP.length}</span></button><button data-tab="res" class="${S.tab === 'res' ? 'on' : ''}">예약 내역<span>${corpRes().length}</span></button></nav>
+  ${S.tab === 'emp' ? empTab() : resTab()}`;
 }
 
 function empTab(){
-  const filters = ['전체','이용 가능','권한 없음','미가입'];
+  const F = ['전체','이용 가능','권한 없음','미가입'];
   let rows = EMP.filter(e => S.ef === '전체' || permState(e) === S.ef);
-  if (S.q) rows = rows.filter(e => (e.name + e.phone + e.email).includes(S.q));
-  return `<div class="panel">
-    <div class="bar">
-      <input class="search" id="q" placeholder="이름, 휴대전화번호, 이메일로 찾기" value="${esc(S.q)}">
-      <div class="seg" id="ef">${filters.map(f => `<button data-f="${f}" class="${S.ef===f?'on':''}">${f}<span>${f==='전체'?EMP.length:EMP.filter(e=>permState(e)===f).length}</span></button>`).join('')}</div>
-      <button class="btn primary ml" id="addBtn">+ 직원 등록</button>
+  if (S.q) rows = rows.filter(e => (e.name + e.phone + e.email).includes(S.q) || (e.phone.replace(/-/g, '')).includes(S.q.replace(/-/g, '')));
+  const order = {'확인 대기':0,'이용 가능':1,'권한 없음':2,'미가입':3};
+  rows.sort((a, b) => order[permState(a)] - order[permState(b)]);
+  return `<div class="panel" id="empPanel">
+    <div class="tb">
+      <input class="search" id="q" placeholder="이름, 휴대전화번호, 이메일" value="${esc(S.q)}">
+      <div class="seg">${F.map(f => `<button data-ef="${f}" class="${S.ef === f ? 'on' : ''}">${f}<span>${f === '전체' ? EMP.length : EMP.filter(e => permState(e) === f).length}</span></button>`).join('')}</div>
+      <button class="btn primary" id="addBtn" style="margin-left:auto">직원 등록</button>
     </div>
-    <div class="tablewrap"><table>
-      <thead><tr><th>이름</th><th>휴대전화번호 · 이메일</th><th>앱 가입</th><th>권한 상태</th><th style="text-align:right">권한 관리</th></tr></thead>
-      <tbody>${rows.length ? rows.map(e => {
-        const i = EMP.indexOf(e); const st = permState(e);
-        return `<tr class="${S.flash===i?'new':''}">
-          <td><b>${esc(e.name)}</b></td>
-          <td class="num">${e.phone}<span class="s">${e.email}</span></td>
-          <td>${e.joined ? '<span class="pill p-ok"><i></i>가입</span>' : '<span class="pill p-mute"><i></i>미가입</span>'}</td>
-          <td>${st==='이용 가능' ? `<span class="pill p-info">이용 가능</span><span class="s">${e.since} 부여</span>` : st==='권한 없음' ? `<span class="pill p-mute">권한 없음</span>${e.removed?`<span class="s">${e.removed} 삭제</span>`:''}` : '<span class="s">앱 가입 후 권한을 줄 수 있어요</span>'}</td>
-          <td><div class="acts">${e.perm ? `<button class="btn sm danger" data-rm="${i}">권한 삭제</button>` : `<button class="btn sm" data-grant="${i}" ${e.joined?'':'disabled title="앱에 가입한 직원만 권한을 줄 수 있어요"'}>권한 부여</button>`}</div></td>
-        </tr>`; }).join('') : `<tr><td colspan="5" class="empty">조건에 맞는 직원이 없어요.</td></tr>`}</tbody>
-    </table></div>
-    <div class="foot">권한을 삭제하면 그 직원은 이후 회사 숙박권으로 새 예약을 할 수 없어요. 부서, 승인, 개인별 숙박권 배정 기능은 제공하지 않아요.</div>
+    <table><thead><tr><th>직원</th><th>휴대전화번호</th><th>앱 가입</th><th>다가오는 예약</th><th style="text-align:right">이용 권한</th></tr></thead>
+    <tbody>${rows.length ? rows.map(e => { const i = EMP.indexOf(e), s = permState(e), u = upOf(e);
+      return `<tr class="${S.flash === i ? 'flash' : ''}">
+        <td><div class="who"><span class="av">${e.name[0]}</span><div><b>${esc(e.name)}</b><span class="sub">${e.email}</span></div></div></td>
+        <td class="num">${e.phone}</td>
+        <td>${e.joined ? '가입' : `<span class="mut">미가입</span> <button class="tbtn" data-invite="${i}" style="margin-left:8px">${e.invited ? '안내 보냄' : '가입 안내 보내기'}</button>`}</td>
+        <td>${u.length ? `${vById[u[0].villa].name} ${md(u[0].in)}${u.length > 1 ? ` 외 ${u.length - 1}건` : ''}` : '<span style="color:var(--ink-4)">–</span>'}</td>
+        <td style="text-align:right">${s === '확인 대기' ? `${BD('소속 확인 대기','orange')} <button class="tbtn" data-go="req" style="margin-left:6px">확인하기</button>`
+          : s === '미가입' ? '<span class="mut" style="font-size:13px">가입하면 켤 수 있어요</span>'
+          : `<label class="sw"><span>${e.perm ? `${e.since}부터` : e.off ? `${e.off}에 끔` : ''}</span><span class="tgl"><input type="checkbox" data-perm="${i}" ${e.perm ? 'checked' : ''} aria-label="${esc(e.name)} 이용 권한"></span></label>`}</td>
+      </tr>`; }).join('') : `<tr><td colspan="5" class="empty">조건에 맞는 직원이 없어요.</td></tr>`}</tbody></table>
+    <div class="foot">권한을 끄면 그 직원은 회사 숙박권으로 새 예약을 할 수 없어요. 이미 한 예약은 그대로 유지돼요. 부서 관리나 개인별 숙박권 배정은 없어요.</div>
   </div>`;
 }
 
 function resTab(){
   const segs = ['예정','완료','취소','전체'];
-  const match = r => S.rf === '전체' || (S.rf === '예정' ? (r.st === '예정' || r.st === '이용 중') : r.st === S.rf);
-  const rows = RES.filter(match).sort((a,b) => S.rf === '예정' ? a.in.localeCompare(b.in) : b.in.localeCompare(a.in));
-  const cnt = f => RES.filter(r => f === '전체' || (f === '예정' ? (r.st==='예정'||r.st==='이용 중') : r.st === f)).length;
-  const nights = rows.reduce((a,r) => a + (r.st === '취소' ? 0 : r.n), 0);
-  const pill = s => ({'예정':'<span class="pill p-info">예정</span>','이용 중':'<span class="pill p-ok">이용 중</span>','완료':'<span class="pill p-mute">완료</span>','취소':'<span class="pill p-danger">취소</span>'}[s]);
-  const dd = s => { const [y,m,d] = s.split('.'); const w = '일월화수목금토'[new Date(+y, m-1, +d).getDay()]; return `${+m}.${+d} (${w})`; };
+  const m = (r, f) => f === '전체' || (f === '예정' ? ['예정','이용 중'].includes(cst(r)) : cst(r) === f);
+  const rows = corpRes().filter(r => m(r, S.rf)).sort((a, b) => S.rf === '예정' ? a.in - b.in : b.in - a.in);
+  const n = rows.filter(r => cst(r) !== '취소').reduce((a, r) => a + r.out - r.in, 0);
   return `<div class="panel">
-    <div class="bar">
-      <div class="seg" id="rf">${segs.map(f => `<button data-f="${f}" class="${S.rf===f?'on':''}">${f}<span>${cnt(f)}</span></button>`).join('')}</div>
-      <span class="ml" style="font-size:13px;color:var(--ink-2)">${S.rf==='취소' ? '취소된 예약은 숙박권이 차감되지 않아요' : `숙박권 <b class="num">${nights}</b>박 사용`}</span>
-      <button class="btn sm">엑셀 내려받기</button>
+    <div class="tb">
+      <div class="seg">${segs.map(f => `<button data-rf="${f}" class="${S.rf === f ? 'on' : ''}">${f}<span>${corpRes().filter(r => m(r, f)).length}</span></button>`).join('')}</div>
+      <span class="mut" style="margin-left:6px">${S.rf === '취소' ? '취소된 예약은 숙박권이 차감되지 않아요' : `숙박권 <b style="color:var(--ink)">${n}박</b> ${S.rf === '예정' ? '사용 예정' : '사용'}`}</span>
+      <button class="btn sm line" style="margin-left:auto">엑셀 내려받기</button>
     </div>
-    <div class="tablewrap"><table>
-      <thead><tr><th>예약자</th><th>숙소</th><th>체크인 · 체크아웃</th><th>예약 상태</th><th style="text-align:right">사용 숙박권</th></tr></thead>
-      <tbody>${rows.map(r => `<tr>
-        <td><b>${esc(r.who)}</b>${EMP.find(e=>e.name===r.who && !e.perm) ? '<span class="s">현재 권한 없음</span>' : ''}</td>
-        <td>${r.villa}</td>
+    <table><thead><tr><th>예약자</th><th>숙소</th><th>체크인 → 체크아웃</th><th>예약 상태</th><th style="text-align:right">사용 숙박권</th></tr></thead>
+    <tbody>${rows.length ? rows.map(r => { const e = empOf(r.email), s = cst(r);
+      return `<tr><td><div class="who"><span class="av">${r.name[0]}</span><div><b>${esc(r.name)}</b>${e && !e.perm ? '<span class="sub">현재 권한 없음</span>' : ''}</div></div></td>
+        <td>${vFull(r.villa)}</td>
         <td class="num">${dd(r.in)} → ${dd(r.out)}</td>
-        <td>${pill(r.st)}${r.note?`<span class="s">${r.note}</span>`:''}</td>
-        <td class="num" style="text-align:right;${r.st==='취소'?'color:var(--ink-3);text-decoration:line-through':''}">${r.n}박</td>
-      </tr>`).join('')}</tbody>
-    </table></div>
-    <div class="foot">예약 변경과 취소는 직원이 앱에서 직접 해요. 기업 관리자 페이지에서는 조회만 할 수 있어요.</div>
+        <td>${s === '취소' ? `<span class="mut">취소</span>${r.note ? `<span class="sub">${esc(r.note)}</span>` : ''}` : `<span class="stt"><i style="background:${s === '완료' ? '#D5D8DC' : s === '이용 중' ? '#1A1A1E' : '#0DBC7C'}"></i>${s}</span>`}</td>
+        <td class="num" style="text-align:right;font-weight:600;${s === '취소' ? 'color:var(--ink-4);text-decoration:line-through;font-weight:500' : ''}">${r.out - r.in}박</td></tr>`; }).join('') : `<tr><td colspan="5" class="empty">예약이 없어요.</td></tr>`}</tbody></table>
+    <div class="foot">예약 변경과 취소는 직원이 앱에서 직접 해요. 이 화면에서는 조회만 할 수 있어요.</div>
   </div>`;
 }
 
-function appTab(){
-  const cal = () => { const days = []; for (let i=0;i<3;i++) days.push('<span></span>');
-    for (let d=1; d<=31; d++){ let c='d'; if ([3,4,10,11,24,25].includes(d)) c+=' x'; if (d===17||d===19) c+=' sel'; if (d===18) c+=' mid'; days.push(`<span class="${c}">${d}</span>`); }
-    return days.join(''); };
-  return `<div class="panel">
-    <div class="appintro">
-      <p>직원은 별도 앱 없이 기존 베이컨하우스 앱을 그대로 써요. 이용 권한이 있는 직원에게만 회사 숙박권 카드와 예약 기능이 보이고, 권한이 없으면 일반 회원 화면과 같아요.</p>
-      <span class="pill p-info">권한 보유 직원 기준 화면</span>
-    </div>
-    <div class="phones">
-      <div class="pcol"><span class="pcap">홈 · 회사 숙박권</span>
-        <div class="phone"><div class="screen">
-          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
-          <div class="ah"><b>베이컨하우스</b><span style="font-size:12px;color:#6B7772">이서윤님</span></div>
-          <div class="ascroll">
-            <div class="corpcard">
-              <div class="row"><span>(주)노을랩스 기업 숙박권</span><span>~2027.02.28</span></div>
-              <div><span class="t">회사 전체 잔여</span><div class="big">38<small> 박</small></div></div>
-              <div class="row"><span>동료들과 함께 쓰는 숙박권이에요</span></div>
-              <button>회사 숙박권으로 예약하기</button>
-            </div>
-            <div class="acard"><h5>다가오는 내 예약</h5>
-              <div class="vth"><div class="vimg" style="background:linear-gradient(135deg,#8FB8A0,#3F6E58)"></div><div><b>제주 애월돌집</b><span>10.17 (토) → 10.18 (일) · 1박</span><div style="margin-top:3px"><span class="tagc">기업 숙박권</span></div></div></div>
-            </div>
-            <div class="acard"><h5>이번 주말 예약 가능한 별장</h5>
-              <div class="vth"><div class="vimg" style="background:linear-gradient(135deg,#C7B89A,#7C6A4A)"></div><div><b>가평 숲속별장</b><span>최대 6인 · 반려동물 가능</span></div></div>
-              <div class="vth"><div class="vimg" style="background:linear-gradient(135deg,#9FB6CF,#4A6784)"></div><div><b>강릉 오션스테이</b><span>최대 6인 · 바다 전망</span></div></div>
-            </div>
-          </div>
-          <div class="tabbar"><span class="on">홈</span><span>검색</span><span>내 예약</span><span>마이</span></div>
-        </div></div>
-      </div>
-      <div class="pcol"><span class="pcap">별장·날짜 선택 후 예약</span>
-        <div class="phone"><div class="screen">
-          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
-          <div class="ah"><b>‹ 제주 애월돌집</b></div>
-          <div class="ascroll">
-            <div class="chips2"><span class="on">전체 지역</span><span>가평</span><span>양평</span><span>강릉</span><span>제주</span></div>
-            <div class="acard"><h5>2026년 10월 · 예약 가능한 날짜</h5>
-              <div class="cal"><span class="h">일</span><span class="h">월</span><span class="h">화</span><span class="h">수</span><span class="h">목</span><span class="h">금</span><span class="h">토</span>${cal()}</div>
-              <span style="font-size:11px;color:#8A9690">취소선은 이미 예약된 날짜예요</span>
-            </div>
-            <div class="acard">
-              <dl class="kvs"><dt>일정</dt><dd>10.17 (토) → 10.19 (월) · 2박</dd><dt>인원</dt><dd>성인 2</dd><dt>결제</dt><dd><span class="tagc">기업 숙박권 2박 차감</span></dd><dt>예약 후 회사 잔여</dt><dd class="num">36박</dd></dl>
-            </div>
-            <button class="abtn">회사 숙박권 2박으로 예약</button>
-          </div>
-        </div></div>
-      </div>
-      <div class="pcol"><span class="pcap">내 예약 조회·변경·취소</span>
-        <div class="phone"><div class="screen">
-          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
-          <div class="ah"><b>내 예약</b></div>
-          <div class="ascroll">
-            <div class="chips2"><span class="on">예정 1</span><span>완료 1</span><span>취소 0</span></div>
-            <div class="acard">
-              <div class="vth"><div class="vimg" style="background:linear-gradient(135deg,#8FB8A0,#3F6E58)"></div><div><b>제주 애월돌집</b><span>예약번호 BH260931204</span></div></div>
-              <dl class="kvs"><dt>체크인</dt><dd>10.17 (토) 15:00</dd><dt>체크아웃</dt><dd>10.18 (일) 11:00</dd><dt>인원</dt><dd>성인 2</dd><dt>사용 숙박권</dt><dd><span class="tagc">기업 1박</span></dd></dl>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button class="abtn ghost">일정 변경</button><button class="abtn ghost" style="color:#C4382E">예약 취소</button></div>
-              <span style="font-size:11px;color:#8A9690">취소하면 사용한 숙박권 1박이 회사 잔여로 돌아가요</span>
-            </div>
-            <div class="acard" style="opacity:.75"><h5>지난 예약</h5>
-              <div class="vth"><div class="vimg" style="background:linear-gradient(135deg,#B7A3CE,#5E4A82)"></div><div><b>양평 소나무집</b><span>5.2 (토) → 5.4 (월) · 2박 · 완료</span></div></div>
-            </div>
-          </div>
-          <div class="tabbar"><span>홈</span><span>검색</span><span class="on">내 예약</span><span>마이</span></div>
-        </div></div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function render(){
-  head();
-  $('tab').innerHTML = S.tab === 'emp' ? empTab() : S.tab === 'res' ? resTab() : appTab();
-  S.flash = null;
-  const q = $('q');
-  if (q) q.addEventListener('input', () => { S.q = q.value; const p = q.selectionStart; render(); const n = $('q'); n.focus(); n.setSelectionRange(p,p); });
-}
-document.querySelector('.tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b){ S.tab = b.dataset.tab; render(); } });
-$('tab').addEventListener('click', e => {
-  const t = e.target.closest('button'); if (!t) return;
-  if (t.closest('#ef')){ S.ef = t.dataset.f; render(); return; }
-  if (t.closest('#rf')){ S.rf = t.dataset.f; render(); return; }
-  if (t.id === 'addBtn') return openAdd();
-  if (t.dataset.grant){ const e2 = EMP[+t.dataset.grant]; e2.perm = true; e2.since = '2026.09.28'; delete e2.removed; S.flash = +t.dataset.grant; render(); toast(`${e2.name}님에게 이용 권한을 줬어요`); return; }
-  if (t.dataset.rm) return openRemove(+t.dataset.rm);
+function render(){ $('wrap').innerHTML = page(); S.flash = null; }
+const wrap = $('wrap');
+wrap.addEventListener('click', e => {
+  const t = e.target;
+  const tab = t.closest('[data-tab]'); if (tab){ S.tab = tab.dataset.tab; render(); return; }
+  const go = t.closest('[data-go]'); if (go){
+    const g = go.dataset.go;
+    if (g === 'req'){ const b = $('reqBox'); if (b){ b.scrollIntoView({behavior:'smooth', block:'center'}); b.classList.remove('flash'); void b.offsetWidth; b.classList.add('flash'); } else toast('확인할 요청이 없어요', false); return; }
+    S.tab = 'emp'; S.ef = g.split(':')[1]; render(); $('empPanel').scrollIntoView({behavior:'smooth', block:'start'}); return; }
+  const ef = t.closest('[data-ef]'); if (ef){ S.ef = ef.dataset.ef; render(); return; }
+  const rf = t.closest('[data-rf]'); if (rf){ S.rf = rf.dataset.rf; render(); return; }
+  const ok = t.closest('[data-ok]'); if (ok){ const x = EMP[+ok.dataset.ok]; delete x.req; if (S.grantOnConfirm){ x.perm = true; x.since = '9.28'; } saveEmp(); S.flash = +ok.dataset.ok; S.ef = '전체'; render(); toast(`${x.name}님을 소속 직원으로 확인했어요${S.grantOnConfirm ? '. 이제 앱에서 회사 숙박권을 쓸 수 있어요' : ''}`); return; }
+  const dn = t.closest('[data-deny]'); if (dn){ const x = EMP[+dn.dataset.deny]; EMP.splice(+dn.dataset.deny, 1); saveEmp(); render(); toast(`${x.name}님의 요청을 거절했어요`); return; }
+  const inv = t.closest('[data-invite]'); if (inv){ const x = EMP[+inv.dataset.invite]; x.invited = true; saveEmp(); render(); toast(`${x.name}님에게 앱 가입 안내 문자를 보냈어요`); return; }
+  if (t.id === 'addBtn') openAdd();
 });
+wrap.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'grantOn'){ S.grantOnConfirm = t.checked; return; }
+  if (t.dataset.perm){
+    const i = +t.dataset.perm, x = EMP[i];
+    if (t.checked){ x.perm = true; x.since = '9.28'; delete x.off; saveEmp(); S.flash = i; render(); toast(`${x.name}님에게 이용 권한을 줬어요`); }
+    else { t.checked = true; openRemove(i); }
+  }
+});
+wrap.addEventListener('input', e => { if (e.target.id !== 'q') return; S.q = e.target.value; const p = e.target.selectionStart; render(); const q = $('q'); q.focus(); q.setSelectionRange(p, p); });
 
+/* dialogs */
 const layer = $('layer');
 const close = () => layer.innerHTML = '';
 layer.addEventListener('click', e => { if (e.target.classList.contains('scrim') || e.target.closest('[data-close]')) close(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-function toast(m){ const t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
-
 function openRemove(i){
-  const e = EMP[i];
-  const up = RES.filter(r => r.who === e.name && (r.st === '예정' || r.st === '이용 중'));
-  layer.innerHTML = `<div class="scrim"><div class="modal" role="dialog" aria-label="권한 삭제">
-    <div class="mh"><div><h3>${esc(e.name)}님의 이용 권한을 삭제할까요?</h3><p>${e.phone} · ${e.email}</p></div><button class="x" data-close aria-label="닫기">✕</button></div>
-    <div class="mb">
-      <div class="warnbox">삭제 후에는 회사 숙박권으로 새 예약을 할 수 없어요. 앱에서 회사 숙박권 카드도 사라져요.</div>
-      ${up.length ? `<div style="font-size:13px;color:var(--ink-2)">예정된 예약 ${up.length}건: ${up.map(r=>`${r.villa} ${r.in.slice(5)}`).join(', ')}</div>` : '<div style="font-size:13px;color:var(--ink-3)">예정된 예약이 없어요.</div>'}
-    </div>
-    <div class="mf"><button class="btn" data-close>닫기</button><button class="btn primary" id="rmOk" style="background:var(--danger);border-color:var(--danger);color:#fff">권한 삭제</button></div>
+  const x = EMP[i], u = upOf(x);
+  layer.innerHTML = `<div class="scrim"><div class="dlg" role="dialog" aria-label="이용 권한 끄기">
+    <div class="h"><h3>${esc(x.name)}님의 이용 권한을 끌까요?</h3>
+      <p>앱에서 회사 숙박권이 사라지고 새 예약을 할 수 없어요.${u.length ? ` 이미 한 예약 ${u.length}건(${u.map(r => `${vById[r.villa].name} ${md(r.in)}`).join(', ')})은 그대로 유지돼요.` : ''}</p></div>
+    <div class="f"><button class="btn xl" data-close>닫기</button><button class="btn xl danger" id="rmOk">권한 끄기</button></div>
   </div></div>`;
-  $('rmOk').onclick = () => { e.perm = false; e.removed = '2026.09.28'; close(); S.flash = i; render(); toast(`${e.name}님의 이용 권한을 삭제했어요`); };
+  $('rmOk').onclick = () => { x.perm = false; x.off = '9.28'; saveEmp(); close(); S.flash = i; render(); toast(`${x.name}님의 이용 권한을 껐어요`); };
   $('rmOk').focus();
 }
 function openAdd(){
-  layer.innerHTML = `<div class="scrim"><div class="modal" role="dialog" aria-label="직원 등록">
-    <div class="mh"><div><h3>직원 등록</h3><p>베이컨하우스 앱에 가입한 계정을 이름이나 연락처로 찾아 회사 소속으로 등록해요.</p></div><button class="x" data-close aria-label="닫기">✕</button></div>
-    <div class="mb">
-      <input class="search" id="aq" placeholder="예: 문가온, 010-3381, @noeul.io" value="문" style="min-width:0">
-      <label class="chk"><input type="checkbox" id="aGrant" checked> 등록하면서 이용 권한도 줄게요</label>
-      <div id="aList" style="display:flex;flex-direction:column;gap:8px"></div>
+  layer.innerHTML = `<div class="scrim"><div class="dlg" role="dialog" aria-label="직원 등록">
+    <div class="h"><h3>직원 등록</h3><p>앱에 가입한 계정을 이름이나 연락처로 찾아 우리 회사 소속으로 등록해요.</p></div>
+    <div class="b">
+      <input class="inp" id="aq" placeholder="예: 문가온, 010-3381, @noeul.io" value="신">
+      <label class="chk"><input type="checkbox" id="aGrant" checked>등록하면서 이용 권한도 줄게요</label>
+      <div id="aList"></div>
     </div>
-    <div class="mf"><button class="btn" data-close>닫기</button></div>
+    <div class="f"><button class="btn xl" data-close>닫기</button></div>
   </div></div>`;
   const draw = () => {
-    const q = $('aq').value.trim();
-    const L = q ? APP_USERS.filter(u => (u.name + u.phone + u.email).includes(q)) : [];
-    $('aList').innerHTML = !q ? '<div class="empty" style="padding:18px">이름, 휴대전화번호, 이메일 중 하나를 입력하세요.</div>'
-      : L.length ? L.map(u => { const has = EMP.some(e => e.phone === u.phone);
-        return `<div class="res"><div class="av">${u.name[0]}</div><div class="who"><b>${u.name}</b><span class="num">${u.phone.slice(0,9)}•••• · ${u.email.replace(/^(.{3}).*@/, '$1•••@')}</span></div>
-          ${has ? '<span class="pill p-mute">이미 소속</span>' : `<button class="btn sm primary" data-add="${u.phone}">소속 등록</button>`}</div>`; }).join('')
-      : '<div class="empty" style="padding:18px">일치하는 앱 가입 계정이 없어요. 직원에게 먼저 앱 가입을 안내해 주세요.</div>';
+    const q = $('aq').value.trim(), dq = q.replace(/\D/g, '');
+    const L = q ? APP_USERS.filter(u => (u.name + u.email).includes(q) || (dq.length >= 3 && u.phone.replace(/\D/g, '').includes(dq))) : [];
+    $('aList').innerHTML = !q ? '<div class="empty" style="padding:20px">이름, 휴대전화번호, 이메일 중 하나를 입력해 주세요.</div>'
+      : L.length ? L.map(u => { const has = empOf(u.email);
+        return `<div class="res"><span class="av">${u.name[0]}</span><span class="tx"><b>${u.name}</b><small class="num">${u.phone.slice(0, 9)}•••• · ${u.email.replace(/^(.{3}).*@/, '$1•••@')}</small></span>
+          ${has ? '<span class="mut" style="font-size:13px">이미 소속</span>' : `<button class="btn sm primary" data-add="${u.email}">등록</button>`}</div>`; }).join('')
+      : '<div class="empty" style="padding:20px">일치하는 앱 가입 계정이 없어요.<br>직원에게 먼저 앱 가입을 안내해 주세요.</div>';
   };
-  draw();
-  $('aq').addEventListener('input', draw);
-  $('aq').focus();
+  draw(); $('aq').addEventListener('input', draw); $('aq').focus();
   $('aList').addEventListener('click', e => {
     const b = e.target.closest('[data-add]'); if (!b) return;
-    const u = APP_USERS.find(x => x.phone === b.dataset.add);
-    const g = $('aGrant').checked;
-    EMP.unshift({name:u.name, phone:u.phone, email:u.email, joined:true, perm:g, since:g?'2026.09.28':''});
-    S.flash = 0; S.ef = '전체'; S.q = ''; close(); render();
+    const u = APP_USERS.find(x => x.email === b.dataset.add), g = $('aGrant').checked;
+    EMP.unshift({name:u.name, phone:u.phone, email:u.email, joined:true, perm:g, since:g ? '9.28' : ''});
+    saveEmp(); S.flash = 0; S.ef = '전체'; S.q = ''; S.tab = 'emp'; close(); render();
     toast(`${u.name}님을 등록했어요${g ? '. 이용 권한도 줬어요' : ''}`);
   });
 }
+const H = location.hash.slice(1); if (H === 'res') S.tab = 'res';
 render();
 </script>
-
 </body>
 </html>

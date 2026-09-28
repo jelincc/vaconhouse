@@ -121,13 +121,26 @@ const RAW = [
   ['v5','Olivia(에어비앤비)',null,'010-6614-2210','2026-10-10','2026-10-12',2,0,0,'확정','채널정산','2026-09-26 02:17','',{sync:true, unseen:true}],
   ['v6','윤두현','yoonwt@naver.com','01083680500','2026-11-06','2026-11-07',4,0,0,'확정','결제완료','2026-09-27 18:48',''],
   ['v7','진영호','wlsdudghzz@naver.com','01073075930','2026-11-10','2026-11-12',2,0,0,'취소','환불완료','2026-09-27 13:36',''],
+  // (주)노을랩스 기업 숙박권 예약 (기업 관리자 · 직원 앱과 공유)
+  ['v4','오시우','siwoo.oh@noeul.io','01055219083','2026-09-30','2026-10-02',2,0,0,'확정','기업숙박권','2026-09-18 10:12','',{corp:true}],
+  ['v7','이서윤','seoyun.lee@noeul.io','01044021187','2026-10-17','2026-10-18',2,0,0,'확정','기업숙박권','2026-09-21 20:40','',{corp:true}],
+  ['v3','류건우','gunwoo.ryu@noeul.io','01077103321','2026-10-24','2026-10-26',2,1,0,'확정','기업숙박권','2026-09-25 09:15','',{corp:true}],
+  ['v2','한도윤','doyun.han@noeul.io','01022557784','2026-11-06','2026-11-08',3,0,0,'확정','기업숙박권','2026-09-24 12:02','',{corp:true}],
+  ['v5','김도하','doha.kim@noeul.io','01023814410','2026-09-19','2026-09-21',2,0,0,'확정','기업숙박권','2026-09-02 14:30','',{corp:true}],
+  ['v7','임태오','taeo.lim@noeul.io','01073496605','2026-09-15','2026-09-17',2,0,0,'확정','기업숙박권','2026-09-03 18:22','',{corp:true}],
+  ['v1','정하린','harin.jung@noeul.io','01030195562','2026-08-22','2026-08-24',4,0,0,'확정','기업숙박권','2026-08-01 11:00','',{corp:true}],
+  ['v3','윤재원','jaewon.yoon@noeul.io','01044189920','2026-07-25','2026-07-27',2,0,0,'확정','기업숙박권','2026-07-10 09:00','',{corp:true}],
+  ['v6','오시우','siwoo.oh@noeul.io','01055219083','2026-06-13','2026-06-15',5,0,0,'확정','기업숙박권','2026-05-28 13:13','',{corp:true}],
+  ['v2','이서윤','seoyun.lee@noeul.io','01044021187','2026-05-02','2026-05-04',2,0,0,'확정','기업숙박권','2026-04-12 21:45','',{corp:true}],
+  ['v4','강민지','minji.kang@noeul.io','01081204476','2026-09-19','2026-09-21',2,0,0,'취소','환불완료','2026-09-01 08:30','권한 삭제 전 본인 취소',{corp:true}],
+  ['v1','한도윤','doyun.han@noeul.io','01022557784','2026-08-08','2026-08-09',2,0,0,'취소','환불완료','2026-07-20 19:05','',{corp:true}],
 ];
 
 const hex = i => { let x = (i + 7) * 2654435761 >>> 0, s = ''; for (let k = 0; k < 12; k++){ s += '0123456789ABCDEF'[(x >>> ((k * 3) % 29)) & 15]; x = (x * 1103515245 + 12345) >>> 0; } return s; };
 const fmtPhone = p => { const d = (p||'').replace(/\D/g,''); return d.length === 11 ? `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}` : d.length === 10 ? `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}` : d; };
 const phoneOk = r => r.phoneRaw.replace(/\D/g,'').length >= 10;
 
-const R = RAW.map((a, i) => {
+function build(a, i){
   const [villa, raw, email, phone, ci, co, adults, kids, infants, base, pay, created, note, ex = {}] = a;
   const m = raw.match(/^(.*)\((에어비앤비|네이버)\)$/);
   const ch = m ? m[2] : email ? '앱' : '관리자';
@@ -136,7 +149,7 @@ const R = RAW.map((a, i) => {
     flags:[], memos: ex.memo ? [{t:ex.memo, m:'jelin · 9.27 16:02'}] : [] };
   ['conflict','notify','dup','sync','clean'].forEach(f => ex[f] && r.flags.push(f));
   if (created === `${co} 11:00` || created === `${ci} 15:00`) r.flags.push('syncdate');
-  r.isNew = created >= '2026-09-27 18:00' && base !== '취소';
+  r.isNew = created >= '2026-09-27 18:00' && created <= '2026-09-28 10:24' && base !== '취소';
   r.seen = !(r.isNew || ex.unseen);
   r.history = [{t:`예약 접수 · ${CH[ch].lb}`, m:`${created.slice(5).replace('-','.')} · ${ch === '앱' ? '고객' : ch === '관리자' ? '운영자' : '채널 동기화'}`}];
   if (base === '취소') r.history.unshift({t:'예약 취소 · 환불 완료', m:`${created.slice(5,10).replace('-','.')} · 고객`});
@@ -144,14 +157,23 @@ const R = RAW.map((a, i) => {
   if (base === '변경요청') r.history.unshift({t:`일정 변경 요청 · ${note}`, m:`${r.reqAt} · 고객(앱)`, new:true});
   r.notices = [{t:'예약 확정 알림톡', m:created.slice(5,16).replace('-','.'), ok:true}];
   if (r.in >= 0 && r.in <= 1) r.notices.push({t:'입실 안내 알림톡', m:`${md(r.in - 1)} 10:00`, ok:!ex.notify});
+  r.corp = !!ex.corp;
   return r;
-});
+}
+const R = RAW.map(build);
+/* bookings made in the demo (e.g. 직원 앱) */
+const EXTRA = 'vh-res-extra-v1';
+try { JSON.parse(localStorage.getItem(EXTRA) || '[]').forEach(a => R.push(build(a, R.length))); } catch(e){}
+function addBooking(a){ const r = build(a, R.length); R.push(r); try { const L = JSON.parse(localStorage.getItem(EXTRA) || '[]'); L.push(a); localStorage.setItem(EXTRA, JSON.stringify(L)); } catch(e){} return r; }
 
 /* demo state survives page changes (예약 관리 ↔ 예약 상세) */
-const STORE = 'vh-res-state-v3';
+const STORE = 'vh-res-state-v4';
 const KEEP = ['base','pay','seen','flags','memos','history','notices','in','out','phoneRaw','note','adults','kids','infants','pet'];
-try { const p = JSON.parse(sessionStorage.getItem(STORE) || '{}'); Object.entries(p).forEach(([i, o]) => Object.assign(R[+i], o)); } catch(e){}
-function save(r){ try { const p = JSON.parse(sessionStorage.getItem(STORE) || '{}'); p[r.idx] = Object.fromEntries(KEEP.map(k => [k, r[k]])); sessionStorage.setItem(STORE, JSON.stringify(p)); } catch(e){} }
+try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); Object.entries(p).forEach(([i, o]) => Object.assign(R[+i], o)); } catch(e){}
+function save(r){ try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); p[r.idx] = Object.fromEntries(KEEP.map(k => [k, r[k]])); localStorage.setItem(STORE, JSON.stringify(p)); } catch(e){} }
+function resetDemo(){ try { Object.keys(localStorage).filter(k => /^vh-(res-state|res-extra|corp)/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){} }
+/* another tab changed the demo data → reload so every screen agrees */
+addEventListener('storage', e => { if (e.key && /^vh-(res-state|res-extra|corp)/.test(e.key)) location.reload(); });
 function log(r, t){ r.history.unshift({t, m:`${nowStamp()} · jelin`, new:true}); }
 
 /* ---------- status & issues ---------- */
@@ -172,7 +194,7 @@ function stHTML(r){
   if (s === '변경 요청') return BD('변경 요청','orange');
   return `<span class="stt ${s==='이용 완료'||s==='예약 취소'?'mute':''}"><i style="background:${ST_DOT[s]}"></i>${s}${s==='이용 중' && r.out===0 ? ' · 오늘 퇴실' : ''}</span>`;
 }
-const PAY_LB = {'결제완료':'결제 완료','채널정산':'채널 정산','결제대기':'결제 대기','환불대기':'환불 대기','환불완료':'환불 완료'};
+const PAY_LB = {'기업숙박권':'기업 숙박권','결제완료':'결제 완료','채널정산':'채널 정산','결제대기':'결제 대기','환불대기':'환불 대기','환불완료':'환불 완료'};
 const payHTML = r => r.pay === '결제대기' ? BD('결제 대기','orange') : r.pay === '환불대기' ? BD('환불 대기','red') : `<span class="mut">${PAY_LB[r.pay]}</span>`;
 const BD = (t, c, x = '') => `<span class="bd ${c} ${x}">${t}</span>`;
 
@@ -234,6 +256,7 @@ function price(r){
   if (r.pet) opts.push([`반려견 동반 ${r.out - r.in}박`, 30000 * (r.out - r.in)]);
   const sub = room + opts.reduce((a, o) => a + o[1], 0);
   const fee = r.ch === '에어비앤비' ? Math.round(sub * .15 / 100) * 100 : r.ch === '네이버' ? Math.round(sub * .05 / 100) * 100 : 0;
+  if (r.pay === '기업숙박권') return {room, opts, sub, fee:0, net:sub, method:`(주)노을랩스 기업 숙박권 ${r.out - r.in}박 차감`};
   const method = {'앱':'신용카드 · 일시불','네이버':'네이버페이','에어비앤비':'에어비앤비 결제','관리자':'무통장 입금'}[r.ch];
   return {room, opts, sub, fee, net: sub - fee, method};
 }
@@ -252,7 +275,7 @@ function mountSide(){
       ? `<a href="reservations.html" class="on">예약 관리 <span class="cnt">${n}</span></a>` : `<a href="#" data-soon>${x}</a>`).join('')).join('')}</nav>
     <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../index.html" id="logout">로그아웃</a></div>`;
   try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
-  document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); sessionStorage.removeItem(STORE); } catch(e){} };
+  document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} resetDemo(); };
   document.querySelectorAll('[data-soon]').forEach(a => a.onclick = e => { e.preventDefault(); toast(`${a.textContent} 화면은 준비 중이에요`, false); });
 }
 function toast(msg, ok = true){

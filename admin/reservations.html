@@ -477,7 +477,7 @@ function paneList(){
         <td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박${r.in === 0 ? ' · 오늘 입실' : ''}${r.out === 0 ? ' · 오늘 퇴실' : ''}</span></td>
         <td>${esc(r.name)}<span class="sub num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)}</span>`}</span></td>
         <td class="num">${r.adults + r.kids + r.infants}명<span class="sub">성인 ${r.adults}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}${r.pet ? ' · 반려견' : ''}</span></td>
-        <td>${chDot(r.ch)}<span class="sub">${r.email ? '회원' : '비회원'}</span></td>
+        <td>${chDot(r.ch)}<span class="sub">${r.corp ? '기업 숙박권' : r.email ? '회원' : '비회원'}</span></td>
         <td>${payHTML(r)}</td>
         <td>${stHTML(r)}</td>
         <td><div class="lbl">${is.map(k => BD(ISSUE[k].lb, ISSUE[k].c, 'xs' + (k === 'conflict' ? ' fill' : ''))).join('')}</div>${r.note ? `<span class="sub">${esc(r.note)}</span>` : ''}${!is.length && !r.note ? '<span style="color:var(--ink-4)">–</span>' : ''}</td>
