@@ -278,7 +278,7 @@ function price(r){
 }
 
 /* ---------- chrome ---------- */
-/* 사이드 메뉴: 다루는 대상(회원·숙소·예약…)이 1단계, 실제 메뉴가 2단계. 지금 보는 그룹만 펼쳐요 */
+/* 사이드 메뉴: 모든 메뉴를 펼쳐 두고, 다루는 대상(회원·숙소·예약…)을 작은 머리글로 묶어요 */
 const NAV = [
   ['member', '회원', I('<circle cx="10" cy="7" r="3.2"/><path d="M3.8 16.5c.9-3 3.3-4.6 6.2-4.6s5.3 1.6 6.2 4.6"/>'), ['회원 관리','회원 상태']],
   ['villa', '숙소', I('<path d="M3 9.2 10 3.5l7 5.7"/><path d="M5 8v8.5h10V8"/><path d="M8.3 16.5v-4.3h3.4v4.3"/>'), ['숙소 관리','숙소 운영']],
@@ -292,27 +292,18 @@ function mountSide(){
   setTimeout(mountAlert, 400);
   const n = R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
   const cur = /stats/.test(location.pathname) ? '통계·매출' : '예약 관리';
-  let open;
-  try { open = new Set(JSON.parse(localStorage.getItem('vh-nav-open') || '[]')); } catch(e){ open = new Set(); }
-  open.add(NAV.find(g => g[3].includes(cur))[0]);
-  const side = document.querySelector('.side');
   const href = x => x === '예약 관리' ? './' : x === '통계·매출' ? 'stats' : '#';
-  const draw = () => {
-    side.innerHTML = `
+  const side = document.querySelector('.side');
+  side.innerHTML = `
     <div class="brand"><a href="./">${LOGO}</a><small>ADMIN</small></div>
-    <nav class="nav">${NAV.map(([id, lb, ic, items]) => {
-      const isOpen = open.has(id), here = items.includes(cur), cnt = items.includes('예약 관리') && n;
-      return `<div class="ng ${isOpen ? 'open' : ''} ${here ? 'here' : ''}">
-        <button class="ngh" data-g="${id}" aria-expanded="${isOpen}"><span class="ngi">${ic}</span><span class="ngl">${lb}</span>${cnt && !isOpen ? `<span class="cnt">${n}</span>` : ''}<span class="ngc">${ICON.down}</span></button>
-        <div class="ngs">${items.map(x => `<a href="${href(x)}" class="${x === cur ? 'on' : ''}" ${href(x) === '#' ? 'data-soon' : ''}>${x}${x === '예약 관리' && n ? `<span class="cnt">${n}</span>` : ''}</a>`).join('')}</div>
-      </div>`; }).join('')}</nav>
+    <nav class="nav">${NAV.map(([id, lb, ic, items]) => `<div class="ng ${items.includes(cur) ? 'here' : ''}">
+      <div class="ngh"><span class="ngi">${ic}</span>${lb}</div>
+      ${items.map(x => `<a href="${href(x)}" class="${x === cur ? 'on' : ''}" ${href(x) === '#' ? 'data-soon' : ''}>${x}${x === '예약 관리' && n ? `<span class="cnt">${n}</span>` : ''}</a>`).join('')}
+    </div>`).join('')}</nav>
     <div class="userbox"><div><b id="who">jelin</b><small>운영 관리자</small></div><a href="../" id="logout">로그아웃</a></div>`;
-    try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
-    document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} resetDemo(); };
-    side.querySelectorAll('[data-soon]').forEach(a => a.onclick = e => { e.preventDefault(); toast(`${a.textContent} 화면은 준비 중이에요`, false); });
-    side.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { const g = b.dataset.g; open.has(g) ? open.delete(g) : open.add(g); try { localStorage.setItem('vh-nav-open', JSON.stringify([...open])); } catch(e){} draw(); });
-  };
-  draw();
+  try { const u = localStorage.getItem('vh-admin-session'); if (u) document.getElementById('who').textContent = u; } catch(e){}
+  document.getElementById('logout').onclick = () => { try { localStorage.removeItem('vh-admin-session'); } catch(e){} resetDemo(); };
+  side.querySelectorAll('[data-soon]').forEach(a => a.onclick = e => { e.preventDefault(); toast(`${a.textContent} 화면은 준비 중이에요`, false); });
 }
 function toast(msg, ok = true){
   document.querySelectorAll('.toast').forEach(t => t.remove());
