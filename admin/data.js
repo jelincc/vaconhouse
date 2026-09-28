@@ -171,6 +171,8 @@ function build(a, i){
   r.notices = [{t:'예약 확정 알림톡', m:created.slice(5,16).replace('-','.'), ok:true}];
   if (r.in >= 0 && r.in <= 1) r.notices.push({t:'입실 안내 알림톡', m:`${md(r.in - 1)} 10:00`, ok:!ex.notify});
   r.corp = !!ex.corp;
+  r.opts = ex.opts || []; r.memberId = ex.member || null;
+  if (r.opts.includes('pet')) r.pet = true;
   return r;
 }
 const R = RAW.map(build);
@@ -179,14 +181,37 @@ const EXTRA = 'vh-res-extra-v1';
 try { JSON.parse(localStorage.getItem(EXTRA) || '[]').forEach(a => R.push(build(a, R.length))); } catch(e){}
 function addBooking(a){ const r = build(a, R.length); R.push(r); try { const L = JSON.parse(localStorage.getItem(EXTRA) || '[]'); L.push(a); localStorage.setItem(EXTRA, JSON.stringify(L)); } catch(e){} return r; }
 
+/* ---------- 회원 ---------- */
+const MEMBERS = (() => {
+  const L = [
+    ['김재민','01026379763','kjm900@naver.com','카카오',false,'2026-09-28 23:01:35'],
+    ['마서방','01031001369','masubang@naver.com','카카오',true,'2026-09-28 17:12:41'],
+    ['유경은','01093915110','ych5110@naver.com','카카오',false,'2026-09-26 22:58:17'],
+    ['함경희','01047197159','goldensmile@naver.com','카카오',false,'2026-09-26 20:52:38'],
+    ['조단','01047738238','qoentlr37@naver.com','카카오',true,'2026-09-23 23:09:57'],
+    ['이성환','01032134819','stone@cultureway.co.kr','이메일',true,'2026-09-22 21:09:59'],
+  ].map(([name, phone, email, join, sub, joined]) => ({name, phone, email, join, sub, joined}));
+  const seen = new Set(L.map(m => m.email));
+  RAW.forEach((a, i) => { const [, raw, email, phone, , , , , , , , created] = a; if (!email || seen.has(email)) return; seen.add(email);
+    const d = new Date(created.slice(0,10)); d.setDate(d.getDate() - 20 - (i * 7) % 90);
+    L.push({name:raw, phone, email, join: /kakao/.test(email) || i % 3 === 0 ? '카카오' : '이메일', sub: i % 2 === 0, joined:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(9 + i % 12).padStart(2,'0')}:${String(i * 7 % 60).padStart(2,'0')}:12`}); });
+  L.forEach((m, i) => Object.assign(m, {id:'m' + (i + 1), tier:'게스트', status:'이용 가능', birth:'', push:m.sub, memos:[]}));
+  return L;
+})();
+const MEMKEY = 'vh-mem-v1';
+try { const p = JSON.parse(localStorage.getItem(MEMKEY) || '{}'); MEMBERS.forEach(m => p[m.id] && Object.assign(m, p[m.id])); } catch(e){}
+function saveMember(m){ try { const p = JSON.parse(localStorage.getItem(MEMKEY) || '{}'); p[m.id] = {tier:m.tier, status:m.status, birth:m.birth, push:m.push, memos:m.memos, phone:m.phone}; localStorage.setItem(MEMKEY, JSON.stringify(p)); } catch(e){} }
+const memberRes = m => R.filter(r => r.memberId === m.id || (r.email && r.email === m.email));
+const memberOf = r => MEMBERS.find(m => m.id === r.memberId || (r.email && m.email === r.email));
+
 /* demo state survives page changes (예약 관리 ↔ 예약 상세) */
 const STORE = 'vh-res-state-v4';
 const KEEP = ['villa','base','pay','seen','flags','memos','history','notices','in','out','phoneRaw','note','adults','kids','infants','pet'];
 try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); Object.entries(p).forEach(([i, o]) => Object.assign(R[+i], o)); } catch(e){}
 function save(r){ try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); p[r.idx] = Object.fromEntries(KEEP.map(k => [k, r[k]])); localStorage.setItem(STORE, JSON.stringify(p)); } catch(e){} }
-function resetDemo(){ try { Object.keys(localStorage).filter(k => /^vh-(res-state|res-extra|corp)/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){} }
+function resetDemo(){ try { Object.keys(localStorage).filter(k => /^vh-(res-state|res-extra|corp|mem)/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){} }
 /* another tab changed the demo data → reload so every screen agrees */
-addEventListener('storage', e => { if (e.key && /^vh-(res-state|res-extra|corp)/.test(e.key)) location.reload(); });
+addEventListener('storage', e => { if (e.key && /^vh-(res-state|res-extra|corp|mem)/.test(e.key)) location.reload(); });
 function log(r, t){ r.history.unshift({t, m:`${nowStamp()} · jelin`, new:true}); }
 
 /* ---------- status & issues ---------- */
@@ -263,13 +288,18 @@ function issueDesc(r, k){
 }
 
 /* ---------- money ---------- */
+/* 숙소 옵션 (예약 등록에서 여러 개 고를 수 있어요) */
+const OPTS = [{k:'bbq', lb:'바베큐', p:20000}, {k:'pet', lb:'반려동물 동반', p:30000}, {k:'fire', lb:'불멍 세트', p:15000}];
 function price(r){
   const v = vById[r.villa];
   let room = 0;
   for (let o = r.in; o < r.out; o++){ const d = dOf(o).getDay(); room += (d === 5 || d === 6) ? Math.round(v.rate * 1.3 / 10000) * 10000 : v.rate; }
   const opts = [];
-  if ((r.note || '').includes('바비큐')) opts.push(['바비큐 세트', 45000]);
-  if (r.pet) opts.push([`반려견 동반 ${r.out - r.in}박`, 30000 * (r.out - r.in)]);
+  if (r.opts && r.opts.length) r.opts.forEach(k => { const o = OPTS.find(x => x.k === k); if (o) opts.push([o.lb, o.p]); });
+  else {
+    if ((r.note || '').includes('바비큐')) opts.push(['바비큐 세트', 45000]);
+    if (r.pet) opts.push([`반려견 동반 ${r.out - r.in}박`, 30000 * (r.out - r.in)]);
+  }
   const sub = room + opts.reduce((a, o) => a + o[1], 0);
   const fee = r.ch === '에어비앤비' ? Math.round(sub * .15 / 100) * 100 : r.ch === '네이버' ? Math.round(sub * .05 / 100) * 100 : 0;
   if (r.pay === '기업숙박권') return {room, opts, sub, fee:0, net:sub, method:`(주)노을랩스 기업 숙박권 ${r.out - r.in}박 차감`};
@@ -287,8 +317,8 @@ const NAV = [
 function mountSide(){
   setTimeout(mountAlert, 400);
   const n = R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
-  const cur = /stats/.test(location.pathname) ? '통계·매출' : '예약 관리';
-  const href = x => x === '예약 관리' ? './' : x === '통계·매출' ? 'stats' : '#';
+  const cur = /stats/.test(location.pathname) ? '통계·매출' : /member/.test(location.pathname) ? '회원 관리' : '예약 관리';
+  const href = x => x === '예약 관리' ? './' : x === '통계·매출' ? 'stats' : x === '회원 관리' ? 'members' : '#';
   const side = document.querySelector('.side');
   side.innerHTML = `
     <div class="brand"><a href="./">${LOGO}</a><small>ADMIN</small></div>
@@ -367,9 +397,10 @@ function refundOf(r){
   return {rate, amount: Math.round(p * rate / 100) * 100, paid: p, days: d};
 }
 function createAdmin(o){
-  const a = [o.villa, o.name, null, o.phone.replace(/\D/g, ''), isoOf(o.a), isoOf(o.b), o.adults, o.kids, 0, '확정', o.pay, `2026-09-28 ${new Date().toTimeString().slice(0,5)}`, [o.route, o.note].filter(Boolean).join(' · ')];
+  const a = [o.villa, o.name, null, o.phone.replace(/\D/g, ''), isoOf(o.a), isoOf(o.b), o.adults, o.kids, o.infants || 0, '확정', o.pay, `2026-09-28 ${new Date().toTimeString().slice(0,5)}`, [o.route, o.note].filter(Boolean).join(' · '), {opts:o.opts || [], member:o.member || null}];
   const r = addBooking(a);
-  r.seen = true; r.history = [{t:`예약 등록 · 관리자 (${o.route})`, m:`${nowStamp()} · jelin`, new:true}];
+  r.seen = true; r.history = [{t:`예약 등록 · 관리자 (${o.route})${o.member ? ' · 회원 예약' : ' · 비회원 예약'}`, m:`${nowStamp()} · jelin`, new:true}];
+  if (o.memo) r.memos = [{t:o.memo, m:`jelin · ${nowStamp()}`}];
   r.notices = o.notify ? [{t:'예약 확정 알림톡', m:nowStamp(), ok:true}] : [];
   save(r); return r;
 }

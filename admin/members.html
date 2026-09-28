@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="../assets/vacon-logo-stacked.svg" type="image/svg+xml">
+<title>VACON house 회원 관리</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="admin.css">
+<style>
+.wrap{max-width:1480px;width:100%;display:flex;flex-direction:column;gap:20px}
+.head h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em}
+.head p{margin:6px 0 0;font-size:15px;color:var(--ink-2)}
+.tools{display:flex;gap:8px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tools .inp{max-width:360px;height:40px}
+.chips{display:flex;gap:6px}
+.chips button{border:0;background:var(--surface-2);height:34px;padding:0 14px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.chips button.on{background:#3E434B;color:#fff}
+.chips button span{opacity:.6;margin-left:4px;font-weight:500}
+table{width:100%;border-collapse:collapse}
+th{font-size:13px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td .sub{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:#FAFBFC}
+.panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.empty{padding:48px 16px;text-align:center;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side"></aside>
+  <main class="main"><div class="wrap" id="wrap"></div></main>
+</div>
+<script src="data.js"></script>
+<script src="cases.js" defer></script>
+<script>
+mountSide();
+const S = {q:'', f:'전체'};
+const F = {'전체':() => true, '구독':m => m.sub, '카카오':m => m.join === '카카오', '이용 정지':m => m.status !== '이용 가능'};
+function render(){
+  const q = S.q.trim().toLowerCase().replace(/-/g, '');
+  const L = MEMBERS.filter(F[S.f]).filter(m => !q || (m.name + m.phone + m.email).toLowerCase().includes(q)).sort((a, b) => b.joined.localeCompare(a.joined));
+  document.getElementById('wrap').innerHTML = `
+    <div class="head"><h1>회원 관리</h1><p>앱 가입 회원 ${MEMBERS.length}명 · 이름을 누르면 회원 정보와 예약 내역을 봐요.</p></div>
+    <div class="panel">
+      <div class="tools"><input class="inp search" id="q" placeholder="이름, 전화번호, 이메일" value="${esc(S.q)}">
+        <div class="chips">${Object.keys(F).map(k => `<button data-f="${k}" class="${S.f === k ? 'on' : ''}">${k}<span>${MEMBERS.filter(F[k]).length}</span></button>`).join('')}</div></div>
+      <table><thead><tr><th>회원</th><th>전화번호</th><th>가입</th><th>마케팅 수신</th><th>예약</th><th>상태</th></tr></thead>
+      <tbody>${L.length ? L.map(m => { const n = memberRes(m).filter(ACTIVE).length; return `<tr data-id="${m.id}">
+        <td><b>${esc(m.name)}</b><span class="sub">${esc(m.email)}</span></td>
+        <td class="num">${fmtPhone(m.phone)}</td>
+        <td>${m.join}<span class="sub num">${m.joined.slice(0, 10).replace(/-/g, '.')}</span></td>
+        <td>${m.push ? '받음' : '<span style="color:var(--ink-4)">안 받음</span>'}</td>
+        <td class="num">${n ? `${n}회` : '<span style="color:var(--ink-4)">없음</span>'}</td>
+        <td>${m.status === '이용 가능' ? '이용 가능' : BD(m.status, 'red')}</td></tr>`; }).join('') : `<tr><td colspan="6" class="empty">조건에 맞는 회원이 없어요.</td></tr>`}</tbody></table>
+    </div>`;
+}
+document.addEventListener('click', e => {
+  const f = e.target.closest('[data-f]'); if (f){ S.f = f.dataset.f; render(); return; }
+  const tr = e.target.closest('tr[data-id]'); if (tr) location.href = `member?id=${tr.dataset.id}`;
+});
+document.addEventListener('input', e => { if (e.target.id === 'q'){ S.q = e.target.value; const p = e.target.selectionStart; render(); const i = document.getElementById('q'); i.focus(); i.setSelectionRange(p, p); } });
+render();
+</script>
+</body>
+</html>
