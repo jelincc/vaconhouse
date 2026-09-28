@@ -63,13 +63,13 @@ const chDot = ch => `<span class="chn"><i style="background:${CH[ch].c}"></i>${C
 const REGIONS = ['가평','양평','홍천','마포'];
 const TYPES = ['직영','위탁'];
 const VILLAS = [
-  {id:'v1', name:'소석원',       region:'가평', type:'직영', cap:6, rate:390000, c:'#E86A33'},
-  {id:'v2', name:'캐빈 브리즈 A동', region:'양평', type:'직영', cap:4, rate:190000, c:'#2F80ED'},
-  {id:'v3', name:'캐빈 브리즈 B동', region:'양평', type:'직영', cap:4, rate:190000, c:'#27AE60'},
-  {id:'v4', name:'캐빈 브리즈 C동', region:'양평', type:'직영', cap:4, rate:190000, c:'#9B51E0'},
-  {id:'v5', name:'캐빈 브리즈 D동', region:'양평', type:'직영', cap:4, rate:190000, c:'#E2B000'},
-  {id:'v6', name:'그로브',       region:'홍천', type:'위탁', cap:8, rate:450000, c:'#159A9C'},
-  {id:'v7', name:'르 아르젠',     region:'마포', type:'위탁', cap:4, rate:260000, c:'#8E6C4E'},
+  {id:'v1', name:'소석원',       region:'가평', type:'직영', cap:6, base:4, bed:2, bath:2, rate:390000, c:'#E86A33'},
+  {id:'v2', name:'캐빈 브리즈 A동', region:'양평', type:'직영', cap:3, base:2, bed:1, bath:1, rate:190000, c:'#2F80ED'},
+  {id:'v3', name:'캐빈 브리즈 B동', region:'양평', type:'직영', cap:3, base:2, bed:1, bath:1, rate:190000, c:'#27AE60'},
+  {id:'v4', name:'캐빈 브리즈 C동', region:'양평', type:'직영', cap:3, base:2, bed:1, bath:1, rate:190000, c:'#9B51E0'},
+  {id:'v5', name:'캐빈 브리즈 D동', region:'양평', type:'직영', cap:3, base:2, bed:1, bath:1, rate:190000, c:'#E2B000'},
+  {id:'v6', name:'그로브',       region:'홍천', type:'위탁', cap:6, base:6, bed:2, bath:2, rate:450000, c:'#159A9C'},
+  {id:'v7', name:'르 아르젠',     region:'마포', type:'위탁', cap:4, base:2, bed:1, bath:2, rate:260000, c:'#8E6C4E'},
 ];
 const vById = Object.fromEntries(VILLAS.map(v => [v.id, v]));
 const vFull = id => `${vById[id].region} ${vById[id].name}`;

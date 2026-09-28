@@ -291,6 +291,36 @@ body.anno .main{margin-right:432px}
 @media (max-width:1280px){.ops-g{grid-template-columns:1fr 1fr}.twin{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.sp:nth-child(2){border-right:0}.sp:nth-child(-n+2){border-bottom:1px solid var(--line)}body.anno .main{margin-right:0}}
 @media (max-width:860px){.tabs{gap:18px;overflow-x:auto}.tabs button{font-size:15px}.search{min-width:0;width:100%}.tl{--name:140px}.anp{left:12px;width:auto}.facts{grid-template-columns:1fr 1fr}}
 /* 예약 등록: 왼쪽 입력, 오른쪽 요약 + 등록 */
+.cr .ltools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cr .ltools .sbox{flex:1;min-width:220px;max-width:360px}
+.cr .ltools .search{width:100%;min-width:0}
+.cr .ltools .sm2{margin-left:auto;font-size:14px}
+.cr .segs{display:flex;background:var(--surface-2);border-radius:10px;padding:3px;gap:2px}
+.cr .segs button{border:0;background:none;height:30px;padding:0 12px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink-3)}
+.cr .segs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.cr .plist{border:1px solid var(--line);border-radius:14px;max-height:292px;overflow:auto}
+.cr .plist .ph{position:sticky;top:0;background:#fff;z-index:1;display:grid;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-3)}
+.cr .pr2{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:12px;align-items:center;width:100%;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px}
+.cr .pr2:last-child{border-bottom:0}
+.cr .pr2:hover{background:#FAFBFC}
+.cr .pr2 > span{min-width:0;display:flex;flex-direction:column}
+.cr .pr2 small{font-size:13px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cr .pr2 i{font-style:normal;color:var(--ink-4)}
+.cr .m{grid-template-columns:minmax(0,1.6fr) 1fr .8fr 1fr}
+.cr .v{grid-template-columns:minmax(0,1.6fr) .7fr .8fr .8fr 1fr}
+.cr .pr2.v > span:first-child{display:grid;grid-template-columns:22px 1fr;column-gap:8px}
+.cr .pr2.v > span:first-child small{grid-column:2}
+.cr .rd{width:20px;height:20px;border-radius:50%;background:var(--surface-3);display:grid;place-items:center;grid-row:span 2;align-self:center;color:var(--accent)}
+.cr .rd svg{width:20px;height:20px}
+.cr .pr2.v.on{background:var(--accent-soft)}
+.cr .pr2.v.on b{color:var(--accent-ink)}
+.cr .pr2:disabled{cursor:not-allowed;opacity:.5}
+.cr .pr2 em{font-style:normal;font-weight:600}
+.cr .pr2 .ok{color:var(--ok-ink)}
+.cr .pr2 .bad{color:var(--danger-ink)}
+.cr .pr2 .warn{color:var(--accent-ink);font-weight:600}
+.cr .pempty{padding:28px 14px;text-align:center;color:var(--ink-3);font-size:14px}
+
 .dlg.cr{width:min(1120px,100%);height:min(860px,calc(100vh - 32px));flex-direction:row;overflow:hidden}
 .cr .crl{flex:1;min-width:0;display:flex;flex-direction:column}
 .cr .crl .b{gap:0;padding:6px 28px 28px}
@@ -300,15 +330,6 @@ body.anno .main{margin-right:432px}
 .cr h4 span{width:22px;height:22px;border-radius:50%;background:var(--surface-2);font-size:13px;display:grid;place-items:center;color:var(--ink-2)}
 .cr .mut.sm,.crr .mut.sm{font-size:14px;color:var(--ink-3)}
 .cr .lnk{all:unset;cursor:pointer;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.cr .srch{position:relative}
-.cr .srch .inp{height:48px;font-size:15px}
-.cr .res{margin-top:6px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px var(--line),0 8px 24px rgba(26,26,30,.08);padding:6px;display:flex;flex-direction:column}
-.cr .res button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:14px}
-.cr .res button:hover{background:var(--surface-2)}
-.cr .res button span{color:var(--ink-3);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cr .res button em{font-style:normal;font-size:13px;color:var(--ink-3)}
-.cr .res .nm{color:var(--ink-3);border-top:1px solid var(--line);border-radius:0 0 10px 10px;margin-top:4px}
-.cr .res .nm b{color:var(--ink)}
 .cr .pick{display:flex;align-items:center;gap:12px;background:var(--surface-2);border-radius:14px;padding:12px 14px}
 .cr .pick .av{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:700}
 .cr .pick .tx{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -316,19 +337,6 @@ body.anno .main{margin-right:432px}
 .cr .pick .tx em{font-style:normal;font-size:13px;color:var(--ink-3);font-weight:600;margin-left:4px}
 .cr .pick .tx span{font-size:14px;color:var(--ink-3)}
 .cr .guest{display:flex;flex-direction:column;gap:8px}
-.cr .vg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.cr .vc{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:var(--surface-2)}
-.cr .vc small{font-size:13px;color:var(--ink-3)}
-.cr .vc b{font-size:14.5px;font-weight:600}
-.cr .vc span{font-size:13px;color:var(--ink-3)}
-.cr .vc:hover{background:var(--surface-3)}
-.cr .vc.on{background:var(--accent-soft)}
-.cr .vc.on b{color:var(--accent-ink)}
-.cr .vc em{position:absolute;right:10px;top:10px;color:var(--accent);display:flex}
-.cr .vc em svg{width:20px;height:20px}
-.cr .vc:disabled{cursor:not-allowed;opacity:.55}
-.cr .vc .bad{font-style:normal;color:var(--danger-ink)}
-.cr .vc .warn{font-style:normal;color:var(--accent-ink)}
 .cr .cal{display:flex;flex-direction:column;gap:10px}
 .cr .cnav{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-3)}
 .cr .cnav span{flex:1;text-align:center}
@@ -346,7 +354,8 @@ body.anno .main{margin-right:432px}
 .cr .cd.full{color:var(--danger);text-decoration:line-through;background:var(--danger-soft)}
 .cr .cd.in{background:var(--surface-2);border-radius:0}
 .cr .cd.st,.cr .cd.en{background:#1A1A1E;color:#fff;font-weight:700;text-decoration:none}
-.cr .cd.full.st,.cr .cd.full.en,.cr .cd.full.in{background:var(--danger);color:#fff;text-decoration:line-through}
+.cr .cd.full.st,.cr .cd.full.in{background:var(--danger);color:#fff;text-decoration:line-through}
+.cr .cd.full.en{background:#1A1A1E;color:#fff;text-decoration:none}
 .cr .hint{font-size:14px;color:var(--ink-2);background:var(--surface-2);border-radius:12px;padding:12px 14px}
 .cr .hint.ok{background:var(--ok-soft);color:var(--ok-ink);font-weight:600}
 .cr .ppl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -384,9 +393,8 @@ body.anno .main{margin-right:432px}
   <aside class="side"></aside>
   <main class="main">
     <div class="pagehead">
-      <div><h1>예약 관리</h1><p>9월 28일 월요일 · 오전 10:24 기준</p></div>
+      <div><h1>예약 관리</h1></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn line" id="syncBtn">채널 연동</button>
         <button class="btn primary" id="addBtn">예약 등록</button>
       </div>
     </div>
@@ -482,8 +490,8 @@ function paneToday(){
   const ins = pick('in'), outs = pick('out'), stay = pick('stay'), same = pick('sameday');
   const tmr = R.filter(r => ACTIVE(r) && r.in === 1);
   /* 3건까지는 모두, 넘으면 2건 + "외 N건 더 보기" (카드 높이 고정) */
-  const who = (L, tm) => (L.length > 3 ? L.slice(0, 2) : L).map(r => `<span class="op-p"><b>${vById[r.villa].name}</b>${esc(r.name)}<em>${tm(r)}</em></span>`).join('') + (L.length > 3 ? `<span class="op-p more">외 ${L.length - 2}건 더 보기 ${ICON.chev}</span>` : '');
-  const op = (k, lb, L, sub, tm, empty) => `<button class="op ${L.length ? '' : 'zero'}" data-k="${k}"><span class="op-l">${lb}</span><span class="op-v num">${L.length}<small>건</small></span><span class="op-s">${sub}</span><span class="op-list">${L.length ? who(L, tm) : `<span class="op-p none">${empty}</span>`}${!L.length && k === 'in' && tmr.length ? `<span class="op-next">내일 ${mdw(1)}</span>${who(tmr, () => '15:00')}` : ''}</span></button>`;
+  const who = (L, tm) => (L.length >= 3 ? L.slice(0, 2) : L).map(r => `<span class="op-p"><b>${vById[r.villa].name}</b>${esc(r.name)}<em>${tm(r)}</em></span>`).join('') + (L.length >= 3 ? `<span class="op-p more">외 ${L.length - 2}건 더 보기 ${ICON.chev}</span>` : '');
+  const op = (k, lb, L, sub, tm, empty) => `<button class="op ${L.length ? '' : 'zero'}" data-k="${k}"><span class="op-l">${lb}</span><span class="op-v num">${L.length}<small>건</small></span>${sub ? `<span class="op-s">${sub}</span>` : ''}<span class="op-list">${L.length ? who(L, tm) : `<span class="op-p none">${empty}</span>`}${!L.length && k === 'in' && tmr.length ? `<span class="op-next">내일 ${mdw(1)}</span>${who(tmr, () => '15:00')}` : ''}</span></button>`;
   const row = k => { const c = pick(k).length, col = c ? (SEV[k] || '') : '';
     return `<button class="lr ${c ? '' : 'zero'}" data-k="${k}"><span class="ico ${col}">${ICON[ICK[k]]}</span><span class="tx"><b>${COND[k].lb}${c && col === 'red' ? ' ' + BD('긴급','red','xs') : ''}</b><small>${c ? esc(reason(k)) : '이상 없어요'}</small></span><span class="cnt2 ${col === 'red' ? 'red' : ''} num">${c}건</span><span class="chev">${ICON.chev}</span></button>`; };
   const chAll = Object.keys(CH).map(c => [c, fresh.filter(r => r.ch === c).length]);
@@ -492,12 +500,12 @@ function paneToday(){
       <h2>${n ? `확인이 필요한 예약이 <em>${n}건</em> 있어요` : '지금 처리할 예약이 없어요'}</h2>
     </div>
     <section class="ops" id="opsCard">
-      <div class="ops-h"><h3>오늘의 운영</h3></div>
+      <div class="ops-h"><h3>오늘의 운영</h3><span class="num">9월 28일 (월) 오전 10:24 기준</span></div>
       <div class="ops-g">
         ${op('in', '오늘 체크인', ins, '15:00부터 입실', r => '15:00', '오늘 체크인은 없어요')}
         ${op('out', '오늘 체크아웃', outs, '11:00까지 퇴실', r => st(r) === '이용 완료' ? '퇴실 완료' : '11:00', '오늘은 없어요')}
         ${op('stay', '현재 투숙 중', stay, `${VILLAS.length}채 중 ${new Set(stay.map(r => r.villa)).size}채 사용 중`, r => `${r.adults + r.kids + r.infants}명`, '비어 있어요')}
-        ${op('sameday', '오늘 접수된 당일 예약', same, '오늘 접수 · 오늘 입실', r => CH[r.ch].lb, '오늘은 없어요')}
+        ${op('sameday', '오늘 접수된 당일 예약', same, same.length ? '입실까지 시간이 짧아요 · 객실 준비 확인' : '', r => CH[r.ch].lb, '오늘은 없어요')}
       </div>
     </section>
     <div class="twin">
@@ -563,7 +571,7 @@ function blockHTML(r, start, n, w, lane){
 function toolbar(){
   return `<div class="toolbar">
     ${S.tab === 'board' ? `<div class="seg">${Object.entries(SPAN).map(([k, v]) => `<button data-s="${k}" class="${S.span === k ? 'on' : ''}">${v.lb}</button>`).join('')}</div>` : '<span></span>'}
-    <div class="datebar"><button class="icbtn" id="prev" aria-label="이전">${ICON.back}</button><span class="range num">${rangeLabel()}</span><button class="icbtn" id="next" aria-label="다음">${ICON.chev}</button><button class="btn sm" id="todayBtn">오늘</button></div>
+    <div class="datebar"><button class="icbtn" id="prev" aria-label="이전">${ICON.back}</button><span class="range num">${rangeLabel()}</span><button class="icbtn" id="next" aria-label="다음">${ICON.chev}</button><button class="btn sm" id="todayBtn" ${atToday() ? 'disabled title="오늘이 보이는 범위예요"' : ''}>오늘</button></div>
   </div>`;
 }
 function paneBoard(){
@@ -670,6 +678,7 @@ function render(){
   mountSide();
   if (!S.caseMode) try { history.replaceState(null, '', '#' + S.tab); } catch(e){}
 }
+const atToday = () => S.tab === 'month' ? S.moff === 0 : S.offset === (S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2);
 function go(tab, key){ S.tab = tab; S.key = key || null; S.dd = null; if (key) S.period = 'all'; render(); window.scrollTo({top:0, behavior:'smooth'}); }
 $('tabs').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) go(b.dataset.t); });
 const pane = $('pane');
@@ -685,7 +694,7 @@ pane.addEventListener('click', e => {
   const sp = t.closest('[data-s]'); if (sp){ S.span = sp.dataset.s; S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; persist(); render(); return; }
   if (t.closest('#prev') || t.closest('#next')){ const dir = t.closest('#prev') ? -1 : 1;
     if (S.tab === 'month'){ const d = dOf(S.moff); S.moff = Math.round((new Date(d.getFullYear(), d.getMonth() + dir, 15) - TODAY) / 864e5); S.openDay = null; } else S.offset += dir * SPAN[S.span].n; render(); return; }
-  if (t.closest('#todayBtn')){ if (S.tab === 'month') S.moff = 0; else S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; render(); return; }
+  if (t.closest('#todayBtn')){ if (S.tab === 'month') S.moff = 0; else S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; render(); document.querySelectorAll('.tl-day.today,.mc.today').forEach(el => { el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }); return; }
   const g = t.closest('[data-grp]'); if (g){ const x = g.dataset.grp; S.collapsed.has(x) ? S.collapsed.delete(x) : S.collapsed.add(x); render(); return; }
   if (t.closest('[data-clearkey]')){ S.key = null; render(); return; }
   const per = t.closest('[data-per]'); if (per){ S.period = per.dataset.per; render(); return; }
@@ -774,7 +783,6 @@ $('anpB').addEventListener('click', e => {
 function setAnno(on){ document.body.classList.toggle('anno', on); $('anp').hidden = !on; try { localStorage.setItem('vh-anno', on ? '1' : '0'); } catch(e){} if (S.tab === 'board') render(); }
 /* 개선 포인트 패널은 상단 버튼 없이 코드만 남겨 둬요 */
 $('anpX').onclick = () => setAnno(false);
-$('syncBtn').onclick = () => openChannels();
 $('addBtn').onclick = () => openCreate({});
 
 /* ---------- 빈 칸 메뉴 ---------- */
@@ -805,7 +813,7 @@ function autoBlock(){ try { return localStorage.getItem('vh-ch-autoblock') === '
 function openCreate(o){
   /* 한 화면에서 위에서 아래로: 예약자 → 숙소·날짜 → 인원·옵션 → 접수. 오른쪽 요약에서 바로 등록 */
   const F = {villa:o.villa || null, a:o.a ?? null, b:(o.b != null && o.b > (o.a ?? -99)) ? o.b : null, pick:0,
-    mem:o.member ? MEMBERS.find(m => m.id === o.member) || null : null, guest:null, q:'',
+    mem:o.member ? MEMBERS.find(m => m.id === o.member) || null : null, guest:null, mq:'', vq:'', rg:'전체',
     adults:2, kids:0, infants:0, opts:[], route:'전화', pay:'결제대기', memo:'', notify:true, mo:0};
   if (F.a != null && F.b == null) F.pick = 1;
   if (F.a != null) F.mo = dOf(F.a).getMonth() - TODAY.getMonth();
@@ -833,20 +841,27 @@ function openCreate(o){
     return `<div class="mo"><b>${first.getFullYear()}년 ${first.getMonth() + 1}월</b><div class="wk">${['일','월','화','수','목','금','토'].map(x => `<span>${x}</span>`).join('')}</div><div class="gd">${cells}</div></div>`;
   };
   function body(){
-    const n = nights(), res = F.q.trim() ? MEMBERS.filter(m => (m.name + m.phone + m.email).toLowerCase().includes(F.q.trim().toLowerCase().replace(/-/g, ''))).slice(0, 5) : [];
+    const n = nights(), mq = F.mq.trim().toLowerCase().replace(/-/g, '');
+    const mems = MEMBERS.filter(m => !mq || (m.name + m.phone + m.email).toLowerCase().includes(mq)).sort((x, y) => y.joined.localeCompare(x.joined));
+    const vq = F.vq.trim();
+    const vils = VILLAS.filter(x => (F.rg === '전체' || x.region === F.rg) && (!vq || (x.region + x.name).includes(vq))).sort((x, y) => (y.id === F.villa) - (x.id === F.villa) || (n > 0 ? freeFor(y.id, F.a, F.b) - freeFor(x.id, F.a, F.b) : 0));
     const v = F.villa && vById[F.villa];
     q('#crBody').innerHTML = `
       <section><h4><span>1</span>예약자</h4>
         ${F.mem ? `<div class="pick"><div class="av">${esc(F.mem.name[0])}</div><div class="tx"><b>${esc(F.mem.name)} <em>회원</em></b><span>${fmtPhone(F.mem.phone)} · ${esc(F.mem.email)} · ${F.mem.join} 가입</span></div><a class="tbtn" href="member?id=${F.mem.id}" target="_blank">회원 정보</a><button class="tbtn" data-unpick>바꾸기</button></div>`
-        : F.guest ? `<div class="guest"><div class="fg"><div class="fl"><label>이름</label><input class="inp" id="gName" value="${esc(F.guest.name)}" placeholder="홍길동"></div><div class="fl"><label>연락처</label><input class="inp num" id="cPhone" value="${esc(F.guest.phone)}" placeholder="010-0000-0000" inputmode="tel"><span class="err" id="cPhoneErr"></span></div></div><div class="mut sm">비회원 예약이에요. <button class="lnk" data-unpick>회원에서 찾기</button></div></div>`
-        : `<div class="srch"><input class="inp" id="mQ" placeholder="회원 이름, 전화번호, 이메일로 찾기" value="${esc(F.q)}" autocomplete="off">
-            ${F.q.trim() ? `<div class="res">${res.map(m => `<button data-mem="${m.id}"><b>${esc(m.name)}</b><span>${fmtPhone(m.phone)} · ${esc(m.email)}</span><em>${m.join}</em></button>`).join('')}
-              <button class="nm" data-guest>${res.length ? '찾는 회원이 없어요 · ' : '일치하는 회원이 없어요 · '}<b>비회원으로 입력</b></button></div>` : ''}</div>
-          <div class="mut sm">회원이 아니면 <button class="lnk" data-guest>비회원으로 입력</button>할 수 있어요.</div>`}
+        : F.guest ? `<div class="guest"><div class="fg"><div class="fl"><label>이름</label><input class="inp" id="gName" value="${esc(F.guest.name)}" placeholder="홍길동"></div><div class="fl"><label>연락처</label><input class="inp num" id="cPhone" value="${esc(F.guest.phone)}" placeholder="010-0000-0000" inputmode="tel"><span class="err" id="cPhoneErr"></span></div></div><div class="mut sm">비회원 예약이에요. <button class="lnk" data-unpick>회원 목록에서 고르기</button></div></div>`
+        : `<div class="ltools"><form class="sbox" id="mform" role="search"><input class="search" id="mQ" placeholder="이름, 전화번호, 이메일" value="${esc(F.mq)}" autocomplete="off"><button type="submit" aria-label="검색">${ICON.search}</button></form><span class="mut sm">${mems.length}명</span><button class="lnk sm2" data-guest>비회원으로 입력</button></div>
+          <div class="plist"><div class="ph m"><span>회원</span><span>전화번호</span><span>가입</span><span>최근 예약</span></div>
+            ${mems.length ? mems.map(m => { const lr = memberRes(m).filter(ACTIVE).sort((x, y) => y.in - x.in)[0]; return `<button class="pr2 m" data-mem="${m.id}"><span><b>${esc(m.name)}</b><small>${esc(m.email)}</small></span><span class="num">${fmtPhone(m.phone)}</span><span>${m.join}<small class="num">${m.joined.slice(2, 10).replace(/-/g, '.')}</small></span><span>${lr ? `${vById[lr.villa].name}<small class="num">${md(lr.in)}</small>` : '<i>없음</i>'}</span></button>`; }).join('')
+            : `<div class="pempty">일치하는 회원이 없어요. <button class="lnk" data-guest>비회원으로 입력</button></div>`}</div>`}
       </section>
       <section><h4><span>2</span>숙소와 날짜</h4>
-        <div class="vg">${VILLAS.map(x => { const no = n > 0 && !freeFor(x.id, F.a, F.b), small = x.cap < people();
-          return `<button class="vc ${F.villa === x.id ? 'on' : ''}" data-v="${x.id}" ${no ? 'disabled' : ''}><small>${x.region} · ${x.type}</small><b>${x.name}</b><span>${no ? `<i class="bad">${why(x.id)}</i>` : small ? `<i class="warn">최대 ${x.cap}인</i>` : `최대 ${x.cap}인`}</span>${F.villa === x.id ? `<em>${ICON.checkFill}</em>` : ''}</button>`; }).join('')}</div>
+        <div class="ltools"><form class="sbox" id="vform" role="search"><input class="search" id="vQ" placeholder="숙소 이름" value="${esc(F.vq)}" autocomplete="off"><button type="submit" aria-label="검색">${ICON.search}</button></form>
+          <div class="segs">${['전체', ...REGIONS].map(x => `<button data-rg="${x}" class="${F.rg === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
+        <div class="plist v"><div class="ph v"><span>숙소</span><span>침실 · 욕실</span><span>기준 / 최대</span><span>1박 요금</span><span>${n > 0 ? `${md(F.a)} – ${md(F.b)}` : '예약 가능'}</span></div>
+          ${vils.length ? vils.map(x => { const no = n > 0 && !freeFor(x.id, F.a, F.b), small = x.cap < people();
+            return `<button class="pr2 v ${F.villa === x.id ? 'on' : ''}" data-v="${x.id}" ${no ? 'disabled' : ''}><span><i class="rd">${F.villa === x.id ? ICON.checkFill : ''}</i><b>${x.name}</b><small>${x.region} · ${x.type}</small></span><span class="num">${x.bed} · ${x.bath}</span><span class="num ${small ? 'warn' : ''}">${x.base} / ${x.cap}명</span><span class="num">${won(x.rate)}</span><span>${n > 0 ? (no ? `<em class="bad">${why(x.id)}</em>` : '<em class="ok">가능</em>') : '<i>날짜를 고르면 보여요</i>'}</span></button>`; }).join('')
+          : '<div class="pempty">조건에 맞는 숙소가 없어요.</div>'}</div>
         <div class="cal"><div class="cnav"><button data-mo="-1" ${F.mo <= 0 ? 'disabled' : ''} aria-label="이전 달">${ICON.chev}</button><span>${F.villa ? `${v.region} ${v.name}의 예약 현황이에요. 취소선이 있는 날은 묵을 수 없어요.` : '숙소를 고르면 그 숙소의 예약된 날이 표시돼요.'}</span><button data-mo="1" aria-label="다음 달">${ICON.chev}</button></div>
           <div class="mos">${month(F.mo)}${month(F.mo + 1)}</div>
           <div id="cCheck"></div></div>
@@ -903,7 +918,8 @@ function openCreate(o){
     if (t === box || t.closest('[data-x]')) return box.remove();
     if (t.closest('[data-ch2]')){ e.preventDefault(); box.remove(); return openChannels(); }
     const m = t.closest('[data-mem]'); if (m){ F.mem = MEMBERS.find(x => x.id === m.dataset.mem); F.guest = null; return body(); }
-    if (t.closest('[data-guest]')){ const nm = /\d|@/.test(F.q) ? '' : F.q.trim(), ph = /^[\d-]+$/.test(F.q.trim()) ? F.q.trim() : ''; F.guest = {name:nm, phone:ph}; F.mem = null; body(); (nm ? q('#cPhone') : q('#gName')).focus(); return; }
+    if (t.closest('[data-guest]')){ const qq = (q('#mQ')?.value || F.mq).trim(), nm = /\d|@/.test(qq) ? '' : qq, ph = /^[\d-]+$/.test(qq) ? qq : ''; F.guest = {name:nm, phone:ph}; F.mem = null; body(); (nm ? q('#cPhone') : q('#gName')).focus(); return; }
+    const rg = t.closest('[data-rg]'); if (rg){ F.rg = rg.dataset.rg; return body(); }
     if (t.closest('[data-unpick]')){ F.mem = null; F.guest = null; body(); q('#mQ')?.focus(); return; }
     const vb = t.closest('[data-v]'); if (vb && !vb.disabled){ F.villa = vb.dataset.v; return body(); }
     const alt = t.closest('[data-alt]'); if (alt){ F.villa = alt.dataset.alt; return body(); }
@@ -921,7 +937,7 @@ function openCreate(o){
   });
   box.addEventListener('input', e => {
     const t = e.target;
-    if (t.id === 'mQ'){ F.q = t.value; const pos = t.selectionStart; body(); const i = q('#mQ'); i.focus(); i.setSelectionRange(pos, pos); return; }
+    if (t.id === 'mQ' || t.id === 'vQ') return;
     if (t.id === 'gName') F.guest.name = t.value;
     if (t.id === 'cPhone') F.guest.phone = t.value;
     if (t.id === 'cMemo') F.memo = t.value;
@@ -929,7 +945,8 @@ function openCreate(o){
     check();
   });
   box.addEventListener('change', e => { if (e.target.id === 'cNotify') F.notify = e.target.checked; });
-  body(); (q('#mQ') || q('#gName'))?.focus();
+  box.addEventListener('submit', e => { e.preventDefault(); if (e.target.id === 'mform') F.mq = q('#mQ').value; if (e.target.id === 'vform') F.vq = q('#vQ').value; body(); });
+  body(); if (!F.mem) (q('#mQ') || q('#gName'))?.focus();
 }
 
 /* ---------- 판매 막기 ---------- */
