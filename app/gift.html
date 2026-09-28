@@ -205,7 +205,8 @@ const SEED = () => ({
   ],
 });
 let D; try { D = JSON.parse(localStorage.getItem(KEY)) || SEED(); } catch(e){ D = SEED(); }
-const saveD = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch(e){} };
+let CASE = null, FAIL = null; /* 케이스 링크로 열면 저장하지 않고 이 탭에서만 보여줘요 */
+const saveD = () => { if (CASE) return; try { localStorage.setItem(KEY, JSON.stringify(D)); } catch(e){} };
 const gById = id => D.gifts.find(g => g.id === id);
 const OPEN = ['발송 전','발송됨','사용 가능'];
 const isOpen = g => OPEN.includes(g.st);
@@ -285,7 +286,7 @@ function sGifts(){
 
 function sNew(){
   const c = cur();
-  if (!c.type) c.type = D.left.주말 ? '주말' : '평일';
+  if (!c.type || !D.left[c.type]) c.type = D.left.주말 ? '주말' : '평일';
   const opt = (t, sub) => { const n = D.left[t], off = !n; return `<button class="opt ${c.type === t && !off ? 'on' : ''} ${off ? 'off' : ''}" data-type="${t}" ${off ? 'disabled' : ''}><span class="rd"></span><span class="tx"><b>${t} 1박</b><small>${off ? `남은 ${t} 숙박일이 없어요` : sub}</small></span><span class="n num">${n}박 남음</span></button>`; };
   return frame('', `
     <div class="h2">어떤 숙박권을<br>선물할까요?<small>받는 분은 고른 요일에만 예약할 수 있어요.</small></div>
@@ -365,14 +366,16 @@ function side(){
       <div class="tg">받는 분 쪽에서 일어나는 일<small>${g ? `${esc(who(g))} · ${g.type} 1박 · 지금 ${g.st}` : '진행 중인 선물이 없어요. 새로 선물해 보세요.'}</small></div>
       ${acts.length ? `<div class="acts">${acts.map(([k, e]) => `<button class="btn" data-ev="${k}">${ICON.chev}${e.lb}</button>`).join('')}</div>` : ''}
     </div>
+    <div class="grp"><b>케이스 바로 보기</b><select id="case" class="inp" style="height:44px;border-radius:12px;border:0;background:var(--surface-2);padding:0 12px;font-size:14px;font-weight:600"><option value="">직접 눌러 보기</option>${CASES.map(([id, grp, lb]) => `<option value="${id}" ${CASE === id ? 'selected' : ''}>${grp} · ${lb}</option>`).join('')}</select></div>
     <div class="links"><a href="corp">회사 숙박권 앱</a><a href="../admin/">관리자</a><button id="reset">시안 초기화</button></div>`;
 }
+$('side').addEventListener('change', e => { if (e.target.id === 'case'){ location.hash = e.target.value; location.reload(); } });
 $('side').addEventListener('click', e => {
   const m = e.target.closest('[data-m]'); if (m){ D.member = m.dataset.m; saveD(); return draw(); }
   const ev = e.target.closest('[data-ev]'); if (ev){
     const g = simTarget(), [t, p] = EV[ev.dataset.ev].run(g); saveD(); draw(); pushNoti(t, p, g.id); return;
   }
-  if (e.target.id === 'reset'){ try { localStorage.removeItem(KEY); } catch(x){} D = SEED(); stack = [{s:'my'}]; draw(); }
+  if (e.target.id === 'reset'){ try { localStorage.removeItem(KEY); } catch(x){} history.replaceState(null, '', location.pathname); location.reload(); }
 });
 
 /* ---------- 공통 ---------- */
@@ -389,6 +392,16 @@ function pushNoti(title, text, gid){
   p.onclick = () => { p.remove(); stack = [{s:'my'}, {s:'gifts'}, {s:'detail', g:gid}]; draw(); };
   $('scr').appendChild(p); pushT = setTimeout(() => p.remove(), 4200);
 }
+function msgSheet(title, text, btns){
+  const d = document.createElement('div'); d.className = 'shscrim';
+  d.innerHTML = `<div class="sheet"><h3>${title}</h3><p>${text}</p>${btns.map((b, i) => `<button class="btn ${b.cls || ''}" data-i="${i}">${b.lb}</button>`).join('')}</div>`;
+  d.onclick = e => { const b = e.target.closest('[data-i]'); if (e.target === d || b){ d.remove(); b && btns[+b.dataset.i].fn?.(); } };
+  $('scr').appendChild(d);
+}
+function copyLink(g){
+  try { navigator.clipboard?.writeText(`https://vacon.house/g/${g.id}`).catch(() => {}); } catch(e){}
+  if (g.st === '발송 전'){ g.st = '발송됨'; g.sent = NOW; } saveD(); draw(); ptoast('링크를 복사했어요. 원하는 곳에 붙여 넣어 보내 주세요');
+}
 function shareSheet(g, fresh){
   const d = document.createElement('div'); d.className = 'shscrim';
   d.innerHTML = `<div class="sheet"><h3>${fresh ? '선물을 만들었어요<br>카카오톡으로 보내 주세요' : '카카오톡으로 다시 보낼게요'}</h3><p>${fresh ? `${g.type} 잔여 숙박일에서 1박이 빠졌어요. ` : ''}${hm(g.made + LIMIT)}까지 예약하지 않으면 1박이 돌아와요.</p>
@@ -396,6 +409,8 @@ function shareSheet(g, fresh){
     <button class="btn kakao" data-y>${GI.kakao}카카오톡으로 보내기</button>${fresh ? '<button class="btn ghost" data-x>나중에 보낼게요</button>' : '<button class="btn ghost" data-x>닫기</button>'}</div>`;
   d.onclick = e => {
     if (e.target === d || e.target.closest('[data-x]')){ d.remove(); if (fresh) ptoast('선물함에서 언제든 보낼 수 있어요'); return; }
+    if (e.target.closest('[data-y]') && FAIL === 'kakao'){ d.remove(); FAIL = null;
+      return msgSheet('카카오톡을 열 수 없어요', '카카오톡이 설치되어 있지 않거나 열리지 않았어요. 링크를 복사해서 문자나 다른 메신저로 보낼 수 있어요. 선물은 그대로 남아 있어요.', [{lb:'링크 복사하기', cls:'primary', fn:() => copyLink(g)}, {lb:'닫기', cls:'ghost', fn:() => { saveD(); draw(); }}]); }
     if (e.target.closest('[data-y]')){ d.remove(); if (g.st === '발송 전'){ g.st = '발송됨'; g.sent = NOW; } saveD(); draw(); ptoast('카카오톡으로 보냈어요'); }
   };
   $('scr').appendChild(d);
@@ -409,6 +424,9 @@ $('scr').addEventListener('click', e => {
   const g = t.closest('[data-g]'); if (g) return push({s:'detail', g:g.dataset.g});
   const ty = t.closest('[data-type]'); if (ty && !ty.disabled){ c.memo = $('memo')?.value; c.type = ty.dataset.type; return draw(); }
   if (t.closest('[data-make]')){
+    if (FAIL === 'make'){ FAIL = null; return msgSheet('선물을 만들지 못했어요', '연결이 잠시 불안정했어요. 숙박일은 빠지지 않았으니 다시 시도해 주세요.', [{lb:'다시 시도하기', cls:'primary', fn:() => $('scr').querySelector('[data-make]')?.click()}, {lb:'닫기', cls:'ghost'}]); }
+    if (FAIL === 'race'){ FAIL = null; const ty = c.type; D.left[ty] = 0; c.memo = $('memo')?.value; c.type = null; draw();
+      return msgSheet(`남은 ${ty} 숙박일이 없어요`, `그사이 다른 기기에서 ${ty} 숙박일을 모두 썼어요. 숙박일은 빠지지 않았어요.`, [{lb:'확인', cls:'primary'}]); }
     const memo = ($('memo')?.value || '').trim();
     const n = D.gifts.length + 4480;
     const ng = {id:`G-2609-${n}`, type:c.type, memo, made:NOW, st:'발송 전'};
@@ -419,14 +437,38 @@ $('scr').addEventListener('click', e => {
   if (t.closest('[data-share]')) return shareSheet(gById(c.g), false);
 });
 
-/* 케이스 바로가기: #s=gifts|new|detail&g=G-...&m=관리비 미납 */
-{ const P = Object.fromEntries(location.hash.slice(1).split('&').filter(Boolean).map(x => { const [k, ...v] = x.split('='); return [k, decodeURIComponent(v.join('='))]; }));
-  if (P.m) D.member = P.m;
-  if (P.s === 'gifts') stack.push({s:'gifts'});
-  if (P.s === 'new') stack.push({s:'gifts'}, {s:'new'});
-  if (P.s === 'detail') stack.push({s:'gifts'}, {s:'detail', g:P.g || D.gifts[0].id});
+/* ---------- 케이스 링크: #c-home 처럼 열면 그 상황으로 바로 시작 ---------- */
+const G = id => D.gifts.find(g => g.id === id);
+const TO = (...st) => { stack = [{s:'my'}, ...st]; };
+const CASES = [
+  ['c-my',        '기본', 'MY에서 선물하기 진입',          () => TO()],
+  ['c-home',      '기본', '선물하기 홈 (진행 중 + 보낸 선물)', () => TO({s:'gifts'})],
+  ['c-new',       '기본', '선물 만들기',                  () => TO({s:'gifts'}, {s:'new'})],
+  ['c-share',     '기본', '선물 직후 카카오 공유 시트',      () => { const g = {id:'G-2609-4490', type:'주말', memo:'하린님', made:NOW, st:'발송 전'}; D.gifts.unshift(g); D.left.주말--; TO({s:'gifts'}, {s:'detail', g:g.id}); return () => shareSheet(g, true); }],
+  ['c-sent',      '기본', '받기 전 (보냄, 등록 전)',        () => { G('G-2609-4471').made = NOW - 10; TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'}); }],
+  ['c-registered','기본', '예약 전 (받는 분 등록 완료)',     () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4402'})],
+  ['c-booked',    '기본', '예약 완료',                    () => TO({s:'gifts'}, {s:'detail', g:'G-2609-3318'})],
+  ['c-used',      '기본', '이용 완료 (다녀왔어요)',          () => TO({s:'gifts'}, {s:'detail', g:'G-2609-2210'})],
+  ['c-push',      '기본', '상태 변경 푸시 (받는 분 등록)',   () => { G('G-2609-4471').made = NOW - 10; TO({s:'gifts'}); return () => { const g = G('G-2609-4471'), [t, p] = EV.reg.run(g); draw(); pushNoti(t, p, g.id); }; }],
+  ['c-unsent',    '엣지', '보내기 전 (공유 시트를 닫음)',    () => { const g = {id:'G-2609-4489', type:'평일', memo:'도윤님', made:NOW - 3, st:'발송 전'}; D.gifts.unshift(g); D.left.평일--; TO({s:'gifts'}); }],
+  ['c-urgent',    '엣지', '기한 임박 (12시간 미만)',        () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'})],
+  ['c-nomemo',    '엣지', '받는 분 이름 없이 보냄',          () => { const g = G('G-2609-4471'); g.memo = ''; g.made = NOW - 10; TO({s:'gifts'}, {s:'detail', g:g.id}); }],
+  ['c-returned',  '엣지', '48시간 지나 1박 반환',           () => TO({s:'gifts'}, {s:'detail', g:'G-2609-1187'})],
+  ['c-noshow',    '엣지', '예약 후 입실 안 함 (노쇼)',       () => { const g = G('G-2609-3318'); g.st = '노쇼'; g.res.in = -2; TO({s:'gifts'}, {s:'detail', g:g.id}); }],
+  ['c-first',     '엣지', '처음 선물 (보낸 선물 없음)',       () => { D.gifts = []; D.left = {평일:10, 주말:3}; TO({s:'gifts'}); }],
+  ['c-type-zero', '엣지', '주말 잔여 0박 (평일만 선택)',      () => { D.left.주말 = 0; TO({s:'gifts'}, {s:'new'}); }],
+  ['c-zero',      '엣지', '평일·주말 잔여 모두 0박',          () => { D.left = {평일:0, 주말:0}; TO({s:'gifts'}); }],
+  ['c-unpaid',    '에러', '관리비 미납 회원',                () => { D.member = '관리비 미납'; TO({s:'gifts'}); }],
+  ['c-before',    '에러', '사용 시작 전 회원',               () => { D.member = '사용 시작 전'; D.gifts = []; TO({s:'gifts'}); }],
+  ['c-kakao-fail','에러', '카카오톡 실행 실패, 링크 복사로 보내기',   () => { FAIL = 'kakao'; const g = {id:'G-2609-4490', type:'주말', memo:'하린님', made:NOW, st:'발송 전'}; D.gifts.unshift(g); D.left.주말--; TO({s:'gifts'}, {s:'detail', g:g.id}); return () => shareSheet(g, true); }],
+  ['c-make-fail', '에러', '선물 만들기 실패 (네트워크)',       () => { FAIL = 'make'; TO({s:'gifts'}, {s:'new'}); }],
+  ['c-race',      '에러', '다른 기기에서 잔여 먼저 소진',      () => { FAIL = 'race'; TO({s:'gifts'}, {s:'new'}); }],
+];
+{ const h = location.hash.slice(1), k = CASES.find(x => x[0] === h);
+  if (k){ CASE = h; D = SEED(); const after = k[3](); draw(); after && after(); }
+  else draw();
 }
-draw();
+addEventListener('hashchange', () => location.reload());
 </script>
 </body>
 </html>
