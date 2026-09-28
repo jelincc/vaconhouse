@@ -170,7 +170,7 @@ $('f').addEventListener('submit', e => {
   go.innerHTML = '<span class="spin" aria-hidden="true"></span>로그인 중';
   setTimeout(() => {
     try { $('save').checked ? localStorage.setItem('vh-admin-id-v2', uid.value.trim()) : localStorage.removeItem('vh-admin-id-v2'); } catch(e){}
-    if (!(uid.value.trim() === '11' && pw.value.trim() === '11')){
+    if (!(uid.value.trim() === 'jelin' && pw.value.trim() === '12')){
       go.innerHTML = '로그인';
       toast('아이디 또는 비밀번호가 맞지 않아요');
       $('pwBox').classList.add('err');
