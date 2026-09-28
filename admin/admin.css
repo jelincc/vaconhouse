@@ -218,3 +218,19 @@ input[type=checkbox]{accent-color:#3E434B}
 .side .ng a:hover{background:rgba(255,255,255,.06);color:#fff}
 .side .ng a.on{background:rgba(255,255,255,.12);color:#fff;font-weight:700}
 .side .ng a:focus-visible{outline:2px solid rgba(255,255,255,.7);outline-offset:-2px}
+
+/* 상세 표: 그룹 제목 + 라벨/값 칸 (상세 4열, 드로어 2열) */
+.spec{display:grid;grid-template-columns:120px minmax(0,1fr) 120px minmax(0,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:14.5px}
+.spec.two{grid-template-columns:104px minmax(0,1fr)}
+.spec > *{border-top:1px solid var(--line);min-width:0}
+.spec > :first-child{border-top:0}
+.spec .sg{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;font-size:13.5px;font-weight:700;color:var(--ink);background:#fff}
+.spec .sg + .k,.spec .sg + .k + .v,.spec .sg + .k + .v + .k,.spec .sg + .k + .v + .k + .v{border-top:1px solid var(--line)}
+.spec .k{background:var(--surface-2);color:var(--ink-3);font-size:13.5px;padding:12px 14px}
+.spec .v{padding:12px 16px;line-height:1.5}
+.spec .v small{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.spec .v.w{grid-column:2/-1}
+.spec .v.r{text-align:right}
+.spec .v.sum{font-weight:700;font-size:16px}
+.spec .tbtn{font-size:13px}
+@media (max-width:900px){.spec{grid-template-columns:104px minmax(0,1fr)}}

@@ -367,7 +367,7 @@ function side(){
       ${acts.length ? `<div class="acts">${acts.map(([k, e]) => `<button class="btn" data-ev="${k}">${ICON.chev}${e.lb}</button>`).join('')}</div>` : ''}
     </div>
     <div class="grp"><b>케이스 바로 보기</b><select id="case" class="inp" style="height:44px;border-radius:12px;border:0;background:var(--surface-2);padding:0 12px;font-size:14px;font-weight:600"><option value="">직접 눌러 보기</option>${CASES.map(([id, grp, lb]) => `<option value="${id}" ${CASE === id ? 'selected' : ''}>${grp} · ${lb}</option>`).join('')}</select></div>
-    <div class="links"><a href="corp">회사 숙박권 앱</a><a href="../admin/">관리자</a><button id="reset">시안 초기화</button></div>`;
+    <div class="links"><a href="../admin/">관리자</a><button id="reset">시안 초기화</button></div>`;
 }
 $('side').addEventListener('change', e => { if (e.target.id === 'case'){ location.hash = e.target.value; location.reload(); } });
 $('side').addEventListener('click', e => {

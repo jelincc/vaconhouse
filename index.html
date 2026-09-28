@@ -13,7 +13,7 @@
 <style>
 :root,:root[data-theme="dark"]{
   color-scheme:light;
-  --bg:#FFFFFF; --surface:#FFFFFF; --field:#FFFFFF; --field-hover:#F6F7F8; --line:#E6E8EA; --line-2:#D5D8DC;
+  --bg:#FFFFFF; --surface:#FFFFFF; --field:#FFFFFF; --field-hover:#FFFFFF; --line:#E6E8EA; --line-2:#D5D8DC;
   --ink:#1A1A1E; --ink-2:#575F6C; --ink-3:#768091; --ink-4:#AFB5BE;
   --accent:#FF6D12; --accent-soft:#FBF4EF;
   --btn:#1A1A1E; --btn-ink:#FFFFFF; --btn-hover:#3E434B; --btn-dis:#E6E8EA; --btn-dis-ink:#AFB5BE; --focus:#FF6D12;
@@ -40,14 +40,23 @@ form{display:flex;flex-direction:column;gap:20px}
 .field{display:flex;flex-direction:column;gap:8px}
 .field label{font-size:14px;font-weight:600;color:var(--ink-2)}
 .inp{position:relative;display:flex;align-items:center}
-.inp input{width:100%;height:56px;border:0;border-radius:14px;background:var(--field);padding:0 18px;font-size:16px;color:var(--ink);box-shadow:none;transition:box-shadow .15s,background .15s}
+.inp input{width:100%;height:56px;border:0;border-radius:14px;background:var(--field);padding:0 18px;font-size:16px;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2);transition:box-shadow .15s,background .15s}
 .inp input::placeholder{color:var(--ink-4)}
-.inp input:hover{background:var(--field-hover)}
-.inp input:focus{outline:none;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--focus)}
+.inp input:hover{box-shadow:inset 0 0 0 1px var(--ink-4)}
+/* 비어 있으면 회색 선 (포커스 중엔 조금 진한 회색), 값이 있으면 검은 선 */
+.inp input:focus{outline:none;box-shadow:inset 0 0 0 1px var(--ink-4)}
+.inp input:not(:placeholder-shown){box-shadow:inset 0 0 0 1.5px var(--ink)}
 .inp.err input{box-shadow:inset 0 0 0 1.5px var(--danger);background:var(--surface)}
 .inp.pw input{padding-right:84px}
+/* 크롬 자동완성 파란 배경 대신 기본 입력칸 색 유지 */
+.inp input:-webkit-autofill,.inp input:-webkit-autofill:hover{-webkit-box-shadow:inset 0 0 0 1.5px var(--ink),0 0 0 1000px var(--field) inset;-webkit-text-fill-color:var(--ink);caret-color:var(--ink);transition:background-color 99999s}
+.inp input:-webkit-autofill:focus{-webkit-box-shadow:inset 0 0 0 1.5px var(--ink),0 0 0 1000px var(--field) inset}
+.inp.err input:-webkit-autofill{-webkit-box-shadow:inset 0 0 0 1.5px var(--danger),0 0 0 1000px var(--surface) inset}
 .inp .clear,.inp .eye{position:absolute;border:0;background:transparent;cursor:pointer;color:var(--ink-3);border-radius:8px;display:grid;place-items:center}
 .inp .clear{right:12px;width:28px;height:28px}
+/* 지우기 버튼은 입력 중(포커스)일 때만 */
+.inp .clear{visibility:hidden}
+.inp:focus-within .clear{visibility:visible}
 .inp.pw .clear{right:50px}
 .inp .eye{right:10px;width:36px;height:36px}
 .inp .clear:hover,.inp .eye:hover{color:var(--ink);background:var(--field-hover)}
