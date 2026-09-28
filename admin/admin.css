@@ -200,8 +200,8 @@ input[type=checkbox]{accent-color:#3E434B}
 .fsel:focus-visible,.search:focus-visible,.inp:focus-visible,select:focus-visible{outline:2px solid #3E434B;outline-offset:1px}
 .ddpanel label input[type=checkbox]{width:16px;height:16px}
 
-/* 사이드 메뉴: 어두운 그레이(Gray 800) 면으로 콘텐츠와 구분 · 로고는 화이트 */
-.side{background:#3E434B;border-right:0;color:#fff;scrollbar-color:rgba(255,255,255,.18) transparent}
+/* 사이드 메뉴: 주요 버튼과 같은 블랙 면으로 콘텐츠와 구분 · 로고는 화이트 */
+.side{background:#1A1A1E;border-right:0;color:#fff;scrollbar-color:rgba(255,255,255,.18) transparent}
 .side .brand a,.side .logo-svg{color:#fff}
 .side .brand small{color:rgba(255,255,255,.5)}
 .side .nav-label{color:rgba(255,255,255,.42)}
