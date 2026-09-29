@@ -299,7 +299,7 @@ body.anno .main{margin-right:432px}
 .cr .segs button{border:0;background:none;height:30px;padding:0 12px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink-3)}
 .cr .segs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .cr .plist{border:1px solid var(--line);border-radius:14px;max-height:292px;overflow:auto}
-.cr .plist .ph{position:sticky;top:0;background:#fff;z-index:1;display:grid;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-3)}
+.cr .plist .ph{position:sticky;top:0;background:var(--surface-2);z-index:1;display:grid;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-3)}
 .cr .pr2{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:12px;align-items:center;width:100%;padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px}
 .cr .pr2:last-child{border-bottom:0}
 .cr .pr2:hover{background:#FAFBFC}
@@ -312,6 +312,7 @@ body.anno .main{margin-right:432px}
 .cr .pr2.v > span:first-child small{grid-column:2}
 .cr .rd{width:20px;height:20px;border-radius:50%;background:var(--surface-3);display:grid;place-items:center;grid-row:span 2;align-self:center;color:var(--accent)}
 .cr .rd svg{width:20px;height:20px}
+.cr .pr2 i.rd{color:var(--accent)}
 .cr .pr2.v.on{background:var(--accent-soft)}
 .cr .pr2.v.on b{color:var(--accent-ink)}
 .cr .pr2:disabled{cursor:not-allowed;opacity:.5}
@@ -385,6 +386,7 @@ body.anno .main{margin-right:432px}
 .crr .nt{margin-top:auto;color:var(--ink)}
 .crr .callout{background:#fff}
 .crr #cGo{width:100%;margin-top:6px;flex:none}
+.crr .need{font-size:14px;color:var(--ink-3);text-align:center;margin-top:4px}
 .crr #cGo:disabled{background:var(--line-2);color:var(--ink-3);opacity:1}
 </style>
 </head>
@@ -809,11 +811,11 @@ function blockMenu(bi, e){
 /* ---------- 예약 등록: 등록 전에 겹침을 막아요 ---------- */
 const dateVal = o => isoOf(o);
 const offVal = s => offOf(s);
-function autoBlock(){ try { return localStorage.getItem('vh-ch-autoblock') === '1'; } catch(e){ return false; } }
+function autoBlock(){ try { return localStorage.getItem('vh-ch-autoblock') !== '0'; } catch(e){ return true; } }
 function openCreate(o){
   /* 한 화면에서 위에서 아래로: 예약자 → 숙소·날짜 → 인원·옵션 → 접수. 오른쪽 요약에서 바로 등록 */
   const F = {villa:o.villa || null, a:o.a ?? null, b:(o.b != null && o.b > (o.a ?? -99)) ? o.b : null, pick:0,
-    mem:o.member ? MEMBERS.find(m => m.id === o.member) || null : null, guest:null, mq:'', vq:'', rg:'전체',
+    mem:o.member ? MEMBERS.find(m => m.id === o.member) || null : null, guest:null, mq:'', vq:'', rgs:new Set(), rgOpen:false,
     adults:2, kids:0, infants:0, opts:[], route:'전화', pay:'결제대기', memo:'', notify:true, mo:0};
   if (F.a != null && F.b == null) F.pick = 1;
   if (F.a != null) F.mo = dOf(F.a).getMonth() - TODAY.getMonth();
@@ -844,7 +846,7 @@ function openCreate(o){
     const n = nights(), mq = F.mq.trim().toLowerCase().replace(/-/g, '');
     const mems = MEMBERS.filter(m => !mq || (m.name + m.phone + m.email).toLowerCase().includes(mq)).sort((x, y) => y.joined.localeCompare(x.joined));
     const vq = F.vq.trim();
-    const vils = VILLAS.filter(x => (F.rg === '전체' || x.region === F.rg) && (!vq || (x.region + x.name).includes(vq))).sort((x, y) => (y.id === F.villa) - (x.id === F.villa) || (n > 0 ? freeFor(y.id, F.a, F.b) - freeFor(x.id, F.a, F.b) : 0));
+    const vils = VILLAS.filter(x => (!F.rgs.size || F.rgs.has(x.region)) && (!vq || (x.region + x.name).includes(vq))).sort((x, y) => (y.id === F.villa) - (x.id === F.villa) || (n > 0 ? freeFor(y.id, F.a, F.b) - freeFor(x.id, F.a, F.b) : 0));
     const v = F.villa && vById[F.villa];
     q('#crBody').innerHTML = `
       <section><h4><span>1</span>예약자</h4>
@@ -857,7 +859,7 @@ function openCreate(o){
       </section>
       <section><h4><span>2</span>숙소와 날짜</h4>
         <div class="ltools"><form class="sbox" id="vform" role="search"><input class="search" id="vQ" placeholder="숙소 이름" value="${esc(F.vq)}" autocomplete="off"><button type="submit" aria-label="검색">${ICON.search}</button></form>
-          <div class="segs">${['전체', ...REGIONS].map(x => `<button data-rg="${x}" class="${F.rg === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
+          <div class="dd"><button type="button" class="fsel ${F.rgs.size ? 'on' : ''}" data-rgdd>${F.rgs.size ? `지역 ${F.rgs.size}` : '지역 전체'} ${ICON.down}</button>${F.rgOpen ? `<div class="ddpanel">${REGIONS.map(x => `<label><input type="checkbox" data-rgc value="${x}" ${F.rgs.has(x) ? 'checked' : ''}> ${x}</label>`).join('')}<div class="ddfoot"><button type="button" class="btn sm" data-rgclear>전체 해제</button><button type="button" class="btn sm primary" data-rgdd>적용</button></div></div>` : ''}</div></div>
         <div class="plist v"><div class="ph v"><span>숙소</span><span>침실 · 욕실</span><span>기준 / 최대</span><span>1박 요금</span><span>${n > 0 ? `${md(F.a)} – ${md(F.b)}` : '예약 가능'}</span></div>
           ${vils.length ? vils.map(x => { const no = n > 0 && !freeFor(x.id, F.a, F.b), small = x.cap < people();
             return `<button class="pr2 v ${F.villa === x.id ? 'on' : ''}" data-v="${x.id}" ${no ? 'disabled' : ''}><span><i class="rd">${F.villa === x.id ? ICON.checkFill : ''}</i><b>${x.name}</b><small>${x.region} · ${x.type}</small></span><span class="num">${x.bed} · ${x.bath}</span><span class="num ${small ? 'warn' : ''}">${x.base} / ${x.cap}명</span><span class="num">${won(x.rate)}</span><span>${n > 0 ? (no ? `<em class="bad">${why(x.id)}</em>` : '<em class="ok">가능</em>') : '<i>날짜를 고르면 보여요</i>'}</span></button>`; }).join('')
@@ -907,7 +909,7 @@ function openCreate(o){
       <div class="tot">${p ? `<div class="sr"><span>숙박 ${n}박</span><b>${won(p.room)}</b></div>${p.opts.map(o => `<div class="sr"><span>${o[0]}</span><b>${won(o[1])}</b></div>`).join('')}<div class="sum"><span>합계</span><b>${won(p.sub)}</b></div>` : '<div class="sum"><span>합계</span><b class="mut">숙소와 날짜를 고르면 계산돼요</b></div>'}</div>
       <label class="tgl nt"><input type="checkbox" id="cNotify" ${F.notify && d.length >= 10 ? 'checked' : ''} ${d.length >= 10 ? '' : 'disabled'}>예약 확정 알림톡 보내기</label>
       <div id="cChan">${autoBlock() ? '<div class="mut sm">등록하면 네이버·에어비앤비 달력에서도 이 날짜가 막혀요.</div>' : `<div class="callout orange"><div class="tx"><b>채널 달력은 자동으로 막히지 않아요</b><span>에어비앤비에서 같은 날짜가 다시 팔릴 수 있어요. <a href="#" data-ch2 style="color:var(--accent-ink);font-weight:600">채널 연동</a>에서 자동 막기를 켜 주세요.</span></div></div>`}</div>
-      <button class="btn xl primary" id="cGo" ${need ? 'disabled' : ''}>${need || `${n}박 예약 등록`}</button>`;
+      ${need ? `<div class="need">${need}</div>` : ''}<button class="btn xl primary" id="cGo" ${need ? 'disabled' : ''}>예약 등록</button>`;
   }
   const pick = o => {
     if (F.pick === 0 || o <= F.a){ F.a = o; F.b = null; F.pick = 1; }
@@ -919,7 +921,9 @@ function openCreate(o){
     if (t.closest('[data-ch2]')){ e.preventDefault(); box.remove(); return openChannels(); }
     const m = t.closest('[data-mem]'); if (m){ F.mem = MEMBERS.find(x => x.id === m.dataset.mem); F.guest = null; return body(); }
     if (t.closest('[data-guest]')){ const qq = (q('#mQ')?.value || F.mq).trim(), nm = /\d|@/.test(qq) ? '' : qq, ph = /^[\d-]+$/.test(qq) ? qq : ''; F.guest = {name:nm, phone:ph}; F.mem = null; body(); (nm ? q('#cPhone') : q('#gName')).focus(); return; }
-    const rg = t.closest('[data-rg]'); if (rg){ F.rg = rg.dataset.rg; return body(); }
+    if (t.closest('[data-rgdd]')){ F.rgOpen = !F.rgOpen; return body(); }
+    if (t.closest('[data-rgclear]')){ F.rgs.clear(); return body(); }
+    const rc = t.closest('[data-rgc]'); if (rc){ rc.checked ? F.rgs.add(rc.value) : F.rgs.delete(rc.value); return; }
     if (t.closest('[data-unpick]')){ F.mem = null; F.guest = null; body(); q('#mQ')?.focus(); return; }
     const vb = t.closest('[data-v]'); if (vb && !vb.disabled){ F.villa = vb.dataset.v; return body(); }
     const alt = t.closest('[data-alt]'); if (alt){ F.villa = alt.dataset.alt; return body(); }
