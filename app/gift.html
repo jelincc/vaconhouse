@@ -14,15 +14,12 @@
 body{background:#fff}
 .stage{min-height:100vh;display:flex;justify-content:center;align-items:center;gap:64px;padding:40px 24px;flex-wrap:wrap}
 /* side panel */
-.side2{width:360px;display:flex;flex-direction:column;gap:20px}
+.side2{width:340px;display:flex;flex-direction:column;gap:20px}
 .side2 .logo-svg{width:120px}
 .side2 h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
 .side2 p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.6}
 .grp{display:flex;flex-direction:column;gap:8px}
 .grp > b{font-size:13px;color:var(--ink-3);font-weight:600}
-.seg{display:flex;gap:6px;flex-wrap:wrap}
-.seg button{border:0;border-radius:999px;height:34px;padding:0 14px;background:var(--surface-2);font-size:14px;font-weight:600;color:var(--ink-2)}
-.seg button.on{background:#3E434B;color:#fff}
 .sim{background:var(--surface-2);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .sim .tg{font-size:14px;font-weight:600}
 .sim .tg small{display:block;font-size:13px;font-weight:500;color:var(--ink-3)}
@@ -37,115 +34,78 @@ body{background:#fff}
 .scr{width:100%;height:100%;border-radius:42px;background:#fff;overflow:hidden;position:relative;display:flex;flex-direction:column}
 .sbar{height:48px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-size:15px;font-weight:600;flex:none}
 .sbi{display:flex;gap:6px;align-items:center}
-.nav2{height:52px;display:flex;align-items:center;gap:6px;padding:0 12px;flex:none}
-.nav2 .bk{all:unset;cursor:pointer;width:40px;height:40px;display:grid;place-items:center;border-radius:12px}
+.nav2{height:52px;display:flex;align-items:center;gap:4px;padding:0 12px;flex:none}
+.nav2 .bk{all:unset;cursor:pointer;width:36px;height:40px;display:grid;place-items:center;border-radius:12px}
 .nav2 .bk svg{width:24px;height:24px}
-.nav2 b{font-size:17px;font-weight:700}
+.nav2 b{font-size:18px;font-weight:700}
 .body{flex:1;overflow:auto;padding:4px 20px 24px}
 .body::-webkit-scrollbar{display:none}
-.h2{font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.4;margin:6px 0 20px}
-.h2 small{display:block;font-size:15px;font-weight:500;color:var(--ink-3);margin-top:6px;letter-spacing:-.01em;line-height:1.5}
-.h2 em{font-style:normal;color:var(--accent)}
-.sec{font-size:17px;font-weight:700;margin:28px 0 6px;display:flex;justify-content:space-between;align-items:center}
-.sec small{font-size:14px;font-weight:600;color:var(--ink-3)}
 .tabbar{height:78px;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:18px;flex:none}
 .tabbar button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:600;color:var(--ink-4)}
 .tabbar button svg{width:24px;height:24px}
 .tabbar button.on{color:var(--ink)}
-.cta{flex:none;padding:10px 20px 30px;background:#fff}
-.cta .btn{width:100%;height:56px;border-radius:16px;font-size:17px}
-.cta .btn + .btn{margin-top:8px}
-.cta .note{font-size:13px;color:var(--ink-3);text-align:center;margin-bottom:10px}
 
-/* MY */
-.prof{display:flex;align-items:center;gap:14px;margin:6px 0 20px}
-.prof .av{width:56px;height:56px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:20px;font-weight:700;color:var(--ink-2)}
-.prof b{font-size:20px;letter-spacing:-.02em;display:block}
+/* MY (기존 화면 구성) */
+.myh{display:flex;justify-content:space-between;align-items:center;margin:8px 0 18px}
+.myh b{font-size:22px;letter-spacing:-.02em}
+.plan{display:inline-block;background:#6D5DF6;color:#fff;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 8px}
+.prof{display:flex;justify-content:space-between;align-items:center;margin:6px 0 20px}
+.prof b{display:block;font-size:20px;letter-spacing:-.02em;margin-top:6px}
 .prof small{font-size:14px;color:var(--ink-3)}
-.nights{background:var(--surface-2);border-radius:22px;padding:20px;display:grid;grid-template-columns:1fr 1fr}
-.nights div{display:flex;flex-direction:column;gap:2px}
-.nights div + div{border-left:1px solid var(--line-2);padding-left:20px}
-.nights small{font-size:13.5px;color:var(--ink-3)}
-.nights b{font-size:24px;letter-spacing:-.03em}
-.nights b span{font-size:14px;color:var(--ink-3);font-weight:500;margin-left:2px}
-.menu{display:flex;flex-direction:column;margin-top:14px}
-.menu button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;height:58px;font-size:16px;font-weight:500}
-.menu button .l{flex:1}
-.menu button .r{font-size:14px;color:var(--ink-3);font-weight:500}
-.menu button .r.hot{color:var(--accent-ink);font-weight:600}
-.menu button svg{width:18px;height:18px;color:var(--ink-4)}
-.menu hr{border:0;height:8px;background:var(--surface-2);margin:8px -20px}
+.prof .btn{height:34px;border-radius:999px;font-size:13.5px}
+.box{background:#fff;border-radius:18px;box-shadow:0 2px 14px rgba(26,26,30,.08);padding:18px 20px;margin-bottom:14px}
+.box > h4{margin:0 0 12px;font-size:15px;font-weight:600}
+.box > h5{margin:0 0 4px;font-size:14px;font-weight:500;color:var(--ink-3)}
+.left3{display:grid;grid-template-columns:repeat(3,1fr)}
+.left3 div + div{border-left:1px solid var(--line);padding-left:16px}
+.left3 small{display:block;font-size:13.5px;color:var(--ink-3)}
+.left3 b{font-size:20px}
+.left3 b span{font-size:13.5px;color:var(--ink-3);font-weight:500;margin-left:2px}
+.mrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;width:100%;height:52px;font-size:16px;font-weight:600}
+.mrow .l{flex:1}
+.mrow .r{font-size:14px;color:var(--accent-ink);font-weight:600}
+.mrow svg{width:18px;height:18px;color:var(--ink-4)}
+.logout{font-size:14px;color:var(--ink-3);text-decoration:underline;margin:10px 0 0;display:inline-block}
 
-/* gift list */
-.gift{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px 0;width:100%;border-bottom:1px solid var(--line)}
-.gift:last-child{border-bottom:0}
-.gift .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.gift .tx b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gift .tx small{font-size:13.5px;color:var(--ink-3)}
-.gift .rt{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right;flex:none}
-.gift .rt small{font-size:13px;color:var(--ink-3)}
-.st{font-size:15px;font-weight:700;color:var(--ink)}
-.st.hot,.gift .rt small.hot{color:var(--accent-ink)}
-.st.ok{color:var(--ok-ink)}
-.st.end{color:var(--ink-4)}
-.empty{padding:36px 0;text-align:center;color:var(--ink-3);font-size:14.5px}
-.soft{background:var(--surface-2);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:6px}
-.soft b{font-size:17px;letter-spacing:-.02em}
-.soft span{font-size:14px;color:var(--ink-2);line-height:1.55}
-.soft .btn{margin-top:10px;height:48px;border-radius:14px}
-.soft.red{background:var(--danger-soft)}
+/* 상태 배지 · 진행 막대 */
+.bd.orange{background:var(--accent-2);color:var(--accent-ink)}
+.step{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.step i{height:4px;border-radius:2px;background:var(--surface-3)}
+.step i.on{background:var(--accent)}
+.step.green i.on{background:var(--ok)}
+.step.grey i.on{background:var(--ink-4)}
+.stepl{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+.stepl span{font-size:13px;color:var(--ink-4);font-weight:500}
+.stepl span.on{color:var(--ink-2)}
+.stepl span.cur{color:var(--ink);font-weight:700}
 
-/* create */
-.opt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:14px;width:100%;padding:18px;border-radius:18px;background:var(--surface-2);margin-bottom:8px}
-.opt .rd{width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px var(--line-2);flex:none;display:grid;place-items:center}
-.opt.on{background:var(--accent-soft)}
-.opt.on .rd{box-shadow:inset 0 0 0 7px var(--accent)}
-.opt .tx{flex:1;display:flex;flex-direction:column}
-.opt .tx b{font-size:17px}
-.opt .tx small{font-size:13.5px;color:var(--ink-3)}
-.opt .n{font-size:15px;font-weight:600;color:var(--ink-2)}
-.opt:disabled,.opt.off{cursor:default;opacity:.45}
-.field{display:flex;flex-direction:column;gap:6px;margin-top:22px}
-.field label{font-size:13.5px;color:var(--ink-3);font-weight:500}
-.field .inp{height:54px;border-radius:14px;font-size:16px;border:0;background:var(--surface-2);padding:0 16px;outline:none}
-.field .inp:focus{box-shadow:inset 0 0 0 2px #3E434B}
-.rules{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
-.rules li{font-size:14px;color:var(--ink-3);line-height:1.5;padding-left:12px;position:relative}
-.rules li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;background:var(--ink-4)}
-.rules b{color:var(--ink-2)}
+/* 선물 내역 */
+.gc{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;width:100%;padding:20px 0;border-bottom:1px solid var(--line)}
+.gc:last-child{border-bottom:0}
+.gc .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.gc .due{font-size:14px;color:var(--ink-2);font-weight:500}
+.gc .due.hot{color:var(--accent-ink);font-weight:600}
+.gc b{font-size:17px;font-weight:700}
+.gc small{font-size:14px;color:var(--ink-3)}
+.gc .when{margin-top:10px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding-bottom:40px}
+.empty b{font-size:18px}
+.empty span{font-size:15px;color:var(--ink-3);line-height:1.5}
+.empty .btn{margin-top:18px;border-radius:999px;height:44px;padding:0 18px;background:var(--ink);color:#fff}
 
-/* detail */
-.prog{margin:4px 0 0}
-.prog .bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.prog .bar i{height:6px;border-radius:3px;background:var(--surface-3)}
-.prog .bar i.done{background:var(--ink)}
-.prog .bar i.now{background:var(--accent)}
-.prog .lbl{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
-.prog .lbl span{font-size:13px;color:var(--ink-4);font-weight:500}
-.prog .lbl span.done{color:var(--ink-2)}
-.prog .lbl span.now{color:var(--accent-ink);font-weight:700}
-.prog .lbl span.fail{color:var(--ink);font-weight:700}
-.h2 small.hot{color:var(--accent-ink);font-weight:600}
-.kv2{display:flex;flex-direction:column;margin-top:32px;border-top:1px solid var(--line);padding-top:6px}
-.kv2 div{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}
-.kv2 div:last-child{border-bottom:0}
+/* 선물 상세 */
+.dt .bd{margin:8px 0 18px}
+.note{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:14px;color:var(--ink-2);text-align:center;line-height:1.55;margin-top:20px}
+.dt h4{margin:28px 0 6px;font-size:17px;font-weight:700}
+.kv2{display:flex;flex-direction:column}
+.kv2 div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;font-size:15px}
 .kv2 span{color:var(--ink-3);flex:none}
-.kv2 b{font-weight:600;text-align:right}
+.kv2 b{font-weight:500;text-align:right}
+.kv2 em{font-style:normal;color:var(--accent-ink);font-weight:600}
+.dt hr{border:0;border-top:1px solid var(--line);margin:18px 0 0}
+.msg{font-size:15px;line-height:1.6;margin:4px 0 0}
 
-/* share sheet, push, toast */
-.shscrim{position:absolute;inset:0;background:rgba(26,26,30,.4);z-index:10;display:flex;align-items:flex-end}
-.sheet{background:#fff;width:100%;border-radius:28px 28px 0 0;padding:28px 22px 34px}
-.sheet h3{margin:0;font-size:21px;font-weight:700;letter-spacing:-.03em;line-height:1.4}
-.sheet p{margin:8px 0 22px;font-size:15px;color:var(--ink-2);line-height:1.55}
-.sheet .card{background:var(--surface-2);border-radius:18px;padding:16px 18px;margin-bottom:22px}
-.sheet .card b{display:block;font-size:15.5px}
-.sheet .card small{font-size:13px;color:var(--ink-3)}
-.sheet .btn{width:100%;height:56px;border-radius:16px;font-size:17px}
-.sheet .btn + .btn{margin-top:8px}
-.btn.kakao{background:#FEE500;color:#191919}
-.btn.kakao:hover{background:#F4DC00}
-.btn.kakao svg{width:20px;height:20px}
-.btn.ghost{background:none;color:var(--ink-3)}
+/* push, toast */
 .push{position:absolute;left:10px;right:10px;top:8px;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-radius:22px;padding:12px 14px;display:flex;gap:12px;box-shadow:0 12px 32px rgba(26,26,30,.18);cursor:pointer;animation:drop .35s ease-out}
 .push img{width:38px;height:38px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);padding:5px;flex:none}
 .push .tx{flex:1;min-width:0}
@@ -153,7 +113,7 @@ body{background:#fff}
 .push b{display:block;font-size:14.5px;margin-top:1px}
 .push p{margin:1px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.4}
 @keyframes drop{from{transform:translateY(-120%);opacity:0}to{transform:none;opacity:1}}
-.ptoast{position:absolute;left:20px;right:20px;bottom:110px;background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:0 10px 28px rgba(26,26,30,.14);border-radius:16px;padding:14px 16px;font-size:14.5px;display:flex;gap:8px;align-items:center;z-index:12}
+.ptoast{position:absolute;left:20px;right:20px;bottom:110px;background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:0 10px 28px rgba(26,26,30,.14);border-radius:16px;padding:14px 16px;font-size:14.5px;z-index:12}
 @media (max-width:900px){.stage{gap:28px}.side2{width:100%;max-width:390px}}
 @media (max-width:430px){.stage{padding:24px 16px}.phone{width:100%;height:760px;border-radius:44px;padding:8px}.scr{border-radius:36px}}
 </style>
@@ -166,39 +126,61 @@ body{background:#fff}
 <script src="../admin/data.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-/* 시간: 9.28 00:00 기준 시각(h). 지금은 9.28 14:00 */
+/* 시간: 9.28 00:00 기준 시각(h). 지금은 9.28 14:00. 받는 분은 보낸 뒤 48시간 안에 예약해야 해요 */
 const NOW = 14, LIMIT = 48;
-const hm = h => { const d = dOf(Math.floor(h / 24)), m = ((h % 24) + 24) % 24; return `${d.getMonth()+1}.${d.getDate()} (${WD[d.getDay()]}) ${String(Math.floor(m)).padStart(2,'0')}:${m % 1 ? '30' : '00'}`; };
-const dayOf = h => md(Math.floor(h / 24));
-const GI = {
-  kakao: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5c-5 0-9 3.2-9 7.1 0 2.5 1.6 4.7 4.1 5.9l-.9 3.4c-.1.3.3.6.6.4l4-2.6c.4 0 .8.1 1.2.1 5 0 9-3.2 9-7.2S17 3.5 12 3.5z"/></svg>',
-};
+const pad = n => String(n).padStart(2, '0');
+const dt = h => { const d = dOf(Math.floor(h / 24)); return d; };
+const ymd = h => { const d = dt(h); return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`; };
+const ymdhm = h => { const m = ((h % 24) + 24) % 24; return `${ymd(h)} ${pad(Math.floor(m))}:${m % 1 ? '30' : '00'}`; };
 
 /* ---------- 데이터 ---------- */
-const KEY = 'vh-gift-v1';
+const KEY = 'vh-gift-v2';
+const VILLA = '가평 소석원';
 const SEED = () => ({
-  member: '이용 가능',
-  left: {평일: 9, 주말: 1},
+  left: {평일: 6, 주말: 6},
   gifts: [
-    {id:'G-2609-4471', type:'평일', memo:'수아님', made:NOW - 43.5, sent:NOW - 43.5, st:'발송됨'},
-    {id:'G-2609-4402', type:'주말', memo:'현우님', made:NOW - 18, sent:NOW - 18, reg:'이현우', regAt:NOW - 15.5, st:'사용 가능'},
-    {id:'G-2609-3318', type:'주말', memo:'지민님', made:-196, sent:-196, reg:'김지민', regAt:-193, st:'예약 완료', res:{v:'v1', in:5, at:-180}},
-    {id:'G-2609-2210', type:'평일', memo:'엄마', made:-652, sent:-651, reg:'박미정', regAt:-640, st:'이용 완료', res:{v:'v2', in:-13, at:-620}},
-    {id:'G-2609-1187', type:'주말', memo:'', made:-436, sent:-435, st:'회수 완료', backAt:-436 + LIMIT},
+    {id:'G-2609-4471', type:'평일', name:'김수아', phone:'010-2231-4471', msg:'생일 축하해! 베이컨 숙박권으로 어디 여행이라도 다녀와 :)', sent:NOW - 43.5, st:'sent'},
+    {id:'G-2609-4402', type:'주말', name:'이현우', phone:'010-5580-4402', msg:'이번 주말에 푹 쉬고 와요.', sent:NOW - 18, recvAt:NOW - 15.5, st:'recv'},
+    {id:'G-2609-3318', type:'주말', name:'김지민', phone:'010-3318-2207', msg:'', sent:-196, recvAt:-193, st:'booked', res:{in:5, at:-180}},
+    {id:'G-2609-2210', type:'평일', name:'박미정', phone:'010-2210-9981', msg:'엄마 늘 고마워요.', sent:-652, recvAt:-640, st:'used', res:{in:-13, at:-620}},
+    {id:'G-2609-1187', type:'주말', name:'정하린', phone:'010-1187-3320', msg:'', sent:-436, st:'expired'},
   ],
 });
 let D; try { D = JSON.parse(localStorage.getItem(KEY)) || SEED(); } catch(e){ D = SEED(); }
-let CASE = null, FAIL = null; /* 케이스 링크로 열면 저장하지 않고 이 탭에서만 보여줘요 */
+let CASE = null; /* 케이스 링크로 열면 저장하지 않고 이 탭에서만 보여줘요 */
 const saveD = () => { if (CASE) return; try { localStorage.setItem(KEY, JSON.stringify(D)); } catch(e){} };
 const gById = id => D.gifts.find(g => g.id === id);
-const OPEN = ['발송 전','발송됨','사용 가능'];
-const isOpen = g => OPEN.includes(g.st);
-const hoursLeft = g => Math.max(0, g.made + LIMIT - NOW);
-const leftTxt = g => { const h = hoursLeft(g); return h < 1 ? '1시간 안에 끝나요' : `${Math.floor(h)}시간 남음`; };
-const who = g => g.memo || (g.reg ? first(g.reg) + '님' : '받는 분');
-const first = n => n.slice(1);
+const isOpen = g => g.st === 'sent' || g.st === 'recv';
+const hoursLeft = g => Math.max(0, g.sent + LIMIT - NOW);
+const leftTxt = g => { const h = hoursLeft(g); return h < 1 ? '만료까지 1시간 미만' : `만료까지 ${Math.floor(h)}시간`; };
 const isWeekend = o => [5, 6].includes(dOf(o).getDay());
-const OWNER = {name:'최하은', plan:'Dual Life Plan', start:'2026.03.01'};
+
+/* 상태: 배지 이름과 색, 진행 단계(발송 · 수령 · 예약 · 사용) */
+const ST = {
+  sent:   {lb:'발송완료', c:'orange', step:1},
+  recv:   {lb:'수령완료', c:'orange', step:2},
+  booked: {lb:'예약완료', c:'green',  step:3},
+  used:   {lb:'사용완료', c:'green',  step:4},
+  noshow: {lb:'미입실',   c:'grey',   step:3},
+  expired:{lb:'기간만료', c:'grey',   step:0},
+};
+const doneOf = g => g.st === 'expired' ? (g.recvAt != null ? 2 : 1) : ST[g.st].step;
+const badge = g => `<span class="bd ${ST[g.st].c}">${ST[g.st].lb}</span>`;
+const bar = g => { const n = doneOf(g); return `<div class="step ${ST[g.st].c}">${[0,1,2,3].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>`; };
+function barLabels(g){
+  const n = doneOf(g), names = ['발송', '수령', '예약', '사용'];
+  if (g.st === 'expired') names[n] = '만료';
+  if (g.st === 'noshow') names[3] = '미입실';
+  const stop = g.st === 'expired' || g.st === 'noshow' ? n : -1;
+  return `<div class="stepl">${names.map((t, i) => `<span class="${i === stop || (i === n - 1 && stop < 0) ? 'cur' : i < n ? 'on' : ''}">${t}</span>`).join('')}</div>`;
+}
+/* 목록 오른쪽 한 줄: 기한이 있으면 남은 시간, 예약했으면 날짜 */
+function dueOf(g){
+  if (isOpen(g)) return `<span class="due hot">${leftTxt(g)}</span>`;
+  if (g.st === 'booked') return `<span class="due">${md(g.res.in)} 체크인</span>`;
+  if (g.st === 'used') return `<span class="due">${md(g.res.in + 1)} 체크아웃</span>`;
+  return '';
+}
 
 /* ---------- 화면 스택 ---------- */
 let stack = [{s:'my'}];
@@ -206,159 +188,101 @@ const cur = () => stack[stack.length - 1];
 const push = o => { stack.push(o); draw(); $('scr').querySelector('.body')?.scrollTo(0, 0); };
 const pop = () => { if (stack.length > 1) stack.pop(); draw(); };
 
-function frame(title, body, cta = '', tab = false){
+function frame(title, body, tab = false){
   return `<div class="sbar"><span>9:41</span><span class="sbi"><svg viewBox="0 0 18 12" width="18" height="12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 26 12" width="26" height="12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><path d="M24 4v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".4"/></svg></span></div>
-    ${title !== null ? `<div class="nav2">${stack.length > 1 ? `<button class="bk" data-back aria-label="뒤로">${ICON.back}</button>` : ''}<b>${title}</b></div>` : ''}
-    <div class="body">${body}</div>${cta}
+    ${title !== null ? `<div class="nav2"><button class="bk" data-back aria-label="뒤로">${ICON.back}</button><b>${title}</b></div>` : ''}
+    <div class="body">${body}</div>
     ${tab ? `<nav class="tabbar">
       <button data-soon="홈"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>홈</button>
       <button data-soon="탐색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4" stroke-linecap="round"/></svg>탐색</button>
-      <button data-soon="예약 내역"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="15" rx="3"/><rect x="7" y="3" width="2" height="4" rx="1"/><rect x="15" y="3" width="2" height="4" rx="1"/></svg>예약 내역</button>
+      <button data-soon="예약내역"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="15" rx="3"/><rect x="7" y="3" width="2" height="4" rx="1"/><rect x="15" y="3" width="2" height="4" rx="1"/></svg>예약내역</button>
       <button class="on"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6z"/></svg>MY</button></nav>` : ''}`;
-}
-
-/* 지금 상태 한 마디 + 보조 문구. tone: hot(보낸 사람이 할 일) · ok(다녀옴) · end(끝남) */
-function stateOf(g){
-  const soon = hoursLeft(g) < 12;
-  if (g.st === '발송 전') return {st:'보내기 전', sub:leftTxt(g), tone:'hot'};
-  if (g.st === '발송됨') return {st:'받기 전', sub:leftTxt(g), tone:soon ? 'hot' : ''};
-  if (g.st === '사용 가능') return {st:'예약 전', sub:leftTxt(g), tone:soon ? 'hot' : ''};
-  if (g.st === '예약 완료') return {st:'예약 완료', sub:`${md(g.res.in)} 체크인`, tone:''};
-  if (g.st === '이용 완료') return {st:'다녀왔어요', sub:`${md(g.res.in + 1)} 체크아웃`, tone:'ok'};
-  if (g.st === '노쇼') return {st:'이용 안 함', sub:`${md(g.res.in)} 미입실`, tone:'end'};
-  return {st:'1박 돌아옴', sub:`${dayOf(g.backAt)} 반환`, tone:'end'};
-}
-function giftRow(g){
-  const {st, sub, tone} = stateOf(g);
-  return `<button class="gift" data-g="${g.id}">
-    <span class="tx"><b>${esc(who(g))}</b><small>${g.type} 1박 · ${dayOf(g.made)} 선물</small></span>
-    <span class="rt"><span class="st ${tone}">${st}</span><small class="${tone === 'hot' ? 'hot' : ''}">${sub}</small></span></button>`;
 }
 
 /* ---------- 화면 ---------- */
 function sMy(){
   const open = D.gifts.filter(isOpen).length;
+  const row = (lb, attr, r = '') => `<button class="mrow" ${attr}><span class="l">${lb}</span>${r}${ICON.chev}</button>`;
   return frame(null, `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 8px"><b style="font-size:22px;letter-spacing:-.02em">MY</b></div>
-    <div class="prof"><span class="av">${OWNER.name[1]}</span><div><b>${OWNER.name}</b><small>${OWNER.plan} · 사용개시일 ${OWNER.start}</small></div></div>
-    <div class="nights"><div><small>평일 잔여</small><b class="num">${D.left.평일}<span>/ 16박</span></b></div><div><small>주말 잔여</small><b class="num">${D.left.주말}<span>/ 14박</span></b></div></div>
-    <div class="menu">
-      <button data-go="gifts"><span class="l">숙박권 선물하기</span>${open ? `<span class="r hot">진행 중 ${open}건</span>` : ''}${ICON.chev}</button>
-      <button data-soon="예약 내역"><span class="l">예약 내역</span>${ICON.chev}</button>
-      <button data-soon="관리비 결제"><span class="l">관리비 결제</span><span class="r">${D.member === '관리비 미납' ? '<span style="color:var(--danger-ink);font-weight:600">결제 필요</span>' : '10.1 결제 예정'}</span>${ICON.chev}</button>
-      <hr>
-      <button data-soon="공지사항"><span class="l">공지사항</span>${ICON.chev}</button>
-      <button data-soon="설정"><span class="l">설정</span>${ICON.chev}</button>
-    </div>`, '', true);
+    <div class="myh"><b>MY</b></div>
+    <div class="prof"><div><span class="plan">Residence Plan</span><b>김모모님</b><small>vacon@gmail.com</small></div><button class="btn" data-soon="관리">관리</button></div>
+    <div class="box"><h4>잔여 숙박일</h4><div class="left3">
+      <div><small>평일</small><b class="num">${D.left.평일}<span>/8박</span></b></div>
+      <div><small>주말</small><b class="num">${D.left.주말}<span>/8박</span></b></div>
+      <div><small>구좌</small><b class="num">1<span>구</span></b></div></div></div>
+    <div class="box"><h5>예약/ 이용</h5>
+      ${row('예약 내역', 'data-soon="예약 내역"')}
+      ${row('선물하기', 'data-soon="선물하기"')}
+      ${row('선물내역', 'data-go="gifts"', open ? `<span class="r">진행 중 ${open}</span>` : '')}
+      ${row('찜 목록', 'data-soon="찜 목록"')}</div>
+    <div class="box"><h5>오너십/ 결제</h5>
+      ${row('오너십 관리', 'data-soon="오너십 관리"')}
+      ${row('결제 내역', 'data-soon="결제 내역"')}</div>
+    <a class="logout" href="#" data-soon="로그아웃">로그아웃</a>`, true);
 }
 
 function sGifts(){
-  const open = D.gifts.filter(isOpen).sort((a, b) => (b.st === '발송 전') - (a.st === '발송 전') || hoursLeft(a) - hoursLeft(b));
-  const past = D.gifts.filter(g => !isOpen(g)).sort((a, b) => b.made - a.made);
-  const can = D.member === '이용 가능', total = D.left.평일 + D.left.주말;
-  let head;
-  if (D.member === '사용 시작 전') head = `<div class="h2">사용개시일부터<br>선물할 수 있어요<small>사용개시일 10.1 이후에 최초 결제를 마치면 숙박권을 선물할 수 있어요.</small></div>`;
-  else if (D.member === '관리비 미납') head = `<div class="h2">관리비를 결제하면<br>다시 선물할 수 있어요<small>이미 보낸 선물은 그대로 쓸 수 있고, 진행 상황도 계속 볼 수 있어요.</small></div>`;
-  else if (!total) head = `<div class="h2">선물할 수 있는<br>숙박일이 없어요<small>보낸 선물이 48시간 안에 예약되지 않으면 1박이 돌아와요.</small></div>`;
-  else head = `<div class="h2">숙박권 1박을<br>선물할 수 있어요<small>평일 ${D.left.평일}박 · 주말 ${D.left.주말}박 남았어요</small></div>`;
-  return frame('숙박권 선물하기', `
-    ${head}
-    ${open.length ? `<div class="sec">예약 전 <small>48시간 안에 예약해야 해요</small></div>${open.map(giftRow).join('')}` : ''}
-    <div class="sec">보낸 선물</div>
-    ${past.length ? past.map(giftRow).join('') : '<div class="empty">아직 보낸 선물이 없어요</div>'}`,
-    can && total ? `<div class="cta"><button class="btn primary" data-go="new">선물하기</button></div>`
-      : D.member === '관리비 미납' ? `<div class="cta"><button class="btn primary" data-soon="관리비 결제">관리비 결제하기</button></div>` : '');
-}
-
-function sNew(){
-  const c = cur();
-  if (!c.type || !D.left[c.type]) c.type = D.left.주말 ? '주말' : '평일';
-  const opt = (t, sub) => { const n = D.left[t], off = !n; return `<button class="opt ${c.type === t && !off ? 'on' : ''} ${off ? 'off' : ''}" data-type="${t}" ${off ? 'disabled' : ''}><span class="rd"></span><span class="tx"><b>${t} 1박</b><small>${off ? `남은 ${t} 숙박일이 없어요` : sub}</small></span><span class="n num">${n}박 남음</span></button>`; };
-  return frame('', `
-    <div class="h2">어떤 숙박권을<br>선물할까요?<small>받는 분은 고른 요일에만 예약할 수 있어요.</small></div>
-    ${opt('평일', '일요일 ~ 목요일 밤')}
-    ${opt('주말', '금요일 · 토요일 · 공휴일 전날 밤')}
-    <div class="field"><label for="memo">받는 분 (나만 보는 이름)</label><input class="inp" id="memo" placeholder="예: 지민님, 엄마" maxlength="12" value="${esc(c.memo || '')}" autocomplete="off"></div>
-    <ul class="rules">
-      <li>선물하면 ${c.type} 잔여 숙박일에서 1박이 바로 빠져요.</li>
-      <li><b>48시간 안에</b> 예약하지 않으면 1박이 돌아와요.</li>
-      <li>받는 분이 등록, 예약, 이용을 마칠 때마다 알려드려요.</li>
-    </ul>`,
-    `<div class="cta"><button class="btn primary" data-make>${c.type} 1박 선물하기</button></div>`);
+  if (!D.gifts.length) return frame('선물 내역', `<div class="empty"><b>선물 내역이 없어요</b><span>선물하기로 소중한 분에게<br>숙박권을 보내 보세요</span><button class="btn" data-soon="선물하기">선물하러 가기</button></div>`);
+  const list = [...D.gifts.filter(isOpen).sort((a, b) => hoursLeft(a) - hoursLeft(b)), ...D.gifts.filter(g => !isOpen(g)).sort((a, b) => b.sent - a.sent)];
+  return frame('선물 내역', list.map(g => `<button class="gc" data-g="${g.id}">
+      <span class="top">${badge(g)}${dueOf(g)}</span>
+      <b>${esc(g.name)}</b>
+      <small>${g.type} 1박 · ${VILLA}</small>
+      <small class="when">${ymd(g.sent)} 발송</small></button>`).join(''));
 }
 
 function sDetail(){
-  const g = gById(cur().g), w = who(g), r = g.res, v = r && vById[r.v];
-  const due = `${hm(g.made + LIMIT)}까지 예약해야 해요 · ${leftTxt(g)}`, soon = hoursLeft(g) < 12;
-  let h, sub;
-  if (g.st === '발송 전') h = '아직 선물을<br>보내지 않았어요';
-  else if (g.st === '발송됨') h = `${esc(josa(w, '이', '가'))} 아직<br>선물을 받지 않았어요`;
-  else if (g.st === '사용 가능') h = `${esc(josa(w, '이', '가'))} 선물을 받았어요<br><em>아직 예약 전</em>이에요`;
-  else if (g.st === '예약 완료') h = `${esc(josa(w, '이', '가'))} ${josa(v.name, '을', '를')}<br>예약했어요`;
-  else if (g.st === '이용 완료') h = `${esc(josa(w, '이', '가'))} 선물로<br>${v.name}에 다녀왔어요`;
-  else if (g.st === '노쇼'){ h = `${esc(josa(w, '이', '가'))} 예약한 날<br>입실하지 않았어요`; sub = '예약한 날이 지나 1박은 돌아오지 않아요.'; }
-  else { h = '48시간 안에 예약하지 않아<br>1박이 돌아왔어요'; sub = `${g.type} 잔여 숙박일에 다시 더했어요.`; }
-  if (isOpen(g)) sub = due;
-
-  /* 4단계 막대: 보냄 → 받음 → 예약 → 이용 */
-  const done = {'발송 전':0,'발송됨':1,'사용 가능':2,'예약 완료':3,'이용 완료':4,'노쇼':3,'회수 완료':g.reg ? 2 : 1}[g.st];
-  const fail = g.st === '회수 완료' ? '반환' : g.st === '노쇼' ? '미입실' : '';
-  const cls = i => i < done ? 'done' : i === done && isOpen(g) ? 'now' : i === done && fail ? 'fail' : '';
-  const names = ['보냄', '받음', '예약', '이용'].map((t, i) => i === done && fail ? fail : t);
-  const prog = `<div class="prog"><div class="bar">${names.map((_, i) => `<i class="${cls(i) === 'fail' ? '' : cls(i)}"></i>`).join('')}</div>
-    <div class="lbl">${names.map((t, i) => `<span class="${cls(i)}">${t}</span>`).join('')}</div></div>`;
-
-  const row = (k, val) => `<div><span>${k}</span><b>${val}</b></div>`;
-  const cta = g.st === '발송 전' ? `<div class="cta"><button class="btn kakao" data-share>${GI.kakao}카카오톡으로 보내기</button></div>`
-    : g.st === '발송됨' || g.st === '사용 가능' ? `<div class="cta"><button class="btn" data-share>${g.st === '발송됨' ? '링크 다시 보내기' : '예약해 달라고 다시 알리기'}</button></div>` : '';
-  return frame('', `
-    <div class="h2">${h}${sub ? `<small class="${isOpen(g) && soon ? 'hot' : ''}">${sub}</small>` : ''}</div>
-    ${prog}
+  const g = gById(cur().g), r = g.res;
+  const note = g.st === 'expired' ? `48시간 안에 예약하지 않아 만료됐어요.<br>${g.type} 1박은 잔여 숙박일로 돌아왔어요.`
+    : g.st === 'noshow' ? '예약한 날 입실하지 않았어요.<br>사용한 숙박일은 돌아오지 않아요.' : '';
+  const row = (k, v) => `<div><span>${k}</span><b>${v}</b></div>`;
+  return frame('선물 상세', `<div class="dt">
+    ${badge(g)}
+    ${bar(g)}${barLabels(g)}
+    ${note ? `<div class="note">${note}</div>` : ''}
+    <h4>선물 정보</h4>
     <div class="kv2">
-      ${row('받는 분', `${g.reg ? esc(g.reg) : '등록 전'}${g.memo ? `<span style="color:var(--ink-3);font-weight:500"> · ${esc(g.memo)}</span>` : ''}`)}
-      ${row('숙박권', `${g.type} 1박`)}
-      ${r ? row('숙소', `${v.region} ${v.name}`) + row('일정', `${mdw(r.in)} – ${mdw(r.in + 1)}`) : ''}
-      ${row('선물한 날', hm(g.made))}
-      ${g.regAt != null ? row('받은 날', hm(g.regAt)) : ''}
-      ${g.st === '회수 완료' ? row('돌아온 날', hm(g.backAt)) : ''}
-      ${row('선물 번호', `<span class="num" style="color:var(--ink-3);font-weight:500">${g.id}</span>`)}
-    </div>`, cta);
+      ${row('받는 분', esc(g.name))}
+      ${row('휴대폰번호', g.phone)}
+      ${row('숙박권', `${g.type} 1박 · ${VILLA}`)}
+      ${row('발송 일시', ymdhm(g.sent))}
+      ${r ? row('예약 일정', `${mdw(r.in)} – ${mdw(r.in + 1)}`) : row('만료 일시', ymdhm(g.sent + LIMIT) + (isOpen(g) ? `<br><em>${leftTxt(g)}</em>` : ''))}
+    </div>
+    ${g.msg ? `<hr><h4>메시지</h4><p class="msg">${esc(g.msg)}</p>` : ''}</div>`);
 }
 
 /* ---------- 받는 분 쪽 이벤트 (시안 조작) ---------- */
-const NAMES = ['김수아','이도윤','박서진','정하린','최민재'];
 function nextDay(type){ for (let o = 2; o < 40; o++) if (isWeekend(o) === (type === '주말')) return o; return 3; }
+const nim = g => josa(g.name + '님', '이', '가');
 const EV = {
-  reg:   {lb:'받는 분이 링크를 열고 등록', ok:g => g.st === '발송됨',
-          run:g => { g.reg = g.reg || NAMES[D.gifts.indexOf(g) % NAMES.length]; g.regAt = NOW; g.st = '사용 가능'; return [`${josa(who(g), '이', '가')} 선물을 받았어요`, '48시간 안에 예약하면 선물이 완료돼요.']; }},
-  book:  {lb:'받는 분이 예약', ok:g => g.st === '사용 가능',
-          run:g => { g.res = {v:g.type === '주말' ? 'v6' : 'v3', in:nextDay(g.type), at:NOW}; g.st = '예약 완료'; const v = vById[g.res.v]; return [`${josa(who(g), '이', '가')} ${josa(v.name, '을', '를')} 예약했어요`, `${mdw(g.res.in)} 체크인 · 선물한 ${g.type} 1박`]; }},
-  out:   {lb:'받는 분이 체크아웃 (이용 완료)', ok:g => g.st === '예약 완료',
-          run:g => { g.st = '이용 완료'; return [`${josa(who(g), '이', '가')} 선물로 다녀왔어요`, `${vById[g.res.v].name}에서 체크아웃했어요.`]; }},
-  noshow:{lb:'받는 분이 입실하지 않음', ok:g => g.st === '예약 완료',
-          run:g => { g.st = '노쇼'; return [`${josa(who(g), '이', '가')} 입실하지 않았어요`, '예약한 날이 지나 선물이 끝났어요.']; }},
+  recv:  {lb:'받는 분이 선물을 받음', ok:g => g.st === 'sent',
+          run:g => { g.recvAt = NOW; g.st = 'recv'; return [`${nim(g)} 선물을 받았어요`, `${ymdhm(g.sent + LIMIT)}까지 예약할 수 있어요.`]; }},
+  book:  {lb:'받는 분이 예약', ok:g => g.st === 'recv',
+          run:g => { g.res = {in:nextDay(g.type), at:NOW}; g.st = 'booked'; return [`${nim(g)} 소석원을 예약했어요`, `${mdw(g.res.in)} 체크인`]; }},
+  out:   {lb:'받는 분이 체크아웃', ok:g => g.st === 'booked',
+          run:g => { g.st = 'used'; return [`${nim(g)} 선물을 사용했어요`, '소석원에서 체크아웃했어요.']; }},
+  noshow:{lb:'받는 분이 입실하지 않음', ok:g => g.st === 'booked',
+          run:g => { g.st = 'noshow'; return [`${nim(g)} 입실하지 않았어요`, '사용한 숙박일은 돌아오지 않아요.']; }},
   expire:{lb:'예약 없이 48시간이 지남', ok:g => isOpen(g),
-          run:g => { g.st = '회수 완료'; g.backAt = g.made + LIMIT; D.left[g.type]++; return [`${g.type} 1박이 돌아왔어요`, `${josa(who(g), '이', '가')} 48시간 안에 예약하지 않았어요.`]; }},
+          run:g => { g.st = 'expired'; D.left[g.type]++; return ['선물이 기간만료됐어요', `${g.type} 1박이 잔여 숙박일로 돌아왔어요.`]; }},
 };
-const simTarget = () => { const c = cur(); if (c.s === 'detail') return gById(c.g); return D.gifts.filter(isOpen).sort((a, b) => hoursLeft(a) - hoursLeft(b))[0] || D.gifts.find(g => g.st === '예약 완료'); };
+const simTarget = () => { const c = cur(); if (c.s === 'detail') return gById(c.g); return D.gifts.filter(isOpen).sort((a, b) => hoursLeft(a) - hoursLeft(b))[0] || D.gifts.find(g => g.st === 'booked'); };
 
 function side(){
   const g = simTarget(), acts = g ? Object.entries(EV).filter(([, e]) => e.ok(g)) : [];
   $('side').innerHTML = `
     <a href="../">${LOGO}</a>
-    <h1>선물한 숙박권이<br>어디까지 쓰였는지 보여요</h1>
-    <p>MY의 숙박권 선물하기에서 보낸 선물마다 받았는지, 예약했는지, 다녀왔는지 보여줘요. 상태가 바뀌면 푸시로도 알려드려요.</p>
-    <div class="grp"><b>오너 회원 상태</b><div class="seg">${['이용 가능','관리비 미납','사용 시작 전'].map(x => `<button data-m="${x}" class="${D.member === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
+    <h1>선물내역에서<br>상태를 바로 확인해요</h1>
+    <p>보낸 선물마다 발송, 수령, 예약, 사용 중 어디까지 왔는지 보여줘요.</p>
     <div class="sim">
-      <div class="tg">받는 분 쪽에서 일어나는 일<small>${g ? `${esc(who(g))} · ${g.type} 1박 · 지금 ${g.st}` : '진행 중인 선물이 없어요. 새로 선물해 보세요.'}</small></div>
+      <div class="tg">받는 분 쪽에서 일어나는 일<small>${g ? `${esc(g.name)} · ${g.type} 1박 · 지금 ${ST[g.st].lb}` : '진행 중인 선물이 없어요.'}</small></div>
       ${acts.length ? `<div class="acts">${acts.map(([k, e]) => `<button class="btn" data-ev="${k}">${e.lb}</button>`).join('')}</div>` : ''}
     </div>
-    <div class="grp"><b>케이스 바로 보기</b><select id="case" class="inp" style="height:44px;border-radius:12px;border:0;background:var(--surface-2);padding:0 12px;font-size:14px;font-weight:600"><option value="">직접 눌러 보기</option>${CASES.map(([id, grp, lb]) => `<option value="${id}" ${CASE === id ? 'selected' : ''}>${grp} · ${lb}</option>`).join('')}</select></div>
+    <div class="grp"><b>케이스 바로 보기</b><select id="case" class="inp" style="height:44px;border-radius:12px;border:0;background:var(--surface-2);padding:0 12px;font-size:14px;font-weight:600"><option value="">직접 눌러 보기</option>${CASES.map(([id, lb]) => `<option value="${id}" ${CASE === id ? 'selected' : ''}>${lb}</option>`).join('')}</select></div>
     <div class="links"><a href="../admin/">관리자</a><button id="reset">시안 초기화</button></div>`;
 }
 $('side').addEventListener('change', e => { if (e.target.id === 'case'){ location.hash = e.target.value; location.reload(); } });
 $('side').addEventListener('click', e => {
-  const m = e.target.closest('[data-m]'); if (m){ D.member = m.dataset.m; saveD(); return draw(); }
   const ev = e.target.closest('[data-ev]'); if (ev){
     const g = simTarget(), [t, p] = EV[ev.dataset.ev].run(g); saveD(); draw(); pushNoti(t, p, g.id); return;
   }
@@ -367,10 +291,10 @@ $('side').addEventListener('click', e => {
 
 /* ---------- 공통 ---------- */
 function draw(){
-  $('scr').innerHTML = {my:sMy, gifts:sGifts, new:sNew, detail:sDetail}[cur().s]();
+  $('scr').innerHTML = {my:sMy, gifts:sGifts, detail:sDetail}[cur().s]();
   side();
 }
-function ptoast(m){ $('scr').querySelectorAll('.ptoast').forEach(x => x.remove()); const t = document.createElement('div'); t.className = 'ptoast'; t.innerHTML = `<span>${m}</span>`; $('scr').appendChild(t); setTimeout(() => t.remove(), 2200); }
+function ptoast(m){ $('scr').querySelectorAll('.ptoast').forEach(x => x.remove()); const t = document.createElement('div'); t.className = 'ptoast'; t.textContent = m; $('scr').appendChild(t); setTimeout(() => t.remove(), 2200); }
 let pushT;
 function pushNoti(title, text, gid){
   $('scr').querySelectorAll('.push').forEach(x => x.remove()); clearTimeout(pushT);
@@ -379,80 +303,33 @@ function pushNoti(title, text, gid){
   p.onclick = () => { p.remove(); stack = [{s:'my'}, {s:'gifts'}, {s:'detail', g:gid}]; draw(); };
   $('scr').appendChild(p); pushT = setTimeout(() => p.remove(), 4200);
 }
-function msgSheet(title, text, btns){
-  const d = document.createElement('div'); d.className = 'shscrim';
-  d.innerHTML = `<div class="sheet"><h3>${title}</h3><p>${text}</p>${btns.map((b, i) => `<button class="btn ${b.cls || ''}" data-i="${i}">${b.lb}</button>`).join('')}</div>`;
-  d.onclick = e => { const b = e.target.closest('[data-i]'); if (e.target === d || b){ d.remove(); b && btns[+b.dataset.i].fn?.(); } };
-  $('scr').appendChild(d);
-}
-function copyLink(g){
-  try { navigator.clipboard?.writeText(`https://vacon.house/g/${g.id}`).catch(() => {}); } catch(e){}
-  if (g.st === '발송 전'){ g.st = '발송됨'; g.sent = NOW; } saveD(); draw(); ptoast('링크를 복사했어요. 원하는 곳에 붙여 넣어 보내 주세요');
-}
-function shareSheet(g, fresh){
-  const d = document.createElement('div'); d.className = 'shscrim';
-  d.innerHTML = `<div class="sheet"><h3>${fresh ? '선물을 만들었어요<br>카카오톡으로 보내 주세요' : '카카오톡으로 다시 보낼게요'}</h3><p>${fresh ? `${g.type} 잔여 숙박일에서 1박이 빠졌어요. ` : ''}${hm(g.made + LIMIT)}까지 예약하지 않으면 1박이 돌아와요.</p>
-    <div class="card"><div><b>베이컨하우스 ${g.type} 숙박권 1박</b><small>${OWNER.name}님이 보낸 선물</small></div></div>
-    <button class="btn kakao" data-y>${GI.kakao}카카오톡으로 보내기</button>${fresh ? '<button class="btn ghost" data-x>나중에 보낼게요</button>' : '<button class="btn ghost" data-x>닫기</button>'}</div>`;
-  d.onclick = e => {
-    if (e.target === d || e.target.closest('[data-x]')){ d.remove(); if (fresh) ptoast('선물함에서 언제든 보낼 수 있어요'); return; }
-    if (e.target.closest('[data-y]') && FAIL === 'kakao'){ d.remove(); FAIL = null;
-      return msgSheet('카카오톡을 열 수 없어요', '카카오톡이 설치되어 있지 않거나 열리지 않았어요. 링크를 복사해서 문자나 다른 메신저로 보낼 수 있어요. 선물은 그대로 남아 있어요.', [{lb:'링크 복사하기', cls:'primary', fn:() => copyLink(g)}, {lb:'닫기', cls:'ghost', fn:() => { saveD(); draw(); }}]); }
-    if (e.target.closest('[data-y]')){ d.remove(); if (g.st === '발송 전'){ g.st = '발송됨'; g.sent = NOW; } saveD(); draw(); ptoast('카카오톡으로 보냈어요'); }
-  };
-  $('scr').appendChild(d);
-}
 
 $('scr').addEventListener('click', e => {
-  const t = e.target, c = cur();
+  const t = e.target;
   if (t.closest('[data-back]')) return pop();
-  const so = t.closest('[data-soon]'); if (so) return ptoast(`${so.dataset.soon} 화면은 이 시안에 없어요`);
+  const so = t.closest('[data-soon]'); if (so){ e.preventDefault(); return ptoast(`${so.dataset.soon}는 기존 화면을 그대로 써요`); }
   const go = t.closest('[data-go]'); if (go) return push({s:go.dataset.go});
   const g = t.closest('[data-g]'); if (g) return push({s:'detail', g:g.dataset.g});
-  const ty = t.closest('[data-type]'); if (ty && !ty.disabled){ c.memo = $('memo')?.value; c.type = ty.dataset.type; return draw(); }
-  if (t.closest('[data-make]')){
-    if (FAIL === 'make'){ FAIL = null; return msgSheet('선물을 만들지 못했어요', '연결이 잠시 불안정했어요. 숙박일은 빠지지 않았으니 다시 시도해 주세요.', [{lb:'다시 시도하기', cls:'primary', fn:() => $('scr').querySelector('[data-make]')?.click()}, {lb:'닫기', cls:'ghost'}]); }
-    if (FAIL === 'race'){ FAIL = null; const ty = c.type; D.left[ty] = 0; c.memo = $('memo')?.value; c.type = null; draw();
-      return msgSheet(`남은 ${ty} 숙박일이 없어요`, `그사이 다른 기기에서 ${ty} 숙박일을 모두 썼어요. 숙박일은 빠지지 않았어요.`, [{lb:'확인', cls:'primary'}]); }
-    const memo = ($('memo')?.value || '').trim();
-    const n = D.gifts.length + 4480;
-    const ng = {id:`G-2609-${n}`, type:c.type, memo, made:NOW, st:'발송 전'};
-    D.left[c.type]--; D.gifts.unshift(ng); saveD();
-    stack = [{s:'my'}, {s:'gifts'}, {s:'detail', g:ng.id}]; draw();
-    return shareSheet(ng, true);
-  }
-  if (t.closest('[data-share]')) return shareSheet(gById(c.g), false);
 });
 
-/* ---------- 케이스 링크: #c-home 처럼 열면 그 상황으로 바로 시작 ---------- */
+/* ---------- 케이스 링크: #c-list 처럼 열면 그 상황으로 바로 시작 ---------- */
 const G = id => D.gifts.find(g => g.id === id);
 const TO = (...st) => { stack = [{s:'my'}, ...st]; };
 const CASES = [
-  ['c-my',        '기본', 'MY에서 선물하기 진입',          () => TO()],
-  ['c-home',      '기본', '선물하기 홈 (진행 중 + 보낸 선물)', () => TO({s:'gifts'})],
-  ['c-new',       '기본', '선물 만들기',                  () => TO({s:'gifts'}, {s:'new'})],
-  ['c-share',     '기본', '선물 직후 카카오 공유 시트',      () => { const g = {id:'G-2609-4490', type:'주말', memo:'하린님', made:NOW, st:'발송 전'}; D.gifts.unshift(g); D.left.주말--; TO({s:'gifts'}, {s:'detail', g:g.id}); return () => shareSheet(g, true); }],
-  ['c-sent',      '기본', '받기 전 (보냄, 등록 전)',        () => { G('G-2609-4471').made = NOW - 10; TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'}); }],
-  ['c-registered','기본', '예약 전 (받는 분 등록 완료)',     () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4402'})],
-  ['c-booked',    '기본', '예약 완료',                    () => TO({s:'gifts'}, {s:'detail', g:'G-2609-3318'})],
-  ['c-used',      '기본', '이용 완료 (다녀왔어요)',          () => TO({s:'gifts'}, {s:'detail', g:'G-2609-2210'})],
-  ['c-push',      '기본', '상태 변경 푸시 (받는 분 등록)',   () => { G('G-2609-4471').made = NOW - 10; TO({s:'gifts'}); return () => { const g = G('G-2609-4471'), [t, p] = EV.reg.run(g); draw(); pushNoti(t, p, g.id); }; }],
-  ['c-unsent',    '엣지', '보내기 전 (공유 시트를 닫음)',    () => { const g = {id:'G-2609-4489', type:'평일', memo:'도윤님', made:NOW - 3, st:'발송 전'}; D.gifts.unshift(g); D.left.평일--; TO({s:'gifts'}); }],
-  ['c-urgent',    '엣지', '기한 임박 (12시간 미만)',        () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'})],
-  ['c-nomemo',    '엣지', '받는 분 이름 없이 보냄',          () => { const g = G('G-2609-4471'); g.memo = ''; g.made = NOW - 10; TO({s:'gifts'}, {s:'detail', g:g.id}); }],
-  ['c-returned',  '엣지', '48시간 지나 1박 반환',           () => TO({s:'gifts'}, {s:'detail', g:'G-2609-1187'})],
-  ['c-noshow',    '엣지', '예약 후 입실 안 함 (노쇼)',       () => { const g = G('G-2609-3318'); g.st = '노쇼'; g.res.in = -2; TO({s:'gifts'}, {s:'detail', g:g.id}); }],
-  ['c-first',     '엣지', '처음 선물 (보낸 선물 없음)',       () => { D.gifts = []; D.left = {평일:10, 주말:3}; TO({s:'gifts'}); }],
-  ['c-type-zero', '엣지', '주말 잔여 0박 (평일만 선택)',      () => { D.left.주말 = 0; TO({s:'gifts'}, {s:'new'}); }],
-  ['c-zero',      '엣지', '평일·주말 잔여 모두 0박',          () => { D.left = {평일:0, 주말:0}; TO({s:'gifts'}); }],
-  ['c-unpaid',    '에러', '관리비 미납 회원',                () => { D.member = '관리비 미납'; TO({s:'gifts'}); }],
-  ['c-before',    '에러', '사용 시작 전 회원',               () => { D.member = '사용 시작 전'; D.gifts = []; TO({s:'gifts'}); }],
-  ['c-kakao-fail','에러', '카카오톡 실행 실패, 링크 복사로 보내기',   () => { FAIL = 'kakao'; const g = {id:'G-2609-4490', type:'주말', memo:'하린님', made:NOW, st:'발송 전'}; D.gifts.unshift(g); D.left.주말--; TO({s:'gifts'}, {s:'detail', g:g.id}); return () => shareSheet(g, true); }],
-  ['c-make-fail', '에러', '선물 만들기 실패 (네트워크)',       () => { FAIL = 'make'; TO({s:'gifts'}, {s:'new'}); }],
-  ['c-race',      '에러', '다른 기기에서 잔여 먼저 소진',      () => { FAIL = 'race'; TO({s:'gifts'}, {s:'new'}); }],
+  ['c-my',      'MY에서 선물내역 진입',        () => TO()],
+  ['c-list',    '선물 내역',                  () => TO({s:'gifts'})],
+  ['c-empty',   '선물 내역이 없는 경우',       () => { D.gifts = []; TO({s:'gifts'}); }],
+  ['c-sent',    '발송완료',                   () => { G('G-2609-4471').sent = NOW - 10; TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'}); }],
+  ['c-urgent',  '발송완료 · 만료 12시간 전',   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'})],
+  ['c-recv',    '수령완료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4402'})],
+  ['c-booked',  '예약완료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-3318'})],
+  ['c-used',    '사용완료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-2210'})],
+  ['c-noshow',  '미입실',                     () => { const g = G('G-2609-3318'); g.st = 'noshow'; g.res.in = -2; TO({s:'gifts'}, {s:'detail', g:g.id}); }],
+  ['c-expired', '기간만료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-1187'})],
+  ['c-push',    '상태가 바뀌면 받는 알림',      () => { G('G-2609-4471').sent = NOW - 10; TO({s:'gifts'}); return () => { const g = G('G-2609-4471'), [t, p] = EV.recv.run(g); draw(); pushNoti(t, p, g.id); }; }],
 ];
 { const h = location.hash.slice(1), k = CASES.find(x => x[0] === h);
-  if (k){ CASE = h; D = SEED(); const after = k[3](); draw(); after && after(); }
+  if (k){ CASE = h; D = SEED(); const after = k[2](); draw(); after && after(); }
   else draw();
 }
 addEventListener('hashchange', () => location.reload());
