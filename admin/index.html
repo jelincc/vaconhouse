@@ -338,6 +338,9 @@ body.anno .main{margin-right:432px}
 .cr .pick .tx em{font-style:normal;font-size:13px;color:var(--ink-3);font-weight:600;margin-left:4px}
 .cr .pick .tx span{font-size:14px;color:var(--ink-3)}
 .cr .guest{display:flex;flex-direction:column;gap:8px}
+.cr .gnote{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--accent-soft);color:var(--accent-ink);border-radius:12px;padding:10px 10px 10px 14px;font-size:14px;font-weight:500}
+.cr .gbtn{border:0;background:#fff;color:var(--accent-ink);height:34px;padding:0 14px;border-radius:9px;font-size:13.5px;font-weight:700;white-space:nowrap;flex:none;box-shadow:0 1px 2px rgba(212,86,10,.12)}
+.cr .gbtn:hover{background:var(--accent-2)}
 .cr .cal{display:flex;flex-direction:column;gap:10px}
 .cr .cnav{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-3)}
 .cr .cnav span{flex:1;text-align:center}
@@ -851,7 +854,7 @@ function openCreate(o){
     q('#crBody').innerHTML = `
       <section><h4><span>1</span>예약자</h4>
         ${F.mem ? `<div class="pick"><div class="av">${esc(F.mem.name[0])}</div><div class="tx"><b>${esc(F.mem.name)} <em>회원</em></b><span>${fmtPhone(F.mem.phone)} · ${esc(F.mem.email)} · ${F.mem.join} 가입</span></div><a class="tbtn" href="member?id=${F.mem.id}" target="_blank">회원 정보</a><button class="tbtn" data-unpick>바꾸기</button></div>`
-        : F.guest ? `<div class="guest"><div class="fg"><div class="fl"><label>이름</label><input class="inp" id="gName" value="${esc(F.guest.name)}" placeholder="홍길동"></div><div class="fl"><label>연락처</label><input class="inp num" id="cPhone" value="${esc(F.guest.phone)}" placeholder="010-0000-0000" inputmode="tel"><span class="err" id="cPhoneErr"></span></div></div><div class="mut sm">비회원 예약이에요. <button class="lnk" data-unpick>회원 목록에서 고르기</button></div></div>`
+        : F.guest ? `<div class="guest"><div class="fg"><div class="fl"><label>이름</label><input class="inp" id="gName" value="${esc(F.guest.name)}" placeholder="홍길동"></div><div class="fl"><label>연락처</label><input class="inp num" id="cPhone" value="${esc(F.guest.phone)}" placeholder="010-0000-0000" inputmode="tel"><span class="err" id="cPhoneErr"></span></div></div><div class="gnote"><span>비회원 예약이에요. 회원이라면 목록에서 골라 주세요.</span><button class="gbtn" data-unpick>회원 목록에서 고르기</button></div></div>`
         : `<div class="ltools"><form class="sbox" id="mform" role="search"><input class="search" id="mQ" placeholder="이름, 전화번호, 이메일" value="${esc(F.mq)}" autocomplete="off"><button type="submit" aria-label="검색">${ICON.search}</button></form><span class="mut sm">${mems.length}명</span><button class="lnk sm2" data-guest>비회원으로 입력</button></div>
           <div class="plist"><div class="ph m"><span>회원</span><span>전화번호</span><span>가입</span><span>최근 예약</span></div>
             ${mems.length ? mems.map(m => { const lr = memberRes(m).filter(ACTIVE).sort((x, y) => y.in - x.in)[0]; return `<button class="pr2 m" data-mem="${m.id}"><span><b>${esc(m.name)}</b><small>${esc(m.email)}</small></span><span class="num">${fmtPhone(m.phone)}</span><span>${m.join}<small class="num">${m.joined.slice(2, 10).replace(/-/g, '.')}</small></span><span>${lr ? `${vById[lr.villa].name}<small class="num">${md(lr.in)}</small>` : '<i>없음</i>'}</span></button>`; }).join('')
