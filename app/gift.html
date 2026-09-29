@@ -126,61 +126,42 @@ body{background:#fff}
 <script src="../admin/data.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-/* 시간: 9.28 00:00 기준 시각(h). 지금은 9.28 14:00. 받는 분은 보낸 뒤 48시간 안에 예약해야 해요 */
-const NOW = 14, LIMIT = 48;
+/* 시간: 9.28 00:00 기준 시각(h). 지금은 9.28 14:00. 만료 일시는 기존 화면 기준(발송 후 32일, 예: 5.11 → 6.12) */
+const NOW = 14, LIMIT = 32 * 24;
 const pad = n => String(n).padStart(2, '0');
 const dt = h => { const d = dOf(Math.floor(h / 24)); return d; };
 const ymd = h => { const d = dt(h); return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`; };
 const ymdhm = h => { const m = ((h % 24) + 24) % 24; return `${ymd(h)} ${pad(Math.floor(m))}:${m % 1 ? '30' : '00'}`; };
 
 /* ---------- 데이터 ---------- */
-const KEY = 'vh-gift-v2';
+const KEY = 'vh-gift-v3';
 const VILLA = '가평 소석원';
 const SEED = () => ({
   left: {평일: 6, 주말: 6},
   gifts: [
-    {id:'G-2609-4471', type:'평일', name:'김수아', phone:'010-2231-4471', msg:'생일 축하해! 베이컨 숙박권으로 어디 여행이라도 다녀와 :)', sent:NOW - 43.5, st:'sent'},
-    {id:'G-2609-4402', type:'주말', name:'이현우', phone:'010-5580-4402', msg:'이번 주말에 푹 쉬고 와요.', sent:NOW - 18, recvAt:NOW - 15.5, st:'recv'},
-    {id:'G-2609-3318', type:'주말', name:'김지민', phone:'010-3318-2207', msg:'', sent:-196, recvAt:-193, st:'booked', res:{in:5, at:-180}},
-    {id:'G-2609-2210', type:'평일', name:'박미정', phone:'010-2210-9981', msg:'엄마 늘 고마워요.', sent:-652, recvAt:-640, st:'used', res:{in:-13, at:-620}},
-    {id:'G-2609-1187', type:'주말', name:'정하린', phone:'010-1187-3320', msg:'', sent:-436, st:'expired'},
+    {id:'G-2609-4471', type:'평일', name:'김수아', phone:'010-2231-4471', msg:'생일 축하해! 베이컨 숙박권으로 어디 여행이라도 다녀와 :)', sent:NOW - LIMIT + 18, st:'unused'},
+    {id:'G-2609-4402', type:'주말', name:'이현우', phone:'010-5580-4402', msg:'이번 주말에 푹 쉬고 와요.', sent:NOW - 18, st:'unused', booked:true},
+    {id:'G-2609-3318', type:'주말', name:'김지민', phone:'010-3318-2207', msg:'', sent:-196, st:'used', usedAt:-60},
+    {id:'G-2609-2210', type:'평일', name:'박미정', phone:'010-2210-9981', msg:'엄마 늘 고마워요.', sent:-652, st:'used', usedAt:-300},
+    {id:'G-2609-1187', type:'주말', name:'정하린', phone:'010-1187-3320', msg:'', sent:-900, st:'expired'},
   ],
 });
 let D; try { D = JSON.parse(localStorage.getItem(KEY)) || SEED(); } catch(e){ D = SEED(); }
 let CASE = null; /* 케이스 링크로 열면 저장하지 않고 이 탭에서만 보여줘요 */
 const saveD = () => { if (CASE) return; try { localStorage.setItem(KEY, JSON.stringify(D)); } catch(e){} };
 const gById = id => D.gifts.find(g => g.id === id);
-const isOpen = g => g.st === 'sent' || g.st === 'recv';
+/* 받는 분이 아직 예약하지 않은 미사용 선물만 기한이 흘러요. 받는 분의 숙소와 날짜는 보여주지 않아요 */
+const ticking = g => g.st === 'unused' && !g.booked;
 const hoursLeft = g => Math.max(0, g.sent + LIMIT - NOW);
-const leftTxt = g => { const h = hoursLeft(g); return h < 1 ? '만료까지 1시간 미만' : `만료까지 ${Math.floor(h)}시간`; };
-const isWeekend = o => [5, 6].includes(dOf(o).getDay());
+const leftTxt = g => { const h = hoursLeft(g); return h >= 24 ? `만료까지 ${Math.floor(h / 24)}일` : h < 1 ? '만료까지 1시간 미만' : `만료까지 ${Math.floor(h)}시간`; };
 
-/* 상태: 배지 이름과 색, 진행 단계(발송 · 수령 · 예약 · 사용) */
+/* 상태는 세 가지: 미사용 · 사용완료 · 기간만료 */
 const ST = {
-  sent:   {lb:'발송완료', c:'orange', step:1},
-  recv:   {lb:'수령완료', c:'orange', step:2},
-  booked: {lb:'예약완료', c:'green',  step:3},
-  used:   {lb:'사용완료', c:'green',  step:4},
-  noshow: {lb:'미입실',   c:'grey',   step:3},
-  expired:{lb:'기간만료', c:'grey',   step:0},
+  unused: {lb:'미사용',   c:'orange'},
+  used:   {lb:'사용완료', c:'green'},
+  expired:{lb:'기간만료', c:'grey'},
 };
-const doneOf = g => g.st === 'expired' ? (g.recvAt != null ? 2 : 1) : ST[g.st].step;
 const badge = g => `<span class="bd ${ST[g.st].c}">${ST[g.st].lb}</span>`;
-const bar = g => { const n = doneOf(g); return `<div class="step ${ST[g.st].c}">${[0,1,2,3].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>`; };
-function barLabels(g){
-  const n = doneOf(g), names = ['발송', '수령', '예약', '사용'];
-  if (g.st === 'expired') names[n] = '만료';
-  if (g.st === 'noshow') names[3] = '미입실';
-  const stop = g.st === 'expired' || g.st === 'noshow' ? n : -1;
-  return `<div class="stepl">${names.map((t, i) => `<span class="${i === stop || (i === n - 1 && stop < 0) ? 'cur' : i < n ? 'on' : ''}">${t}</span>`).join('')}</div>`;
-}
-/* 목록 오른쪽 한 줄: 기한이 있으면 남은 시간, 예약했으면 날짜 */
-function dueOf(g){
-  if (isOpen(g)) return `<span class="due hot">${leftTxt(g)}</span>`;
-  if (g.st === 'booked') return `<span class="due">${md(g.res.in)} 체크인</span>`;
-  if (g.st === 'used') return `<span class="due">${md(g.res.in + 1)} 체크아웃</span>`;
-  return '';
-}
 
 /* ---------- 화면 스택 ---------- */
 let stack = [{s:'my'}];
@@ -201,7 +182,6 @@ function frame(title, body, tab = false){
 
 /* ---------- 화면 ---------- */
 function sMy(){
-  const open = D.gifts.filter(isOpen).length;
   const row = (lb, attr, r = '') => `<button class="mrow" ${attr}><span class="l">${lb}</span>${r}${ICON.chev}</button>`;
   return frame(null, `
     <div class="myh"><b>MY</b></div>
@@ -213,7 +193,7 @@ function sMy(){
     <div class="box"><h5>예약/ 이용</h5>
       ${row('예약 내역', 'data-soon="예약 내역"')}
       ${row('선물하기', 'data-soon="선물하기"')}
-      ${row('선물내역', 'data-go="gifts"', open ? `<span class="r">진행 중 ${open}</span>` : '')}
+      ${row('선물내역', 'data-go="gifts"')}
       ${row('찜 목록', 'data-soon="찜 목록"')}</div>
     <div class="box"><h5>오너십/ 결제</h5>
       ${row('오너십 관리', 'data-soon="오너십 관리"')}
@@ -223,59 +203,54 @@ function sMy(){
 
 function sGifts(){
   if (!D.gifts.length) return frame('선물 내역', `<div class="empty"><b>선물 내역이 없어요</b><span>선물하기로 소중한 분에게<br>숙박권을 보내 보세요</span><button class="btn" data-soon="선물하기">선물하러 가기</button></div>`);
-  const list = [...D.gifts.filter(isOpen).sort((a, b) => hoursLeft(a) - hoursLeft(b)), ...D.gifts.filter(g => !isOpen(g)).sort((a, b) => b.sent - a.sent)];
+  /* 미사용을 만료가 가까운 순으로 먼저, 나머지는 발송일 최신순 */
+  const list = [...D.gifts.filter(g => g.st === 'unused').sort((a, b) => a.sent - b.sent), ...D.gifts.filter(g => g.st !== 'unused').sort((a, b) => b.sent - a.sent)];
   return frame('선물 내역', list.map(g => `<button class="gc" data-g="${g.id}">
-      <span class="top">${badge(g)}${dueOf(g)}</span>
+      <span class="top">${badge(g)}${ticking(g) ? `<span class="due hot">${leftTxt(g)}</span>` : ''}</span>
       <b>${esc(g.name)}</b>
       <small>${g.type} 1박 · ${VILLA}</small>
       <small class="when">${ymd(g.sent)} 발송</small></button>`).join(''));
 }
 
 function sDetail(){
-  const g = gById(cur().g), r = g.res;
-  const note = g.st === 'expired' ? `48시간 안에 예약하지 않아 만료됐어요.<br>${g.type} 1박은 잔여 숙박일로 돌아왔어요.`
-    : g.st === 'noshow' ? '예약한 날 입실하지 않았어요.<br>사용한 숙박일은 돌아오지 않아요.' : '';
+  const g = gById(cur().g);
   const row = (k, v) => `<div><span>${k}</span><b>${v}</b></div>`;
   return frame('선물 상세', `<div class="dt">
     ${badge(g)}
-    ${bar(g)}${barLabels(g)}
-    ${note ? `<div class="note">${note}</div>` : ''}
+    ${g.st === 'expired' ? `<div class="note">기간 내 미사용으로 만료됐어요.<br>${g.type} 1박은 잔여 숙박일로 돌아왔어요.</div>` : ''}
     <h4>선물 정보</h4>
     <div class="kv2">
       ${row('받는 분', esc(g.name))}
       ${row('휴대폰번호', g.phone)}
       ${row('숙박권', `${g.type} 1박 · ${VILLA}`)}
       ${row('발송 일시', ymdhm(g.sent))}
-      ${r ? row('예약 일정', `${mdw(r.in)} – ${mdw(r.in + 1)}`) : row('만료 일시', ymdhm(g.sent + LIMIT) + (isOpen(g) ? `<br><em>${leftTxt(g)}</em>` : ''))}
+      ${g.st === 'used' ? row('사용 일시', ymd(g.usedAt)) : !g.booked ? row('만료 일시', ymdhm(g.sent + LIMIT) + (ticking(g) ? `<br><em>${leftTxt(g)}</em>` : '')) : ''}
     </div>
     ${g.msg ? `<hr><h4>메시지</h4><p class="msg">${esc(g.msg)}</p>` : ''}</div>`);
 }
 
 /* ---------- 받는 분 쪽 이벤트 (시안 조작) ---------- */
-function nextDay(type){ for (let o = 2; o < 40; o++) if (isWeekend(o) === (type === '주말')) return o; return 3; }
 const nim = g => josa(g.name + '님', '이', '가');
 const EV = {
-  recv:  {lb:'받는 분이 선물을 받음', ok:g => g.st === 'sent',
-          run:g => { g.recvAt = NOW; g.st = 'recv'; return [`${nim(g)} 선물을 받았어요`, `${ymdhm(g.sent + LIMIT)}까지 예약할 수 있어요.`]; }},
-  book:  {lb:'받는 분이 예약', ok:g => g.st === 'recv',
-          run:g => { g.res = {in:nextDay(g.type), at:NOW}; g.st = 'booked'; return [`${nim(g)} 소석원을 예약했어요`, `${mdw(g.res.in)} 체크인`]; }},
-  out:   {lb:'받는 분이 체크아웃', ok:g => g.st === 'booked',
-          run:g => { g.st = 'used'; return [`${nim(g)} 선물을 사용했어요`, '소석원에서 체크아웃했어요.']; }},
-  noshow:{lb:'받는 분이 입실하지 않음', ok:g => g.st === 'booked',
-          run:g => { g.st = 'noshow'; return [`${nim(g)} 입실하지 않았어요`, '사용한 숙박일은 돌아오지 않아요.']; }},
-  expire:{lb:'예약 없이 48시간이 지남', ok:g => isOpen(g),
+  book:  {lb:'받는 분이 예약 (보낸 분 화면은 그대로)', ok:g => ticking(g), run:g => { g.booked = true; return null; }},
+  cancel:{lb:'받는 분이 기한 안에 예약 취소', ok:g => g.st === 'unused' && g.booked, run:g => { g.booked = false; return null; }},
+  used:  {lb:'받는 분이 숙박을 마침', ok:g => g.st === 'unused' && g.booked,
+          run:g => { g.st = 'used'; g.usedAt = NOW; return [`${nim(g)} 선물을 사용했어요`, `${g.type} 1박 선물이 사용완료됐어요.`]; }},
+  soon:  {lb:'만료 1일 전 (알림만 보냄)', ok:g => ticking(g),
+          run:g => ['선물 만료가 1일 남았어요', `${g.name}님에게 보낸 ${g.type} 1박이 아직 사용되지 않았어요.`]},
+  expire:{lb:'사용 없이 만료 일시가 지남', ok:g => ticking(g),
           run:g => { g.st = 'expired'; D.left[g.type]++; return ['선물이 기간만료됐어요', `${g.type} 1박이 잔여 숙박일로 돌아왔어요.`]; }},
 };
-const simTarget = () => { const c = cur(); if (c.s === 'detail') return gById(c.g); return D.gifts.filter(isOpen).sort((a, b) => hoursLeft(a) - hoursLeft(b))[0] || D.gifts.find(g => g.st === 'booked'); };
+const simTarget = () => { const c = cur(); if (c.s === 'detail') return gById(c.g); return D.gifts.find(g => g.st === 'unused'); };
 
 function side(){
   const g = simTarget(), acts = g ? Object.entries(EV).filter(([, e]) => e.ok(g)) : [];
   $('side').innerHTML = `
     <a href="../">${LOGO}</a>
-    <h1>선물내역에서<br>상태를 바로 확인해요</h1>
-    <p>보낸 선물마다 발송, 수령, 예약, 사용 중 어디까지 왔는지 보여줘요.</p>
+    <h1>보낸 선물이<br>사용됐는지 바로 확인해요</h1>
+    <p>선물마다 미사용, 사용완료, 기간만료 중 하나로 보여줘요. 받는 분의 숙소와 날짜는 보여주지 않아요.</p>
     <div class="sim">
-      <div class="tg">받는 분 쪽에서 일어나는 일<small>${g ? `${esc(g.name)} · ${g.type} 1박 · 지금 ${ST[g.st].lb}` : '진행 중인 선물이 없어요.'}</small></div>
+      <div class="tg">받는 분 쪽에서 일어나는 일<small>${g ? `${esc(g.name)} · ${g.type} 1박 · 지금 ${ST[g.st].lb}${g.st === 'unused' ? (g.booked ? ' (예약함)' : ' (예약 전)') : ''}` : '미사용 선물이 없어요.'}</small></div>
       ${acts.length ? `<div class="acts">${acts.map(([k, e]) => `<button class="btn" data-ev="${k}">${e.lb}</button>`).join('')}</div>` : ''}
     </div>
     <div class="grp"><b>케이스 바로 보기</b><select id="case" class="inp" style="height:44px;border-radius:12px;border:0;background:var(--surface-2);padding:0 12px;font-size:14px;font-weight:600"><option value="">직접 눌러 보기</option>${CASES.map(([id, lb]) => `<option value="${id}" ${CASE === id ? 'selected' : ''}>${lb}</option>`).join('')}</select></div>
@@ -284,7 +259,7 @@ function side(){
 $('side').addEventListener('change', e => { if (e.target.id === 'case'){ location.hash = e.target.value; location.reload(); } });
 $('side').addEventListener('click', e => {
   const ev = e.target.closest('[data-ev]'); if (ev){
-    const g = simTarget(), [t, p] = EV[ev.dataset.ev].run(g); saveD(); draw(); pushNoti(t, p, g.id); return;
+    const g = simTarget(), r = EV[ev.dataset.ev].run(g); saveD(); draw(); r ? pushNoti(r[0], r[1], g.id) : ptoast('보낸 분 화면은 미사용 그대로예요'); return;
   }
   if (e.target.id === 'reset'){ try { localStorage.removeItem(KEY); } catch(x){} history.replaceState(null, '', location.pathname); location.reload(); }
 });
@@ -316,17 +291,15 @@ $('scr').addEventListener('click', e => {
 const G = id => D.gifts.find(g => g.id === id);
 const TO = (...st) => { stack = [{s:'my'}, ...st]; };
 const CASES = [
-  ['c-my',      'MY에서 선물내역 진입',        () => TO()],
-  ['c-list',    '선물 내역',                  () => TO({s:'gifts'})],
-  ['c-empty',   '선물 내역이 없는 경우',       () => { D.gifts = []; TO({s:'gifts'}); }],
-  ['c-sent',    '발송완료',                   () => { G('G-2609-4471').sent = NOW - 10; TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'}); }],
-  ['c-urgent',  '발송완료 · 만료 12시간 전',   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'})],
-  ['c-recv',    '수령완료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4402'})],
-  ['c-booked',  '예약완료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-3318'})],
-  ['c-used',    '사용완료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-2210'})],
-  ['c-noshow',  '미입실',                     () => { const g = G('G-2609-3318'); g.st = 'noshow'; g.res.in = -2; TO({s:'gifts'}, {s:'detail', g:g.id}); }],
-  ['c-expired', '기간만료',                   () => TO({s:'gifts'}, {s:'detail', g:'G-2609-1187'})],
-  ['c-push',    '상태가 바뀌면 받는 알림',      () => { G('G-2609-4471').sent = NOW - 10; TO({s:'gifts'}); return () => { const g = G('G-2609-4471'), [t, p] = EV.recv.run(g); draw(); pushNoti(t, p, g.id); }; }],
+  ['c-my',      'MY에서 선물내역 진입',          () => TO()],
+  ['c-list',    '선물 내역',                    () => TO({s:'gifts'})],
+  ['c-empty',   '선물 내역이 없는 경우',         () => { D.gifts = []; TO({s:'gifts'}); }],
+  ['c-unused',  '미사용 · 받는 분이 예약하기 전',  () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4471'})],
+  ['c-booked',  '미사용 · 받는 분이 예약한 뒤',    () => TO({s:'gifts'}, {s:'detail', g:'G-2609-4402'})],
+  ['c-used',    '사용완료',                     () => TO({s:'gifts'}, {s:'detail', g:'G-2609-2210'})],
+  ['c-expired', '기간만료',                     () => TO({s:'gifts'}, {s:'detail', g:'G-2609-1187'})],
+  ['c-soon',    '만료 1일 전 받는 알림',        () => { TO({s:'gifts'}); return () => { const g = G('G-2609-4471'); pushNoti(...EV.soon.run(g), g.id); }; }],
+  ['c-push',    '선물이 사용되면 받는 알림',      () => { TO({s:'gifts'}); return () => { const g = G('G-2609-4402'), [t, p] = EV.used.run(g); draw(); pushNoti(t, p, g.id); }; }],
 ];
 { const h = location.hash.slice(1), k = CASES.find(x => x[0] === h);
   if (k){ CASE = h; D = SEED(); const after = k[2](); draw(); after && after(); }
