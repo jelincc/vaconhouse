@@ -10,7 +10,7 @@
     seoyun: by(r => r.corp && r.name === '이서윤' && r.in > 0),
   };
   const A = h => `admin/#${h}`, D = (i, h = '') => `admin/reservation?id=${i}${h ? '#' + h : ''}`;
-  const C = h => `corp/#${h}`, P = h => `app/corp#${h}`;
+  const C = h => `corp/#${h}`;
   const DOCS = [
     {doc:'예약관리 개편', secs:[
       {t:'2. 예약관리 대시보드', items:[
@@ -84,25 +84,6 @@
         ['c-cancel', '취소 예약 (숙박권 미차감)', C('res&f=취소')],
         ['c-low', '잔여 숙박권이 얼마 안 남았을 때', C('low=4'), 1],
         ['c-zero', '잔여 숙박권을 모두 썼을 때', C('low=0'), 1],
-      ]},
-      {t:'직원 앱', items:[
-        ['a-home', '권한 있는 직원 · 회사 전체 잔여 숙박권', P('p=0')],
-        ['a-villas', '이용 가능한 별장 확인', P('p=0&s=villas')],
-        ['a-dates', '날짜 확인 후 기업 숙박권으로 예약', P('p=0&s=dates&v=v2&a=7&b=9')],
-        ['a-done', '예약 완료', P('p=0&s=done')],
-        ['a-my', '본인 예약 조회', P('p=0&s=my')],
-        ['a-open', '예약 상세 · 변경 · 취소', P(`p=0&s=open&i=${id.seoyun}`)],
-        ['a-change', '일정 변경', P(`p=0&s=change&i=${id.seoyun}`)],
-        ['a-cancel', '예약 취소 (숙박권 반환)', P(`p=0&s=cancel&i=${id.seoyun}`)],
-        ['a-affil', '가입 직원의 소속 확인 요청', P('p=2&s=affil')],
-        ['a-wait', '소속 확인 대기', P('p=3')],
-        ['a-noperm', '권한이 없으면 회사 숙박권이 안 보임', P('p=1')],
-        ['a-overlap', '이미 예약된 날이 포함될 때', P('p=0&s=dates&v=v7&a=19&b=21'), 1],
-        ['a-block', '판매 막힌 기간', P('p=0&s=dates&v=v6'), 1],
-        ['a-short', '잔여 숙박권보다 길게 고를 때', P('p=0&s=dates&v=v2&a=7&b=10&left=2'), 1],
-        ['a-zero', '회사 숙박권을 모두 썼을 때', P('p=0&left=0'), 1],
-        ['a-mail', '회사 이메일이 아닐 때', P('p=2&s=affil&mail=wooseok@gmail.com'), 1],
-        ['a-offbook', '권한이 꺼진 뒤의 기존 예약', P(`p=0&state=off&s=open&i=${id.seoyun}`), 1],
       ]},
     ]},
   ];
