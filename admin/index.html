@@ -266,7 +266,8 @@ td.v b{font-weight:600}
 .x{all:unset;cursor:pointer;width:40px;height:40px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--ink-2)}
 .x:hover{background:var(--surface-2)}
 .x svg{width:24px;height:24px}
-.dr-body{padding:0 24px 18px;overflow:auto;display:flex;flex-direction:column;gap:18px;flex:1}
+.dr-body{padding:0 24px 18px;overflow:auto;display:flex;flex-direction:column;gap:18px;flex:1;min-height:0}
+.dr-body > *{flex:none}
 .dr-foot{padding:12px 20px 20px;display:flex;gap:8px}
 .dr-link{display:flex;justify-content:center;padding:4px 0}
 .dr-link svg{width:14px;height:14px}
@@ -395,7 +396,7 @@ body.anno .main{margin-right:432px}
 .crr #cGo:disabled{background:var(--line-2);color:var(--ink-3);opacity:1}
 #listPanel th,#listPanel td{white-space:nowrap}
 #listPanel td:nth-child(8){white-space:normal;min-width:160px}
-.dmemo{margin-top:20px}
+.dmemo{margin-top:4px}
 .dmemo h4{margin:0 0 10px;font-size:16px;font-weight:700}
 .dmemo .memo{background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px}
 .dmemo .memo small{display:block;margin-top:4px;font-size:13px;color:var(--ink-3)}
