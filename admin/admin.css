@@ -164,7 +164,9 @@ textarea.inp{height:auto;min-height:72px;padding:10px 12px;resize:vertical}
 .ta-t{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ta-l{display:flex;align-items:center;gap:2px;font-size:14px;color:var(--accent-ink);font-weight:600;flex:none}
 .ta-l svg{width:14px;height:14px}
-.ta-x{width:32px;height:32px;justify-content:center;border-radius:10px;color:var(--ink-3);font-size:14px}
+.ta-x{width:32px;height:32px;justify-content:center;align-items:center;border-radius:10px;color:var(--ink-3);font-size:14px;flex:none}
+.ta-x svg{width:18px;height:18px}
+.topalert{padding:6px 6px 6px 6px}
 .ta-x:hover{background:var(--surface-2)}
 @media (prefers-reduced-motion:reduce){.topalert{transition:none}}
 

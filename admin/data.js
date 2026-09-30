@@ -198,12 +198,25 @@ const MEMBERS = (() => {
   RAW.forEach((a, i) => { const [, raw, email, phone, , , , , , , , created] = a; if (!email || seen.has(email)) return; seen.add(email);
     const d = new Date(created.slice(0,10)); d.setDate(d.getDate() - 20 - (i * 7) % 90);
     L.push({name:raw, phone, email, join: /kakao/.test(email) || i % 3 === 0 ? '카카오' : '이메일', sub: i % 2 === 0, joined:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(9 + i % 12).padStart(2,'0')}:${String(i * 7 % 60).padStart(2,'0')}:12`}); });
+  L.push({name:'이유진', phone:'01065578934', email:'yujinlee@bnp.kr', join:'이메일', sub:true, joined:'2026-09-28 09:12:03'});
   L.forEach((m, i) => Object.assign(m, {id:'m' + (i + 1), tier:'게스트', status:'이용 가능', birth:'', push:m.sub, memos:[]}));
+  /* 오너십 회원 예시: 이유진(신규 계약), 이성환(이용 중) */
+  const own = (m, o) => Object.assign(m, {tier:'오너십', plan:'tp12', seats:1, wk:9, we:3}, o);
+  own(L.find(m => m.name === '이유진'), {contract:'2026-09-28', start:'2026-10-01'});
+  own(L.find(m => m.name === '이성환'), {contract:'2026-06-10', start:'2026-07-01', seats:2, wk:18, we:6});
   return L;
 })();
 const MEMKEY = 'vh-mem-v1';
 try { const p = JSON.parse(localStorage.getItem(MEMKEY) || '{}'); MEMBERS.forEach(m => p[m.id] && Object.assign(m, p[m.id])); } catch(e){}
-function saveMember(m){ try { const p = JSON.parse(localStorage.getItem(MEMKEY) || '{}'); p[m.id] = {tier:m.tier, status:m.status, birth:m.birth, push:m.push, memos:m.memos, phone:m.phone}; localStorage.setItem(MEMKEY, JSON.stringify(p)); } catch(e){} }
+function saveMember(m){ try { const p = JSON.parse(localStorage.getItem(MEMKEY) || '{}'); p[m.id] = {tier:m.tier, status:m.status, birth:m.birth, push:m.push, memos:m.memos, phone:m.phone, plan:m.plan, seats:m.seats, contract:m.contract, start:m.start, wk:m.wk, we:m.we}; localStorage.setItem(MEMKEY, JSON.stringify(p)); } catch(e){} }
+/* 멤버십 기본 정책 (본사 멤버십 관리에서 정해요) */
+const PLANS = [{id:'tp12', name:'Travel Plan (12박)', nights:12, price:85000, wk:9, we:3}];
+/* 남은 숙박일: 사용 개시일 이후 취소되지 않은 예약의 평일·주말(금·토) 박수를 빼요 */
+function nightsLeft(m){
+  let wk = 0, we = 0;
+  memberRes(m).filter(ACTIVE).forEach(r => { for (let o = r.in; o < r.out; o++){ if (m.start && isoOf(o) < m.start) continue; const d = dOf(o).getDay(); (d === 5 || d === 6) ? we++ : wk++; } });
+  return {wk: Math.max(0, (m.wk || 0) - wk), we: Math.max(0, (m.we || 0) - we)};
+}
 const memberRes = m => R.filter(r => r.memberId === m.id || (r.email && r.email === m.email));
 const memberOf = r => MEMBERS.find(m => m.id === r.memberId || (r.email && m.email === r.email));
 

@@ -44,6 +44,7 @@
         ['mem-list', '회원 관리 목록 · 검색 · 필터', 'admin/members'],
         ['mem-detail', '회원 상세 · 예약 내역', 'admin/member?id=m8'],
         ['mem-empty', '예약이 없는 회원', 'admin/member?id=m1', 1],
+        ['mem-own', '오너십 회원 · 멤버십 정책과 남은 숙박일', 'admin/member?id=m50'],
       ]},
       {t:'4. 예약 목록', items:[
         ['list', '운영 순서로 정리한 기본 열', A('list')],

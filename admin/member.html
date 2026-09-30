@@ -72,12 +72,13 @@ tbody tr:hover td{background:#FAFBFC}
 mountSide();
 const $ = id => document.getElementById(id);
 const m = MEMBERS.find(x => x.id === new URLSearchParams(location.search).get('id')) || MEMBERS[0];
-let edit = false;
+let edit = false, medit = false;
 function render(){
   const L = memberRes(m).sort((a, b) => b.in - a.in), act = L.filter(ACTIVE);
   const up = act.filter(r => r.out >= 0).sort((a, b) => a.in - b.in)[0];
   const paid = act.reduce((a, r) => a + price(r).sub, 0);
   const stop = m.status !== '이용 가능';
+  const own = m.tier === '오너십', plan = PLANS.find(x => x.id === m.plan), left = own ? nightsLeft(m) : null;
   $('wrap').innerHTML = `
     <a class="back" href="members">${ICON.back}회원 관리</a>
     <div class="head">
@@ -91,7 +92,7 @@ function render(){
       <div class="fact"><small>예약</small><b class="num">${act.length}회</b><span>취소 ${L.length - act.length}회</span></div>
       <div class="fact"><small>다가오는 예약</small><b>${up ? `${vById[up.villa].name}` : '없음'}</b><span class="num">${up ? `${mdw(up.in)} – ${mdw(up.out)}` : '–'}</span></div>
       <div class="fact"><small>누적 결제</small><b class="num">${won(paid)}</b><span>취소 제외</span></div>
-      <div class="fact"><small>마케팅 수신</small><b>${m.push ? '받음' : '안 받음'}</b><span>${m.sub ? '구독 중' : '미구독'}</span></div>
+      ${own ? `<div class="fact"><small>남은 숙박일</small><b class="num">평일 ${left.wk} · 주말 ${left.we}</b><span>${plan ? plan.name : ''} · 합산 ${m.wk + m.we}박 중</span></div>` : `<div class="fact"><small>마케팅 수신</small><b>${m.push ? '받음' : '안 받음'}</b><span>${m.sub ? '구독 중' : '미구독'}</span></div>`}
     </div>
     <div class="grid">
       <div class="col">
@@ -112,14 +113,31 @@ function render(){
             <div class="formfoot"><button class="btn sm" data-edit>취소</button><button class="btn sm primary" id="save">저장</button></div>`
           : `<dl class="kv"><dt>이름</dt><dd>${esc(m.name)}</dd><dt>이메일</dt><dd>${esc(m.email)}</dd><dt>전화번호</dt><dd class="num">${fmtPhone(m.phone)}</dd><dt>생일</dt><dd>${m.birth ? m.birth.replace(/-/g, '.') : '<span class="mut">입력 안 함</span>'}</dd></dl>`}
         </section>
-        <section class="card"><h3>멤버십·상태</h3>
-          <div class="row"><div>멤버십<small>등급별 혜택은 멤버십 관리에서 정해요</small></div><div class="segb">${['게스트','멤버'].map(x => `<button data-tier="${x}" class="${m.tier === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
-          <div class="row"><div>운영 상태<small>${stop ? '앱 로그인과 새 예약이 막혀 있어요' : '앱을 정상적으로 쓸 수 있어요'}</small></div><button class="btn sm ${stop ? '' : ''}" data-status>${stop ? '이용 다시 허용' : '이용 정지'}</button></div>
+        <section class="card"><h3>멤버십 ${own && !medit ? '<button class="tbtn" data-medit>수정</button>' : ''}</h3>
+          <div class="row"><div>멤버십 타입<small>등급별 혜택은 멤버십 관리에서 정해요</small></div><div class="segb">${['게스트','오너십'].map(x => `<button data-tier="${x}" class="${m.tier === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
+          ${own ? (medit ? `<div class="form" style="margin-top:12px">
+              <label>기본 정책</label><select class="inp" id="fPlan">${PLANS.map(x => `<option value="${x.id}" ${x.id === m.plan ? 'selected' : ''}>${x.name} · ${won(x.price)}</option>`).join('')}</select>
+              <label>구좌 수</label><input class="inp num" type="number" min="1" id="fSeats" value="${m.seats}">
+              <label>계약일</label><input class="inp" type="date" id="fContract" value="${m.contract}">
+              <label>사용 개시일</label><input class="inp" type="date" id="fStart" value="${m.start}">
+              <label>평일 숙박일</label><input class="inp num" type="number" min="0" id="fWk" value="${m.wk}">
+              <label>주말 숙박일</label><input class="inp num" type="number" min="0" id="fWe" value="${m.we}">
+            </div><span class="err" id="mErr" style="font-size:13px;color:var(--danger-ink)"></span>
+            <div class="formfoot"><button class="btn sm" data-medit>취소</button><button class="btn sm primary" id="msave">저장</button></div>`
+          : `<dl class="kv" style="margin-top:12px">
+              <dt>기본 정책</dt><dd>${plan ? `${plan.name}<span class="mut" style="margin-left:6px">${plan.nights}박 / ${won(plan.price)}</span>` : '<span class="mut">없음</span>'}</dd>
+              <dt>구좌 수</dt><dd class="num">${m.seats}구좌</dd>
+              <dt>계약일</dt><dd class="num">${m.contract.replace(/-/g, '.')}</dd>
+              <dt>구독 기간</dt><dd class="num">${m.start.replace(/-/g, '.')}부터 · 기한 없음</dd>
+              <dt>숙박 가능일</dt><dd class="num">평일 ${m.wk} · 주말 ${m.we} · 합산 ${m.wk + m.we}박</dd>
+              <dt>남은 숙박일</dt><dd class="num"><b>평일 ${left.wk} · 주말 ${left.we}</b></dd>
+            </dl><p class="mut" style="font-size:13px;margin:10px 0 0">주말은 금·토요일 밤이에요. 사용 개시일 이후 예약만 차감해요.</p>`) : ''}
         </section>
-        <section class="card"><h3>계정·알림</h3>
+        <section class="card"><h3>계정·상태</h3>
           <div class="row"><div>가입 방식<small>${m.join === '카카오' ? '카카오로 로그인해요' : '이메일과 비밀번호로 로그인해요'}</small></div><span>${m.join}</span></div>
           <div class="row"><div>비밀번호<small>관리자가 직접 정하지 않고, 회원에게 재설정 링크를 보내요</small></div>${m.join === '카카오' ? '<span class="mut" style="font-size:14px">해당 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</div>
           <div class="row"><div>마케팅 푸시 수신<small>회원이 앱에서 바꿀 수 있어요</small></div><label class="tgl"><input type="checkbox" id="push" ${m.push ? 'checked' : ''}></label></div>
+          <div class="row"><div>운영 상태<small>${stop ? '앱 로그인과 새 예약이 막혀 있어요' : '앱을 정상적으로 쓸 수 있어요'}</small></div><button class="btn sm" data-status>${stop ? '이용 다시 허용' : '이용 정지'}</button></div>
         </section>
       </div>
     </div>`;
@@ -137,7 +155,14 @@ document.addEventListener('click', e => {
   const t = e.target;
   if (t.closest('[data-edit]')){ edit = !edit; render(); return; }
   const tr = t.closest('tr[data-r]'); if (tr){ location.href = `reservation?id=${tr.dataset.r}`; return; }
-  const tier = t.closest('[data-tier]'); if (tier && tier.dataset.tier !== m.tier){ m.tier = tier.dataset.tier; saveMember(m); render(); toast(`멤버십을 ${m.tier}(으)로 바꿨어요`.replace('(으)로', m.tier === '멤버' ? '로' : '로')); return; }
+  const tier = t.closest('[data-tier]'); if (tier && tier.dataset.tier !== m.tier){ m.tier = tier.dataset.tier;
+    if (m.tier === '오너십' && !m.plan){ const p0 = PLANS[0]; Object.assign(m, {plan:p0.id, seats:1, wk:p0.wk, we:p0.we, contract:'2026-09-28', start:'2026-10-01'}); medit = true; }
+    saveMember(m); render(); toast(m.tier === '오너십' ? '오너십으로 바꿨어요. 계약 정보를 확인해 주세요' : '게스트로 바꿨어요'); return; }
+  if (t.closest('[data-medit]')){ medit = !medit; render(); return; }
+  if (t.id === 'msave'){ const seats = +$('fSeats').value, wk = +$('fWk').value, we = +$('fWe').value, c = $('fContract').value, st = $('fStart').value;
+    if (seats < 1 || wk < 0 || we < 0 || !c || !st){ $('mErr').textContent = '구좌 수와 숙박일, 날짜를 모두 입력해 주세요.'; return; }
+    if (st < c){ $('mErr').textContent = '사용 개시일은 계약일과 같거나 뒤여야 해요.'; return; }
+    Object.assign(m, {plan:$('fPlan').value, seats, wk, we, contract:c, start:st}); m.memos.unshift({t:`멤버십 정보 수정 · 평일 ${wk} · 주말 ${we}박`, m:`jelin · ${nowStamp()}`}); saveMember(m); medit = false; render(); toast('멤버십 정보를 바꿨어요'); return; }
   if (t.closest('[data-status]')) return confirmStop();
   if (t.closest('[data-pw]')) return toast(`${m.email}로 비밀번호 재설정 링크를 보냈어요`);
   if (t.id === 'addMemo'){ const v = $('memo').value.trim(); if (!v) return; m.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); saveMember(m); render(); toast('메모를 남겼어요'); return; }
