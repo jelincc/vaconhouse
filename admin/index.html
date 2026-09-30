@@ -86,7 +86,8 @@
 .search{border:0;background:var(--surface-2);border-radius:10px;height:36px;padding:0 12px 0 36px;min-width:280px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23768091' stroke-width='1.8'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
 .search::placeholder{color:var(--ink-4)}
 .fsep{width:1px;height:20px;background:var(--line-2);margin:0 4px}
-.reset{border:0;background:none;color:var(--ink-3);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:4px;margin-left:auto;height:36px;padding:0 6px;border-radius:10px}
+.fsp{flex:1}
+.reset{border:0;background:none;color:var(--ink-3);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 6px;border-radius:10px}
 .reset:hover{color:var(--ink);background:var(--surface-2)}
 .reset svg{width:16px;height:16px}
 .ddpanel .dot{width:8px;height:8px;border-radius:2px;display:inline-block}
@@ -539,7 +540,6 @@ function ddMulti(key, label, groups){
 function fbarHTML(){
   const dirty = S.f.q || S.f.regions.size || S.f.villas.size || S.f.types.size || S.f.channels.size || S.f.status !== '전체' || S.f.withCancel;
   return `<div class="fbar" id="fbar">
-    <form class="sbox" id="sform" role="search"><input class="search" id="q" placeholder="예약자, 연락처, 이메일, 메모, 예약번호" value="${esc(S.qDraft ?? S.f.q)}"><button type="submit" aria-label="검색">${ICON.search}</button></form>
     ${ddMulti('regions','지역',[['', REGIONS.map(r => [r, r])]])}
     ${ddMulti('villas','숙소', REGIONS.map(rg => [rg, VILLAS.filter(v => v.region === rg).map(v => [v.id, v.name, v.c])]))}
     ${ddMulti('types','운영 유형',[['', TYPES.map(t => [t, t])]])}
@@ -547,7 +547,9 @@ function fbarHTML(){
       ${S.dd === 'status' ? `<div class="ddpanel" style="min-width:200px">${['전체','예약 확정','이용 중','이용 완료','취소 요청','변경 요청','예약 취소','노쇼'].map(s => `<button class="opt ${S.f.status === s ? 'on' : ''}" data-stv="${s}">${s === '전체' ? '상태 전체' : s}${S.f.status === s ? ICON.tick : ''}</button>`).join('')}</div>` : ''}</div>
     ${ddMulti('channels','예약 경로',[['', Object.keys(CH).map(c => [c, CH[c].lb, CH[c].c])]])}
     <label class="tgl"><input type="checkbox" id="wc" ${S.f.withCancel ? 'checked' : ''}>취소 포함</label>
+    <span class="fsp"></span>
     ${dirty ? `<button class="reset" data-reset>${ICON.reset}초기화</button>` : ''}
+    <form class="sbox" id="sform" role="search"><input class="search" id="q" placeholder="예약자, 연락처, 이메일, 메모, 예약번호" value="${esc(S.qDraft ?? S.f.q)}"><button type="submit" aria-label="검색">${ICON.search}</button></form>
   </div>`;
 }
 

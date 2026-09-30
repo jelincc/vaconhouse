@@ -161,9 +161,9 @@ function empTab(){
   rows.sort((a, b) => order[permState(a)] - order[permState(b)]);
   return `<div class="panel" id="empPanel">
     <div class="tb">
-      <input class="search" id="q" placeholder="이름, 휴대전화번호, 이메일" value="${esc(S.q)}">
       <div class="seg">${F.map(f => `<button data-ef="${f}" class="${S.ef === f ? 'on' : ''}">${f}<span>${f === '전체' ? EMP.length : EMP.filter(e => permState(e) === f).length}</span></button>`).join('')}</div>
-      <button class="btn primary" id="addBtn" style="margin-left:auto">직원 등록</button>
+      <input class="search" id="q" placeholder="이름, 휴대전화번호, 이메일" value="${esc(S.q)}" style="margin-left:auto">
+      <button class="btn primary" id="addBtn">직원 등록</button>
     </div>
     <table><thead><tr><th>직원</th><th>휴대전화번호</th><th>앱 가입</th><th>다가오는 예약</th><th style="text-align:right">이용 권한</th></tr></thead>
     <tbody>${rows.length ? rows.map(e => { const i = EMP.indexOf(e), s = permState(e), u = upOf(e);

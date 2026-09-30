@@ -46,8 +46,8 @@ function render(){
   document.getElementById('wrap').innerHTML = `
     <div class="head"><h1>회원 관리</h1><p>앱 가입 회원 ${MEMBERS.length}명 · 이름을 누르면 회원 정보와 예약 내역을 봐요.</p></div>
     <div class="panel">
-      <div class="tools"><form class="sbox" id="sform" role="search" style="flex:1;max-width:360px"><input class="inp search" id="q" placeholder="이름, 전화번호, 이메일" value="${esc(S.q)}" style="max-width:none"><button type="submit" aria-label="검색">${ICON.search}</button></form>
-        <div class="seg">${Object.keys(F).map(k => `<button data-f="${k}" class="${S.f === k ? 'on' : ''}">${k} <span class="num">${MEMBERS.filter(F[k]).length}</span></button>`).join('')}</div></div>
+      <div class="tools"><div class="seg">${Object.keys(F).map(k => `<button data-f="${k}" class="${S.f === k ? 'on' : ''}">${k} <span class="num">${MEMBERS.filter(F[k]).length}</span></button>`).join('')}</div>
+        <form class="sbox" id="sform" role="search" style="flex:1;max-width:360px;margin-left:auto"><input class="inp search" id="q" placeholder="이름, 전화번호, 이메일" value="${esc(S.q)}" style="max-width:none"><button type="submit" aria-label="검색">${ICON.search}</button></form></div>
       <table><thead><tr><th>회원</th><th>전화번호</th><th>가입</th><th>멤버십</th><th>마케팅 수신</th><th>예약</th><th>상태</th></tr></thead>
       <tbody>${L.length ? L.map(m => { const n = memberRes(m).filter(ACTIVE).length; return `<tr data-id="${m.id}">
         <td><b>${esc(m.name)}</b><span class="sub">${esc(m.email)}</span></td>
