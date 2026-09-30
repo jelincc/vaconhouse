@@ -88,6 +88,7 @@
 .fsep{width:1px;height:20px;background:var(--line-2);margin:0 4px}
 .fsp{flex:1}
 .reset{border:0;background:none;color:var(--ink-3);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 6px;border-radius:10px}
+.reset:disabled{opacity:.35;cursor:default;pointer-events:none}
 .reset:hover{color:var(--ink);background:var(--surface-2)}
 .reset svg{width:16px;height:16px}
 .ddpanel .dot{width:8px;height:8px;border-radius:2px;display:inline-block}
@@ -527,7 +528,7 @@ function paneToday(){
       </section>
       <section class="card" id="actCard"><h3>확인·조치 필요</h3>${['conflict','notify','pay','missing','sync','clean'].map(row).join('')}</section>
     </div>
-    <div class="foot">기간별 예약 수, 취소율, 가동률은 <a href="stats">통계·매출</a>에서 볼 수 있어요.</div>`;
+    `;
 }
 
 /* ---------- filters ---------- */
@@ -548,7 +549,7 @@ function fbarHTML(){
     ${ddMulti('channels','예약 경로',[['', Object.keys(CH).map(c => [c, CH[c].lb, CH[c].c])]])}
     <label class="tgl"><input type="checkbox" id="wc" ${S.f.withCancel ? 'checked' : ''}>취소 포함</label>
     <span class="fsp"></span>
-    ${dirty ? `<button class="reset" data-reset>${ICON.reset}초기화</button>` : ''}
+    <button class="reset" data-reset ${dirty ? '' : 'disabled'}>${ICON.reset}초기화</button>
     <form class="sbox" id="sform" role="search"><input class="search" id="q" placeholder="예약자, 연락처, 이메일, 메모, 예약번호" value="${esc(S.qDraft ?? S.f.q)}"><button type="submit" aria-label="검색">${ICON.search}</button></form>
   </div>`;
 }

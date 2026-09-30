@@ -77,9 +77,8 @@ a{color:inherit}
 .ico svg{width:20px;height:20px}
 .ico.sm{width:32px;height:32px;border-radius:10px}
 .ico.sm svg{width:17px;height:17px}
-.ico.red{background:var(--danger-soft);color:var(--danger)}
-.ico.orange{background:var(--accent-soft);color:var(--accent)}
-.ico.green{background:var(--ok-soft);color:var(--ok)}
+/* 아이콘은 회색 한 톤. 긴급 여부는 라벨과 건수 색으로만 구분해요 */
+.ico.red,.ico.orange,.ico.green{background:#F2F4F6;color:#6B7684}
 
 /* TDS: SegmentedControl, Chip, inputs */
 .seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}

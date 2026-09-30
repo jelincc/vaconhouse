@@ -25,7 +25,7 @@ const nowStamp = () => '9.28 ' + new Date().toTimeString().slice(0,5);
 /* ---------- icons (20px, stroke) ---------- */
 const I = p => `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
 const ICON = {
-  conflict: I('<rect x="3" y="3.5" width="9" height="9" rx="2"/><rect x="8" y="7.5" width="9" height="9" rx="2"/>'),
+  conflict: I('<path d="M10 3.2L17.6 16.4H2.4z"/><path d="M10 8.2v3.6M10 14.1v.1"/>'),
   bell:     I('<path d="M6 8.5a4 4 0 0 1 8 0c0 3.8 1.8 5 1.8 5H4.2S6 12.3 6 8.5"/><path d="M8.6 16.2a1.6 1.6 0 0 0 2.8 0"/><path d="M3 3l14 14"/>'),
   cancel:   I('<circle cx="10" cy="10" r="7"/><path d="M7.6 7.6l4.8 4.8M12.4 7.6l-4.8 4.8"/>'),
   calendar: I('<rect x="3" y="4.5" width="14" height="12.5" rx="2.2"/><path d="M3 8.5h14M7 3v3M13 3v3"/>'),
