@@ -180,7 +180,8 @@ $('f').addEventListener('submit', e => {
   go.innerHTML = '<span class="spin" aria-hidden="true"></span>로그인 중';
   setTimeout(() => {
     try { $('save').checked ? localStorage.setItem('vh-admin-id-v2', uid.value.trim()) : localStorage.removeItem('vh-admin-id-v2'); } catch(e){}
-    if (!(uid.value.trim() === 'jelin' && pw.value.trim() === '12')){
+    const acct = {jelin:'hq', noeul:'corp'}[uid.value.trim()];
+    if (!(acct && pw.value.trim() === '12')){
       go.innerHTML = '로그인';
       toast('아이디 또는 비밀번호가 맞지 않아요');
       $('pwBox').classList.add('err');
@@ -188,7 +189,7 @@ $('f').addEventListener('submit', e => {
       sync();
       return;
     }
-    try { localStorage.setItem('vh-admin-session', uid.value.trim()); } catch(e){}
+    try { localStorage.setItem('vh-admin-session', uid.value.trim()); localStorage.setItem('vh-role', acct); } catch(e){}
     const onClaude = /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname) || location.protocol === 'blob:' || location.origin === 'null';
     if (onClaude){
       const url = 'https://claude.ai/artifact/Kju1TBbegoa8vCD14axR2k';

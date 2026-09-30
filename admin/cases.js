@@ -1,7 +1,7 @@
-/* 케이스 보기 · 요구사항 문서의 화면별로 기본·엣지 케이스를 바로 열어 봐요 (requires data.js) */
+/* 케이스 보기 · 요구사항 문서의 화면별로 기본·예외 케이스를 바로 열어 봐요 (requires data.js) */
 (() => {
   const ROOT = new URL('..', document.currentScript.src).href;
-  const by = f => (R.find(f) || R[0]).idx;
+  const by = f => (R.find(f) || R.filter(Boolean)[0] || {}).idx;
   const id = {
     normal: by(r => r.name === '임미현'), cancel: by(r => r.base === '취소요청' || r.name === '한지민'), change: by(r => r.name === '오세훈'),
     conflict: by(r => r.name === '태오'), admin: by(r => r.name === '조석현'), corp: by(r => r.corp && r.name === '오시우' && r.in > 0),
@@ -31,7 +31,6 @@
         ['board-drawer', '블록 클릭 → 요약 → 상세로 이동', A(`board&off=8&d=${id.cancel}`)],
         ['board-conflict', '예약 충돌이 보이는 보드', A('board&off=1')],
         ['board-filter', '필터 조건 유지 · 그룹 접기', A('board&region=양평')],
-        ['board-block', '판매 막힌 기간 (보수 공사)', A('board&off=10'), 1],
         ['board-create', '예약 등록 · 회원 예약 (숙소·날짜·옵션)', A(`board&create=v6:7:9&m=m1`)],
         ['board-create-search', '예약 등록 · 회원 찾기', A('board&create=')],
         ['board-create-guest', '예약 등록 · 비회원 연락처 불완전', A('board&create=v2:7:9'), 1],
@@ -48,7 +47,6 @@
         ['list', '운영 순서로 정리한 기본 열', A('list')],
         ['list-cols', '예약번호·신청일은 열 설정으로', A('list&cols=1')],
         ['list-missing', '연락처가 불완전한 예약', A('list&k=missing'), 1],
-        ['list-sync', '신청일이 채널 동기화로 덮인 예약', A('list&k=sync&cols=1'), 1],
         ['list-empty', '검색 결과가 없을 때', A('list&q=홍길동'), 1],
       ]},
       {t:'5. 예약 상세', items:[
@@ -68,30 +66,29 @@
         ['detail-dup', '중복 가능성 확인', D(id.dup), 1],
       ]},
     ]},
-    {doc:'기업 숙박권', secs:[
-      {t:'관리자 · 1. 직원 계정 관리', items:[
-        ['c-emp', '소속 직원 목록 · 가입 여부 · 권한 상태', C('emp')],
-        ['c-req', '직원 확인 (소속 확인 요청)', C('req')],
-        ['c-add', '앱 가입 계정 검색해서 등록', C('add&q=신')],
-        ['c-off', '권한 삭제 (예약이 있는 직원)', C('off=이서윤')],
-        ['c-addnone', '검색해도 앱 계정이 없을 때', C('add&q=홍길동'), 1],
-        ['c-unjoined', '미가입 직원 · 가입 안내 보내기', C('emp&f=미가입'), 1],
+    {doc:'기업 관리자', secs:[
+      {t:'직원 관리', items:[
+        ['c-emp', '소속 직원 목록 · 앱 가입 · 이용 권한', 'admin/members'],
+        ['c-detail', '직원 상세 · 이용 권한 부여와 해제', 'admin/member?id=' + ((MEMBERS.find(m => m.email === 'seoyun.lee@noeul.io') || {}).id || '')],
+        ['c-add', '앱 가입 계정 찾아 소속으로 등록', 'admin/members#add&q=신'],
+        ['c-off', '예약이 있는 직원의 권한 해제', 'admin/members#off=이서윤'],
+        ['c-addnone', '찾는 앱 계정이 없을 때', 'admin/members#add&q=홍길동', 1],
+        ['c-unjoined', '앱에 가입하지 않은 직원', 'admin/members#f=미가입', 1],
       ]},
-      {t:'관리자 · 2. 예약 내역', items:[
-        ['c-res', '예정 예약', C('res&f=예정')],
-        ['c-done', '완료 예약', C('res&f=완료')],
-        ['c-cancel', '취소 예약 (숙박권 미차감)', C('res&f=취소')],
-        ['c-low', '잔여 숙박권이 얼마 안 남았을 때', C('low=4'), 1],
-        ['c-zero', '잔여 숙박권을 모두 썼을 때', C('low=0'), 1],
+      {t:'예약 관리', items:[
+        ['c-list', '회사 숙박권 예약 목록', A('list')],
+        ['c-board', '회사 예약만 보이는 예약 보드', A('board')],
+        ['c-res', '기업 숙박권 예약 상세 (조회 전용)', D(id.corp)],
       ]},
     ]},
   ];
   const H = location.hash;
   const curId = (H.match(/case=([\w-]+)/) || [])[1];
-  const all = DOCS.flatMap(d => d.secs.flatMap(s => s.items.map(it => ({doc:d.doc, sec:s.t, id:it[0], t:it[1], url:it[2], edge:!!it[3]}))));
+  const withRole = (u, role) => { const [p, h] = u.split('#'); return p + (p.includes('?') ? '&' : '?') + 'role=' + role + (h ? '#' + h : ''); };
+  const all = DOCS.flatMap((d, di) => d.secs.flatMap(s => s.items.map(it => ({doc:d.doc, sec:s.t, id:it[0], t:it[1], url:withRole(it[2], di ? 'corp' : 'hq'), edge:!!it[3]}))));
   window.__CASES = all;
   const cur = all.find(x => x.id === curId);
-  let docIx = cur ? DOCS.findIndex(d => d.doc === cur.doc) : (/\/(corp|app)\//.test(location.pathname) ? 1 : 0);
+  let docIx = cur ? DOCS.findIndex(d => d.doc === cur.doc) : (typeof IS_CORP !== 'undefined' && IS_CORP ? 1 : 0);
   let onlyEdge = false;
 
   const css = `
@@ -99,8 +96,8 @@
   .cs-fab:hover{background:#F6F7F8}
   .cs-fab svg{width:18px;height:18px;flex:none}
   .cs-fab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#768091;font-weight:500}
-  .cs-scrim{position:fixed;inset:0;background:rgba(26,26,30,.28);z-index:96;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 24px}
-  .cs{background:#fff;width:min(880px,100%);max-height:84vh;border-radius:28px 28px 0 0;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(26,26,30,.18);font-family:var(--font,sans-serif);color:#1A1A1E}
+  .cs-scrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:96;display:flex;align-items:center;justify-content:center;padding:24px}
+  .cs{background:#fff;width:min(880px,100%);max-height:min(720px,calc(100vh - 48px));min-height:0;border-radius:24px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(26,26,30,.24);font-family:var(--font,sans-serif);color:#1A1A1E}
   .cs-h{padding:22px 24px 12px;display:flex;flex-direction:column;gap:12px}
   .cs-h .top{display:flex;justify-content:space-between;align-items:center}
   .cs-h h3{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
@@ -111,7 +108,7 @@
   .cs-seg button.on{background:#fff;color:#1A1A1E;box-shadow:0 1px 3px rgba(0,0,0,.08)}
   .cs-edge{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:#575F6C;cursor:pointer;margin-left:auto}
   .cs-edge input{width:18px;height:18px;accent-color:#1A1A1E}
-  .cs-b{overflow:auto;padding:4px 24px 28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px;align-content:start}
+  .cs-b{overflow-y:auto;min-height:0;flex:1;padding:4px 24px 28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px;align-content:start}
   .cs-sec{display:flex;flex-direction:column}
   .cs-sec h4{margin:14px 0 6px;font-size:15px;font-weight:700;color:#575F6C}
   .cs-it{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;font-size:15px;line-height:1.4}
@@ -137,8 +134,8 @@
     const d = DOCS[docIx];
     box.innerHTML = `<div class="cs-h"><div class="top"><h3>요구사항 화면별 케이스</h3><button class="x" data-x aria-label="닫기"><svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
       <div class="row"><div class="cs-seg">${DOCS.map((x, i) => `<button data-doc="${i}" class="${i === docIx ? 'on' : ''}">${x.doc}</button>`).join('')}</div>
-      <label class="cs-edge"><input type="checkbox" data-edge ${onlyEdge ? 'checked' : ''}>엣지 케이스만</label></div></div>
-      <div class="cs-b">${d.secs.map(s => { const its = s.items.filter(it => !onlyEdge || it[3]); return its.length ? `<div class="cs-sec"><h4>${s.t}</h4>${its.map(it => `<button class="cs-it ${it[0] === curId ? 'on' : ''}" data-go="${it[0]}">${it[3] ? '<i>엣지</i>' : ''}<b>${it[1]}</b><u>${it[2].split('/')[0] === 'app' ? '직원 앱' : it[2].startsWith('corp') ? '기업 관리자' : it[2].includes('reservation?') ? '예약 상세' : '예약 관리'}</u></button>`).join('')}</div>` : ''; }).join('')}</div>`;
+      <label class="cs-edge"><input type="checkbox" data-edge ${onlyEdge ? 'checked' : ''}>예외 상황만</label></div></div>
+      <div class="cs-b">${d.secs.map(s => { const its = s.items.filter(it => !onlyEdge || it[3]); return its.length ? `<div class="cs-sec"><h4>${s.t}</h4>${its.map(it => `<button class="cs-it ${it[0] === curId ? 'on' : ''}" data-go="${it[0]}">${it[3] ? '<i>예외</i>' : ''}<b>${it[1]}</b><u>${it[2].split('/')[0] === 'app' ? '직원 앱' : it[2].startsWith('corp') ? '기업 관리자' : it[2].includes('reservation?') ? '예약 상세' : '예약 관리'}</u></button>`).join('')}</div>` : ''; }).join('')}</div>`;
   }
   fab.onclick = () => {
     const sc = document.createElement('div'); sc.className = 'cs-scrim';

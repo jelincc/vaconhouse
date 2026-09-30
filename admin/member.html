@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=202609301941">
 <style>
 .wrap{max-width:1320px;width:100%;display:flex;flex-direction:column;gap:20px}
 .back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:15px;text-decoration:none;align-self:flex-start;margin-left:-4px}
@@ -59,6 +59,17 @@ tbody tr:hover td{background:#FAFBFC}
 .panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .empty{padding:48px 16px;text-align:center;color:var(--ink-3)}
 .empty .tbtn{white-space:nowrap}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}
+.pair > .card{display:flex;flex-direction:column}
+.card > h3{font-size:18px;margin-bottom:6px}
+.lv{display:grid;grid-template-columns:128px minmax(0,1fr);margin:0}
+.lv dt,.lv dd{margin:0;min-height:52px;display:flex;align-items:center;border-bottom:1px solid var(--line);font-size:15.5px}
+.lv dt{color:var(--ink-3)}
+.lv dd{gap:10px;min-width:0;white-space:nowrap}
+.lv dd .mut{white-space:nowrap}
+.lv dt:nth-last-of-type(1),.lv dd:last-child{border-bottom:0}
+.lv .ctl{margin-left:auto}
+.memos{max-height:240px}
 </style>
 </head>
 <body>
@@ -66,80 +77,108 @@ tbody tr:hover td{background:#FAFBFC}
   <aside class="side"></aside>
   <main class="main"><div class="wrap" id="wrap"></div></main>
 </div>
-<script src="data.js"></script>
-<script src="cases.js" defer></script>
+<script src="data.js?v=202609301941"></script>
+<script src="../corp/corp-data.js?v=202609301941"></script>
+<script src="cases.js?v=202609301941" defer></script>
 <script>
 mountSide();
 const $ = id => document.getElementById(id);
-const m = MEMBERS.find(x => x.id === new URLSearchParams(location.search).get('id')) || MEMBERS[0];
+const QP = new URLSearchParams(location.search);
+const m = MEMBERS.find(x => x.id === QP.get('id')) || (() => { const e = QP.get('email') && EMP.find(x => x.email === QP.get('email')); return e ? {id:'', name:e.name, email:e.email, phone:e.phone.replace(/\D/g, ''), join:'이메일', joined:'2026-09-01', tier:'게스트', status:'이용 가능', push:false, sub:false, birth:'', memos:[]} : null; })() || (IS_CORP ? MEMBERS.find(x => empOf(x.email)) : null) || MEMBERS[0];
 let edit = false, medit = false;
 function render(){
   const L = memberRes(m).sort((a, b) => b.in - a.in), act = L.filter(ACTIVE);
   const up = act.filter(r => r.out >= 0).sort((a, b) => a.in - b.in)[0];
   const paid = act.reduce((a, r) => a + price(r).sub, 0);
   const stop = m.status !== '이용 가능';
+  const emp = empOf(m.email);
   const own = m.tier === '오너십', plan = PLANS.find(x => x.id === m.plan), left = own ? nightsLeft(m) : null;
   $('wrap').innerHTML = `
-    <a class="back" href="members">${ICON.back}회원 관리</a>
+    <a class="back" href="members">${ICON.back}${IS_CORP ? '직원 관리' : '회원 관리'}</a>
     <div class="head">
       <div class="who"><div class="av">${esc(m.name[0])}</div><div>
         <h1>${esc(m.name)} ${stop ? BD(m.status, 'red', 'lg') : ''}</h1>
         <p>${m.join} 가입 · <span class="num">${m.joined.slice(0, 10).replace(/-/g, '.')}</span> · ${m.tier}</p></div></div>
-      <div class="acts"><a class="btn primary" href="./#board&create=&m=${m.id}" ${stop ? 'aria-disabled="true" style="pointer-events:none;opacity:.35"' : ''}>이 회원으로 예약 등록</a></div>
+      <div class="acts hq-only"><a class="btn primary" href="./#board&create=&m=${m.id}" ${stop ? 'aria-disabled="true" style="pointer-events:none;opacity:.35"' : ''}>이 회원으로 예약 등록</a></div>
     </div>
     ${stop ? `<div class="callout red"><div class="tx"><b>이용이 정지된 회원이에요</b><span>앱 로그인과 새 예약이 막혀 있어요. 이미 잡힌 예약은 그대로 유지돼요.</span></div></div>` : ''}
-    <div class="facts">
+    ${IS_CORP ? `<div class="facts">
+      <div class="fact"><small>회사 숙박권 예약</small><b class="num">${act.length}회</b><span>취소 ${L.length - act.length}회</span></div>
+      <div class="fact"><small>다가오는 예약</small><b>${up ? `${vById[up.villa].name}` : '없음'}</b><span class="num">${up ? `${mdw(up.in)} – ${mdw(up.out)}` : '–'}</span></div>
+      <div class="fact"><small>사용한 숙박권</small><b class="num">${act.filter(r => r.out < 0).reduce((a, r) => a + r.out - r.in, 0)}박</b><span>이용 완료 기준</span></div>
+      <div class="fact"><small>이용 권한</small><b>${emp && emp.perm ? '부여' : '해제'}</b><span class="num">${emp && emp.perm ? `${emp.since} 부여` : emp && emp.off ? `${emp.off} 해제` : '–'}</span></div>
+    </div>` : `<div class="facts">
       <div class="fact"><small>예약</small><b class="num">${act.length}회</b><span>취소 ${L.length - act.length}회</span></div>
       <div class="fact"><small>다가오는 예약</small><b>${up ? `${vById[up.villa].name}` : '없음'}</b><span class="num">${up ? `${mdw(up.in)} – ${mdw(up.out)}` : '–'}</span></div>
       <div class="fact"><small>누적 결제</small><b class="num">${won(paid)}</b><span>취소 제외</span></div>
       ${own ? `<div class="fact"><small>남은 숙박일</small><b class="num">평일 ${left.wk} · 주말 ${left.we}</b><span>${plan ? plan.name : ''} · 합산 ${m.wk + m.we}박 중</span></div>` : `<div class="fact"><small>마케팅 수신</small><b>${m.push ? '받음' : '안 받음'}</b><span>${m.sub ? '구독 중' : '미구독'}</span></div>`}
-    </div>
-    <div class="grid">
-      <div class="col">
-        <section class="card"><h3>예약 내역 <span style="font-weight:500;color:var(--ink-3);font-size:15px">${L.length}건</span></h3>
-          ${L.length ? `<table><thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>인원</th><th>예약 경로</th><th>결제</th><th>예약 상태</th></tr></thead><tbody>
-            ${L.map(r => `<tr data-r="${r.idx}"><td><b>${vById[r.villa].name}</b><span class="sub">${vById[r.villa].region}</span></td><td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박</span></td><td>${r.adults + r.kids + r.infants}명</td><td>${chDot(r.ch)}</td><td>${PAY_LB[r.pay] || r.pay}</td><td>${stHTML(r)}</td></tr>`).join('')}</tbody></table>`
-          : `<div class="empty">아직 예약이 없어요.<br><a class="tbtn" href="./#board&create=&m=${m.id}" style="margin-top:8px;color:var(--ink)">이 회원으로 예약 등록 ${ICON.chev}</a></div>`}
-        </section>
-        <section class="card"><h3>관리자 메모</h3>
-          <div class="memo">${m.memos.map(x => `<div class="it">${esc(x.t)}<small>${x.m}</small></div>`).join('')}
-            <div class="add"><input class="inp" id="memo" maxlength="500" placeholder="회원 관리용 메모를 남겨요. 예약마다 보이지는 않아요."><button class="btn" id="addMemo">남기기</button></div></div>
-        </section>
-      </div>
-      <div class="col">
-        <section class="card"><h3>기본 정보 ${edit ? '' : '<button class="tbtn" data-edit>수정</button>'}</h3>
-          ${edit ? `<div class="form"><label>전화번호</label><input class="inp num" id="fPhone" value="${fmtPhone(m.phone)}"><label>생일</label><input class="inp" type="date" id="fBirth" value="${m.birth}"></div>
-            <span class="err" id="fErr" style="font-size:15px;color:var(--danger-ink)"></span>
-            <div class="formfoot"><button class="btn sm" data-edit>취소</button><button class="btn sm primary" id="save">저장</button></div>`
-          : `<dl class="kv"><dt>이름</dt><dd>${esc(m.name)}</dd><dt>이메일</dt><dd>${esc(m.email)}</dd><dt>전화번호</dt><dd class="num">${fmtPhone(m.phone)}</dd><dt>생일</dt><dd>${m.birth ? m.birth.replace(/-/g, '.') : '<span class="mut">입력 안 함</span>'}</dd></dl>`}
-        </section>
-        <section class="card"><h3>멤버십 ${own && !medit ? '<button class="tbtn" data-medit>수정</button>' : ''}</h3>
-          <div class="row"><div>멤버십 타입<small>등급별 혜택은 멤버십 관리에서 정해요</small></div><div class="segb">${['게스트','오너십'].map(x => `<button data-tier="${x}" class="${m.tier === x ? 'on' : ''}">${x}</button>`).join('')}</div></div>
-          ${own ? (medit ? `<div class="form" style="margin-top:12px">
-              <label>기본 정책</label><select class="inp" id="fPlan">${PLANS.map(x => `<option value="${x.id}" ${x.id === m.plan ? 'selected' : ''}>${x.name} · ${won(x.price)}</option>`).join('')}</select>
-              <label>구좌 수</label><input class="inp num" type="number" min="1" id="fSeats" value="${m.seats}">
-              <label>계약일</label><input class="inp" type="date" id="fContract" value="${m.contract}">
-              <label>사용 개시일</label><input class="inp" type="date" id="fStart" value="${m.start}">
-              <label>평일 숙박일</label><input class="inp num" type="number" min="0" id="fWk" value="${m.wk}">
-              <label>주말 숙박일</label><input class="inp num" type="number" min="0" id="fWe" value="${m.we}">
-            </div><span class="err" id="mErr" style="font-size:14px;color:var(--danger-ink)"></span>
-            <div class="formfoot"><button class="btn sm" data-medit>취소</button><button class="btn sm primary" id="msave">저장</button></div>`
-          : `<dl class="kv" style="margin-top:12px">
-              <dt>기본 정책</dt><dd>${plan ? `${plan.name}<span class="mut" style="margin-left:6px">${plan.nights}박 / ${won(plan.price)}</span>` : '<span class="mut">없음</span>'}</dd>
-              <dt>구좌 수</dt><dd class="num">${m.seats}구좌</dd>
-              <dt>계약일</dt><dd class="num">${m.contract.replace(/-/g, '.')}</dd>
-              <dt>구독 기간</dt><dd class="num">${m.start.replace(/-/g, '.')}부터 · 기한 없음</dd>
-              <dt>숙박 가능일</dt><dd class="num">평일 ${m.wk} · 주말 ${m.we} · 합산 ${m.wk + m.we}박</dd>
-              <dt>남은 숙박일</dt><dd class="num"><b>평일 ${left.wk} · 주말 ${left.we}</b></dd>
-            </dl><p class="mut" style="font-size:14px;margin:10px 0 0">주말은 금·토요일 밤이에요. 사용 개시일 이후 예약만 차감해요.</p>`) : ''}
-        </section>
-        <section class="card"><h3>계정·상태</h3>
-          <div class="row"><div>가입 방식<small>${m.join === '카카오' ? '카카오로 로그인해요' : '이메일과 비밀번호로 로그인해요'}</small></div><span>${m.join}</span></div>
-          <div class="row"><div>비밀번호<small>관리자가 직접 정하지 않고, 회원에게 재설정 링크를 보내요</small></div>${m.join === '카카오' ? '<span class="mut" style="font-size:15px">해당 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</div>
-          <div class="row"><div>마케팅 푸시 수신<small>회원이 앱에서 바꿀 수 있어요</small></div><label class="tgl"><input type="checkbox" id="push" ${m.push ? 'checked' : ''}></label></div>
-          <div class="row"><div>운영 상태<small>${stop ? '앱 로그인과 새 예약이 막혀 있어요' : '앱을 정상적으로 쓸 수 있어요'}</small></div><button class="btn sm" data-status>${stop ? '이용 다시 허용' : '이용 정지'}</button></div>
-        </section>
-      </div>
+    </div>`}
+    <div class="pair">
+      <section class="card"><h3>기본 정보 ${edit ? '' : '<button class="tbtn" data-edit>수정</button>'}</h3>
+        ${edit ? `<div class="form"><label>전화번호</label><input class="inp num" id="fPhone" value="${fmtPhone(m.phone)}"><label>생일</label><input class="inp" type="date" id="fBirth" value="${m.birth}"></div>
+          <span class="err" id="fErr" style="font-size:15px;color:var(--danger-ink)"></span>
+          <div class="formfoot"><button class="btn sm" data-edit>취소</button><button class="btn sm primary" id="save">저장</button></div>`
+        : `<dl class="lv"><dt>이름</dt><dd>${esc(m.name)}</dd><dt>이메일</dt><dd>${esc(m.email)}</dd><dt>전화번호</dt><dd class="num">${fmtPhone(m.phone)}</dd><dt>생일</dt><dd>${m.birth ? m.birth.replace(/-/g, '.') : '<span class="mut">입력 안 함</span>'}</dd></dl>`}
+      </section>
+${IS_CORP ? `      <section class="card"><h3>기업 소속</h3>
+        <dl class="lv">${emp ? `
+          <dt>소속 회사</dt><dd>${esc(COMPANY.name)}</dd>
+          <dt>이용 권한</dt><dd>${emp.perm ? '부여' : '<span class="mut">해제</span>'}<label class="tgl ctl"><input type="checkbox" id="perm" ${emp.perm ? 'checked' : ''} aria-label="회사 숙박권 이용 권한"></label></dd>
+          <dt>권한 부여일</dt><dd class="num">${emp.perm ? emp.since : emp.off ? `<span class="mut">${emp.off} 해제</span>` : '<span class="mut">–</span>'}</dd>
+          <dt>회사 숙박권</dt><dd class="num">${nights().left}박 남음<span class="mut">회사 전체</span></dd>`
+          : `<dt>소속 회사</dt><dd><span class="mut">없음</span><button class="btn sm ctl" data-affil>${esc(COMPANY.name)} 소속으로 등록</button></dd>`}
+        </dl>
+      </section>
+` : `      <section class="card hq-only"><h3>계정과 상태</h3>
+        <dl class="lv">
+          <dt>가입 방식</dt><dd>${m.join}<span class="mut num">${m.joined.slice(0, 10).replace(/-/g, '.')}</span></dd>
+          <dt>비밀번호</dt><dd>${m.join === '카카오' ? '<span class="mut">카카오 로그인이라 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</dd>
+          <dt>마케팅 푸시</dt><dd>${m.push ? '받음' : '<span class="mut">안 받음</span>'}<label class="tgl ctl"><input type="checkbox" id="push" ${m.push ? 'checked' : ''} aria-label="마케팅 푸시 수신"></label></dd>
+          <dt>운영 상태</dt><dd>${stop ? BD(m.status, 'red') : '이용 가능'}<button class="btn sm ctl" data-status>${stop ? '다시 허용' : '이용 정지'}</button></dd>
+        </dl>
+      </section>
+`}    </div>
+    ${IS_CORP ? '' : `<div class="pair">
+      <section class="card hq-only"><h3>멤버십 ${own && !medit ? '<button class="tbtn" data-medit>수정</button>' : ''}</h3>
+        <dl class="lv"><dt>멤버십 타입</dt><dd><div class="segb">${['게스트','오너십'].map(x => `<button data-tier="${x}" class="${m.tier === x ? 'on' : ''}">${x}</button>`).join('')}</div></dd>
+        ${own && !medit ? `
+          <dt>기본 정책</dt><dd>${plan ? `${plan.name}<span class="mut">${won(plan.price)}</span>` : '<span class="mut">없음</span>'}</dd>
+          <dt>구좌 수</dt><dd class="num">${m.seats}구좌</dd>
+          <dt>계약일</dt><dd class="num">${m.contract.replace(/-/g, '.')}</dd>
+          <dt>사용 개시일</dt><dd class="num">${m.start.replace(/-/g, '.')}</dd>
+          <dt>숙박 가능일</dt><dd class="num">평일 ${m.wk} · 주말 ${m.we}</dd>
+          <dt>남은 숙박일</dt><dd class="num"><b>평일 ${left.wk} · 주말 ${left.we}</b></dd>` : ''}
+        </dl>
+        ${own && medit ? `<div class="form" style="margin-top:12px">
+            <label>기본 정책</label><select class="inp" id="fPlan">${PLANS.map(x => `<option value="${x.id}" ${x.id === m.plan ? 'selected' : ''}>${x.name} · ${won(x.price)}</option>`).join('')}</select>
+            <label>구좌 수</label><input class="inp num" type="number" min="1" id="fSeats" value="${m.seats}">
+            <label>계약일</label><input class="inp" type="date" id="fContract" value="${m.contract}">
+            <label>사용 개시일</label><input class="inp" type="date" id="fStart" value="${m.start}">
+            <label>평일 숙박일</label><input class="inp num" type="number" min="0" id="fWk" value="${m.wk}">
+            <label>주말 숙박일</label><input class="inp num" type="number" min="0" id="fWe" value="${m.we}">
+          </div><span class="err" id="mErr" style="font-size:14px;color:var(--danger-ink)"></span>
+          <div class="formfoot"><button class="btn sm" data-medit>취소</button><button class="btn sm primary" id="msave">저장</button></div>` : ''}
+      </section>
+      <section class="card"><h3>기업 소속</h3>
+        <dl class="lv">${emp ? `
+          <dt>소속 회사</dt><dd>${esc(COMPANY.name)}</dd>
+          <dt>이용 권한</dt><dd>${emp.perm ? '부여' : '<span class="mut">해제</span>'}<label class="tgl ctl"><input type="checkbox" id="perm" ${emp.perm ? 'checked' : ''} aria-label="회사 숙박권 이용 권한"></label></dd>
+          <dt>권한 부여일</dt><dd class="num">${emp.perm ? emp.since : emp.off ? `<span class="mut">${emp.off} 해제</span>` : '<span class="mut">–</span>'}</dd>
+          <dt>회사 숙박권</dt><dd class="num">${nights().left}박 남음<span class="mut">회사 전체</span></dd>`
+          : `<dt>소속 회사</dt><dd><span class="mut">없음</span><button class="btn sm ctl" data-affil>${esc(COMPANY.name)} 소속으로 등록</button></dd>`}
+        </dl>
+      </section>
+    </div>`}
+    <section class="card"><h3>예약 내역 <span style="font-weight:500;color:var(--ink-3);font-size:15px">${L.length}건</span></h3>
+      ${L.length ? `<table><thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>인원</th><th>예약 경로</th><th>결제</th><th>예약 상태</th></tr></thead><tbody>
+        ${L.map(r => `<tr data-r="${r.idx}"><td><b>${vById[r.villa].name}</b><span class="sub">${vById[r.villa].region}</span></td><td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박</span></td><td>${r.adults + r.kids + r.infants}명</td><td>${chDot(r.ch)}</td><td>${PAY_LB[r.pay] || r.pay}</td><td>${stHTML(r)}</td></tr>`).join('')}</tbody></table>`
+      : `<div class="empty">아직 예약이 없어요.</div>`}
+    </section>
+    <section class="card hq-only"><h3>관리자 메모</h3>
+      <div class="memos">${m.memos.map(x => `<div class="memo">${esc(x.t)}<small>${x.m}</small></div>`).join('')}</div>
+      <div class="memo-in"><textarea class="inp" id="memo" maxlength="500" placeholder="회원 관리용 메모를 입력해 주세요"></textarea><span class="cnt" id="memoCnt">0/500</span></div>
+      <div class="memo-foot"><button class="btn sm primary" id="addMemo" disabled>메모 등록</button></div>
+    </section>
     </div>`;
 }
 function confirmStop(){
@@ -165,10 +204,22 @@ document.addEventListener('click', e => {
     Object.assign(m, {plan:$('fPlan').value, seats, wk, we, contract:c, start:st}); m.memos.unshift({t:`멤버십 정보 수정 · 평일 ${wk} · 주말 ${we}박`, m:`jelin · ${nowStamp()}`}); saveMember(m); medit = false; render(); toast('멤버십 정보를 바꿨어요'); return; }
   if (t.closest('[data-status]')) return confirmStop();
   if (t.closest('[data-pw]')) return toast(`${m.email}로 비밀번호 재설정 링크를 보냈어요`);
-  if (t.id === 'addMemo'){ const v = $('memo').value.trim(); if (!v) return; m.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); saveMember(m); render(); toast('메모를 남겼어요'); return; }
+  if (t.closest('[data-affil]')){ EMP.unshift({name:m.name, phone:fmtPhone(m.phone), email:m.email, joined:true, perm:true, since:'9.28'}); saveEmp(); render(); toast(`${COMPANY.name} 소속으로 등록하고 이용 권한을 부여했어요`); return; }
+  if (t.id === 'addMemo'){ const v = $('memo').value.trim().slice(0, 500); if (!v) return; m.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); saveMember(m); render(); toast('메모를 남겼어요'); return; }
   if (t.id === 'save'){ const d = $('fPhone').value.replace(/\D/g, ''); if (d.length < 10){ $('fErr').textContent = '전화번호를 끝까지 입력해 주세요.'; return; } m.phone = d; m.birth = $('fBirth').value; saveMember(m); edit = false; render(); toast('기본 정보를 바꿨어요'); }
 });
-document.addEventListener('change', e => { if (e.target.id === 'push'){ m.push = e.target.checked; saveMember(m); render(); toast(m.push ? '마케팅 푸시를 받도록 바꿨어요' : '마케팅 푸시를 받지 않도록 바꿨어요'); } });
+document.addEventListener('input', e => { if (e.target.id !== 'memo') return; const n = e.target.value.length, c = $('memoCnt'); c.textContent = `${n}/500`; c.classList.toggle('full', n >= 500); $('addMemo').disabled = !e.target.value.trim(); });
+function confirmPermOff(emp){
+  const up = R.filter(r => r.corp && r.email === emp.email && ACTIVE(r) && r.in > 0).length;
+  const box = document.createElement('div'); box.className = 'mscrim';
+  box.innerHTML = `<div class="dlg"><h3>${esc(m.name)}님의 이용 권한을 해제할까요?</h3><p>회사 숙박권으로 새 예약을 할 수 없어요.${up ? ` 이미 잡힌 예약 ${up}건은 그대로 유지돼요.` : ''}</p>
+    <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl danger" data-ok>권한 해제</button></div></div>`;
+  document.body.appendChild(box);
+  box.onclick = e => { if (e.target === box || e.target.closest('[data-x]')){ box.remove(); render(); return; }
+    if (e.target.closest('[data-ok]')){ emp.perm = false; emp.off = '9.28'; saveEmp(); box.remove(); render(); toast('이용 권한을 해제했어요'); } };
+}
+document.addEventListener('change', e => { if (e.target.id === 'perm'){ const emp = empOf(m.email); if (e.target.checked){ emp.perm = true; emp.since = '9.28'; delete emp.off; saveEmp(); render(); toast('이용 권한을 부여했어요'); } else confirmPermOff(emp); return; }
+  if (e.target.id === 'push'){ m.push = e.target.checked; saveMember(m); render(); toast(m.push ? '마케팅 푸시를 받도록 바꿨어요' : '마케팅 푸시를 받지 않도록 바꿨어요'); } });
 render();
 </script>
 </body>

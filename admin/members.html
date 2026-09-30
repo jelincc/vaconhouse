@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=202609301941">
 <style>
 .wrap{max-width:1480px;width:100%;display:flex;flex-direction:column;gap:20px}
 .head h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.03em}
@@ -27,6 +27,11 @@ tbody tr{cursor:pointer}
 tbody tr:hover td{background:#FAFBFC}
 .panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .empty{padding:48px 16px;text-align:center;color:var(--ink-3)}
+.mscrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:45;display:grid;place-items:center;padding:16px}
+.dlg{background:#fff;border-radius:24px;width:min(460px,100%);box-shadow:var(--shadow);padding:24px}
+.dlg h3{margin:0;font-size:22px;font-weight:700}
+.dlg p{margin:8px 0 16px;font-size:16px;color:var(--ink-2)}
+.dlg .f{display:flex;gap:8px}
 </style>
 </head>
 <body>
@@ -34,37 +39,107 @@ tbody tr:hover td{background:#FAFBFC}
   <aside class="side"></aside>
   <main class="main"><div class="wrap" id="wrap"></div></main>
 </div>
-<script src="data.js"></script>
-<script src="cases.js" defer></script>
+<script src="data.js?v=202609301941"></script>
+<script src="../corp/corp-data.js?v=202609301941"></script>
+<script src="cases.js?v=202609301941" defer></script>
 <script>
 mountSide();
-const S = {q:'', f:'전체'};
-const F = {'전체':() => true, '오너십':m => m.tier === '오너십', '구독':m => m.sub, '카카오':m => m.join === '카카오', '이용 정지':m => m.status !== '이용 가능'};
+const S = {q:'', f:'전체', pg:{page:1, size:10}};
+const F = {'전체':() => true, '오너십':m => m.tier === '오너십', '구독':m => m.sub, '카카오':m => m.join === '카카오', '기업 소속':m => !!empOf(m.email), '이용 정지':m => m.status !== '이용 가능'};
 function render(){
+  if (IS_CORP) return renderCorp();
   const q = S.q.trim().toLowerCase().replace(/-/g, '');
   const L = MEMBERS.filter(F[S.f]).filter(m => !q || (m.name + m.phone + m.email).toLowerCase().includes(q)).sort((a, b) => b.joined.localeCompare(a.joined));
+  const total = L.length, P = paged(L, S.pg, S.f + '|' + S.q);
   document.getElementById('wrap').innerHTML = `
-    <div class="head"><h1>회원 관리</h1><p>앱 가입 회원 ${MEMBERS.length}명 · 이름을 누르면 회원 정보와 예약 내역을 봐요.</p></div>
+    <div class="head"><h1>회원 관리</h1></div>
     <div class="panel">
       <div class="tools"><div class="seg">${Object.keys(F).map(k => `<button data-f="${k}" class="${S.f === k ? 'on' : ''}">${k} <span class="num">${MEMBERS.filter(F[k]).length}</span></button>`).join('')}</div>
         <form class="sbox" id="sform" role="search" style="flex:1;max-width:360px;margin-left:auto"><input class="inp search" id="q" placeholder="이름, 전화번호, 이메일" value="${esc(S.q)}" style="max-width:none"><button type="submit" aria-label="검색">${ICON.search}</button></form></div>
-      <table><thead><tr><th>회원</th><th>전화번호</th><th>가입</th><th>멤버십</th><th>마케팅 수신</th><th>예약</th><th>상태</th></tr></thead>
-      <tbody>${L.length ? L.map(m => { const n = memberRes(m).filter(ACTIVE).length; return `<tr data-id="${m.id}">
+      <table><thead><tr><th>회원</th><th>전화번호</th><th>가입</th><th>멤버십</th><th>소속</th><th>마케팅 수신</th><th>예약</th><th>상태</th></tr></thead>
+      <tbody>${P.length ? P.map(m => { const n = memberRes(m).filter(ACTIVE).length; return `<tr data-id="${m.id}">
         <td><b>${esc(m.name)}</b><span class="sub">${esc(m.email)}</span></td>
         <td class="num">${fmtPhone(m.phone)}</td>
         <td>${m.join}<span class="sub num">${m.joined.slice(0, 10).replace(/-/g, '.')}</span></td>
         <td>${m.tier === '오너십' ? `오너십<span class="sub num">남은 평일 ${nightsLeft(m).wk} · 주말 ${nightsLeft(m).we}</span>` : '<span style="color:var(--ink-4)">게스트</span>'}</td>
+        <td>${empOf(m.email) ? `${COMPANY.name}<span class="sub">${empOf(m.email).perm ? '권한 부여' : '권한 해제'}</span>` : '<span style="color:var(--ink-4)">–</span>'}</td>
         <td>${m.push ? '받음' : '<span style="color:var(--ink-4)">안 받음</span>'}</td>
         <td class="num">${n ? `${n}회` : '<span style="color:var(--ink-4)">없음</span>'}</td>
-        <td>${m.status === '이용 가능' ? '이용 가능' : BD(m.status, 'red')}</td></tr>`; }).join('') : `<tr><td colspan="7" class="empty">조건에 맞는 회원이 없어요.</td></tr>`}</tbody></table>
+        <td>${m.status === '이용 가능' ? '이용 가능' : BD(m.status, 'red')}</td></tr>`; }).join('') : `<tr><td colspan="8" class="empty">조건에 맞는 회원이 없어요.</td></tr>`}</tbody></table>
+      ${pagerHTML(total, S.pg)}
     </div>`;
 }
+
+/* 기업 관리자: 같은 회원 관리 화면을 직원 관리로 써요. 우리 회사 직원만 보여요 */
+const CF = {'전체':() => true, '이용 가능':e => e.joined && e.perm, '권한 없음':e => e.joined && !e.perm, '미가입':e => !e.joined};
+const upOf = e => R.filter(r => r.email === e.email && ACTIVE(r) && r.in > 0).sort((a, b) => a.in - b.in);
+const rowId = e => { const m = MEMBERS.find(x => x.email === e.email); return m ? `id=${m.id}` : `email=${encodeURIComponent(e.email)}`; };
+function renderCorp(){
+  const q = S.q.trim().replace(/-/g, '');
+  const f = CF[S.f] ? S.f : '전체';
+  const L0 = EMP.filter(CF[f]).filter(e => !q || (e.name + e.email + e.phone.replace(/-/g, '')).includes(q));
+  const total = L0.length, L = paged(L0, S.pg, 'c' + f + '|' + S.q);
+  document.getElementById('wrap').innerHTML = `
+    <div class="head" style="display:flex;align-items:flex-end"><h1>직원 관리</h1><button class="btn primary" id="empAdd" style="margin-left:auto">직원 등록</button></div>
+    <div class="panel">
+      <div class="tools"><div class="seg">${Object.keys(CF).map(k => `<button data-f="${k}" class="${f === k ? 'on' : ''}">${k} <span class="num">${EMP.filter(CF[k]).length}</span></button>`).join('')}</div>
+        <form class="sbox" id="sform" role="search" style="flex:1;max-width:360px;margin-left:auto"><input class="inp search" id="q" placeholder="이름, 휴대전화번호, 이메일" value="${esc(S.q)}" style="max-width:none"><button type="submit" aria-label="검색">${ICON.search}</button></form></div>
+      <table><thead><tr><th>직원</th><th>휴대전화번호</th><th>앱 가입</th><th>다가오는 예약</th><th>이용 권한</th></tr></thead>
+      <tbody>${L.length ? L.map(e => { const i = EMP.indexOf(e), u = upOf(e); return `<tr ${e.joined ? `data-emp="${rowId(e)}"` : 'style="cursor:default"'}>
+        <td><b>${esc(e.name)}</b><span class="sub">${esc(e.email)}</span></td>
+        <td class="num">${e.phone}</td>
+        <td>${e.joined ? '가입' : '<span style="color:var(--ink-4)">미가입</span>'}</td>
+        <td>${u.length ? `${vById[u[0].villa].name}<span class="sub num">${mdw(u[0].in)}${u.length > 1 ? ` 외 ${u.length - 1}건` : ''}</span>` : '<span style="color:var(--ink-4)">없음</span>'}</td>
+        <td>${!e.joined ? '<span style="color:var(--ink-4)">가입 후 부여 가능</span>' : `<label class="tgl" onclick="event.stopPropagation()"><input type="checkbox" data-perm="${i}" ${e.perm ? 'checked' : ''} aria-label="${esc(e.name)} 이용 권한"></label><span style="margin-left:10px;color:var(--ink-3)">${e.perm ? `${e.since} 부여` : e.off ? `${e.off} 해제` : '미부여'}</span>`}</td></tr>`; }).join('')
+        : '<tr><td colspan="5" class="empty">조건에 맞는 직원이 없어요.</td></tr>'}</tbody></table>
+      ${pagerHTML(total, S.pg)}
+    </div>`;
+}
+function permOff(i){
+  const x = EMP[i], n = upOf(x).length;
+  const box = document.createElement('div'); box.className = 'mscrim';
+  box.innerHTML = `<div class="dlg"><h3>${esc(x.name)}님의 이용 권한을 해제할까요?</h3><p>회사 숙박권으로 새 예약을 할 수 없어요.${n ? ` 이미 잡힌 예약 ${n}건은 그대로 유지돼요.` : ''}</p>
+    <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl danger" data-ok>권한 해제</button></div></div>`;
+  document.body.appendChild(box);
+  box.onclick = ev => { if (ev.target === box || ev.target.closest('[data-x]')){ box.remove(); render(); return; }
+    if (ev.target.closest('[data-ok]')){ x.perm = false; x.off = '9.28'; saveEmp(); box.remove(); render(); toast(`${x.name}님의 이용 권한을 해제했어요`); } };
+}
+function empAdd(pre){
+  const box = document.createElement('div'); box.className = 'mscrim';
+  box.innerHTML = `<div class="dlg"><h3>직원 등록</h3><p>앱에 가입한 계정을 이름이나 연락처로 찾아 우리 회사 소속으로 등록해요.</p>
+    <input class="inp" id="aq" placeholder="예: 문가온, 010-3381, @noeul.io" value="${esc(pre || '')}">
+    <label style="display:flex;gap:8px;align-items:center;margin:12px 0 4px;font-size:15px;color:var(--ink-2)"><input type="checkbox" id="aGrant" checked>등록하면서 이용 권한도 부여할게요</label>
+    <div id="aList" style="margin:8px 0 16px"></div>
+    <div class="f"><button class="btn xl" data-x>닫기</button></div></div>`;
+  document.body.appendChild(box);
+  const q = box.querySelector('#aq'), list = box.querySelector('#aList');
+  const draw = () => { const v = q.value.trim(), d = v.replace(/\D/g, '');
+    const L = v ? APP_USERS.filter(u => (u.name + u.email).includes(v) || (d.length >= 3 && u.phone.replace(/\D/g, '').includes(d))) : [];
+    list.innerHTML = !v ? '<div class="empty" style="padding:16px">이름, 휴대전화번호, 이메일 중 하나를 입력해 주세요.</div>'
+      : L.length ? L.map(u => `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><div style="flex:1"><b>${u.name}</b><div class="mut num" style="font-size:14px">${u.phone.slice(0, 9)}•••• · ${u.email.replace(/^(.{3}).*@/, '$1•••@')}</div></div>${empOf(u.email) ? '<span class="mut">이미 소속</span>' : `<button class="btn sm primary" data-add="${u.email}">등록</button>`}</div>`).join('')
+      : '<div class="empty" style="padding:16px">일치하는 앱 가입 계정이 없어요.</div>'; };
+  draw(); q.oninput = draw; q.focus();
+  box.onclick = ev => { if (ev.target === box || ev.target.closest('[data-x]')) return box.remove();
+    const b = ev.target.closest('[data-add]'); if (!b) return;
+    const u = APP_USERS.find(x => x.email === b.dataset.add), g = box.querySelector('#aGrant').checked;
+    EMP.unshift({name:u.name, phone:u.phone, email:u.email, joined:true, perm:g, since:g ? '9.28' : ''}); saveEmp(); box.remove(); S.f = '전체'; render();
+    toast(`${u.name}님을 등록했어요${g ? '. 이용 권한도 부여했어요' : ''}`); };
+}
+document.addEventListener('change', e => { if (!IS_CORP || !e.target.dataset.perm) return; const i = +e.target.dataset.perm, x = EMP[i];
+  if (e.target.checked){ x.perm = true; x.since = '9.28'; delete x.off; saveEmp(); render(); toast(`${x.name}님에게 이용 권한을 부여했어요`); } else { e.target.checked = true; permOff(i); } });
 document.addEventListener('click', e => {
+  if (e.target.closest('#empAdd')) return empAdd();
+  const em = e.target.closest('tr[data-emp]'); if (em){ location.href = `member?${em.dataset.emp}`; return; }
   const f = e.target.closest('[data-f]'); if (f){ S.f = f.dataset.f; render(); return; }
   const tr = e.target.closest('tr[data-id]'); if (tr) location.href = `member?id=${tr.dataset.id}`;
 });
 document.addEventListener('submit', e => { if (e.target.id === 'sform'){ e.preventDefault(); S.q = document.getElementById('q').value; render(); } });
+bindPager(document.getElementById('wrap'), S.pg, () => render());
+const HP = new URLSearchParams(location.hash.slice(1));
+if (HP.get('f')) S.f = HP.get('f');
 render();
+if (IS_CORP && HP.has('add')) empAdd(HP.get('q') || '');
+if (IS_CORP && HP.get('off')){ const i = EMP.findIndex(e => e.name === HP.get('off') && e.perm); if (i >= 0) permOff(i); }
 </script>
 </body>
 </html>

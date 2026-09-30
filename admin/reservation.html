@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=202609301941">
 <style>
 .wrap{max-width:1480px;width:100%;display:flex;flex-direction:column;gap:20px}
 .back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:15px;text-decoration:none;align-self:flex-start;margin-left:-4px}
@@ -94,11 +94,11 @@
   <aside class="side"></aside>
   <main class="main"><div class="wrap" id="wrap"></div></main>
 </div>
-<script src="data.js"></script>
-<script src="cases.js" defer></script>
+<script src="data.js?v=202609301941"></script>
+<script src="cases.js?v=202609301941" defer></script>
 <script>
 const id = +(new URLSearchParams(location.search).get('id') ?? 42);
-const r = R[id] || R[42];
+const r = R[id] || R[42] || R.filter(Boolean)[0];
 let edit = null;
 const $ = x => document.getElementById(x);
 const STATES = [['확정','예약 확정'],['이용완료','이용 완료'],['노쇼','노쇼']];
@@ -174,7 +174,7 @@ function render(){
       </div>
 
       <div class="col">
-        <section class="card"><h3>예약 상태</h3>
+        <section class="card hq-only"><h3>예약 상태</h3>
           ${(() => { const steps = ['예약 확정','이용 중','이용 완료']; const k = steps.indexOf(cur);
             return k >= 0 ? `<ol class="life">${steps.map((s, x) => `<li class="${x < k ? 'done' : x === k ? 'now' : ''}"><i></i><span>${s}</span></li>`).join('')}</ol>`
               : `<div class="stnow"><span class="big">${stHTML(r)}</span></div>`; })()}
@@ -185,7 +185,7 @@ function render(){
           <p class="hint">${cur === '예약 취소' ? `취소된 예약이에요 · ${PAY_LB[r.pay] || ''}` : closed && r.base !== '이용완료' && r.base !== '노쇼' ? '이용이 끝난 예약은 바꿀 수 없어요. 메모는 남길 수 있어요.' : '상태를 바꾸면 변경 이력에 남아요.'}</p>
           ${closed ? '' : '<button class="tbtn dangertxt" data-cancel>예약 취소하기</button>'}
         </section>
-        <section class="card"><h3>관리자 메모</h3>
+        <section class="card hq-only"><h3>관리자 메모</h3>
           <div class="memos">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
           <div class="memo-in"><textarea class="inp" id="memoIn" maxlength="500" placeholder="운영팀에 남길 메모를 입력해 주세요"></textarea><span class="cnt" id="memoCnt">0/500</span></div>
           <div class="memo-foot"><button class="btn sm primary" id="memoAdd" disabled>메모 등록</button></div></section>

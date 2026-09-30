@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="admin.css?v=202609301941">
 <style>
 /* TDS Tab */
 .tabs{display:flex;gap:28px;border-bottom:1px solid var(--line);margin-top:-4px}
@@ -428,8 +428,8 @@ body.anno .main{margin-right:432px}
 </aside>
 <div id="layer"></div>
 
-<script src="data.js"></script>
-<script src="cases.js" defer></script>
+<script src="data.js?v=202609301941"></script>
+<script src="cases.js?v=202609301941" defer></script>
 <script>
 const $ = id => document.getElementById(id);
 const XI = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg>';
@@ -474,7 +474,7 @@ const ICK = {conflict:'conflict', notify:'bell', cancel:'cancel', change:'calend
 const needCount = () => R.filter(r => issues(r).some(k => ISSUE[k].c !== 'grey')).length;
 
 /* ---------- state ---------- */
-const S = { tab:'today', span:'w1', offset:-1, moff:0, openDay:null, collapsed:new Set(), key:null, period:'upcoming', dd:null,
+const S = { pg:{page:1, size:10}, tab:'today', span:'w1', offset:-1, moff:0, openDay:null, collapsed:new Set(), key:null, period:'upcoming', dd:null,
   f:{q:'', regions:new Set(), villas:new Set(), types:new Set(), status:'전체', channels:new Set(), withCancel:false},
   cols:{no:false, created:false, email:false} };
 try {
@@ -657,10 +657,11 @@ function paneList(){
   let rows = R.filter(r => S.key ? COND[S.key].f(r) && villaOn(vById[r.villa]) && matchQ(r) : resOn(r));
   if (!S.key){ if (S.period === 'upcoming') rows = rows.filter(r => r.out >= 0); if (S.period === 'past') rows = rows.filter(r => r.out < 0); }
   rows.sort((a, b) => S.period === 'past' && !S.key ? b.in - a.in : a.in - b.in || a.villa.localeCompare(b.villa));
-  const C = S.cols;
+  const C = S.cols, total = rows.length;
+  rows = paged(rows, S.pg, JSON.stringify([S.key, S.period, S.f.q, [...S.f.regions], [...S.f.villas], [...S.f.types], [...S.f.channels], S.f.status, S.f.withCancel]));
   return `${fbarHTML()}<div class="panel" id="listPanel">
     <div class="listbar">
-      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">${ICON.x}</button></span>` :
+      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${total}건<button data-clearkey aria-label="조건 해제">${ICON.x}</button></span>` :
         `<div class="seg">${[['upcoming','다가오는 예약'],['past','지난 예약'],['all','전체']].map(([k, lb]) => `<button data-per="${k}" class="${S.period === k ? 'on' : ''}">${lb}</button>`).join('')}</div><span class="mut">${rows.length}건</span>`}
       <div class="dd" style="margin-left:auto"><button class="btn sm line" data-cols>열 설정</button>
         ${S.dd === 'cols' ? `<div class="ddpanel" style="left:auto;right:0;min-width:200px"><div class="grp">보조 정보</div>
@@ -681,7 +682,7 @@ function paneList(){
         <td><div class="lbl">${is.map(k => BD(ISSUE[k].lb, ISSUE[k].c, 'xs' + (k === 'conflict' ? ' fill' : ''))).join('')}</div>${r.note ? `<span class="sub">${esc(r.note)}</span>` : ''}${!is.length && !r.note ? '<span style="color:var(--ink-4)">–</span>' : ''}</td>
         ${C.no ? `<td class="num mut">${r.id}</td>` : ''}${C.created ? `<td class="num" style="font-size:15px;color:var(--ink-3)">${r.created}</td>` : ''}${C.email ? `<td class="mut">${r.email || '–'}</td>` : ''}
       </tr>`; }).join('') : `<tr><td colspan="11" class="empty">조건에 맞는 예약이 없어요.</td></tr>`}</tbody>
-    </table></div></div>`;
+    </table></div>${pagerHTML(total, S.pg)}</div>`;
 }
 
 /* ---------- render ---------- */
@@ -696,6 +697,7 @@ const atToday = () => S.tab === 'month' ? S.moff === 0 : S.offset === (S.span ==
 function go(tab, key){ S.tab = tab; S.key = key || null; S.dd = null; if (key) S.period = 'all'; render(); window.scrollTo({top:0, behavior:'smooth'}); }
 $('tabs').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) go(b.dataset.t); });
 const pane = $('pane');
+bindPager(pane, S.pg, () => render());
 pane.addEventListener('click', e => {
   const t = e.target;
   const k = t.closest('[data-k]'); if (k){ go('list', k.dataset.k); return; }
@@ -759,7 +761,7 @@ function openDrawer(i){
         <div class="sg">운영</div>
         <div class="k">특이사항</div><div class="v">${esc(r.note) || '<span class="mut">없음</span>'}</div>
       </div>
-      <section class="dmemo"><h4>관리자 메모</h4>
+      <section class="dmemo hq-only"><h4>관리자 메모</h4>
         <div class="memos">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
         <div class="memo-in"><textarea class="inp" id="dMemo" maxlength="500" placeholder="운영팀에 남길 메모를 입력해 주세요"></textarea><span class="cnt" id="dMemoCnt">0/500</span></div>
         <div class="memo-foot"><button class="btn sm primary" id="dMemoAdd" disabled>메모 등록</button></div>
@@ -769,7 +771,7 @@ function openDrawer(i){
     <div class="dr-foot">
       ${sec ? `<button class="btn xl" data-do="${sec}">${ACT[sec].lb}</button>` : ''}
       ${pri === 'conflictOk' ? `<button class="btn xl" data-do="conflictOk">이미 해결했어요</button><a class="btn xl primary" href="reservation?id=${r.idx}#act=move">다른 날짜·숙소로 옮기기</a>`
-        : pri ? `<button class="btn xl ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : `<a class="btn xl primary" href="reservation?id=${r.idx}">예약 상세 보기</a>`}
+        : pri && !IS_CORP ? `<button class="btn xl ${ACT[pri].cls || 'primary'}" data-do="${pri}">${ACT[pri].lb}</button>` : `<a class="btn xl primary" href="reservation?id=${r.idx}">예약 상세 보기</a>`}
     </div>
   </aside>`;
   layer.querySelectorAll('[data-do]').forEach(b => b.onclick = () => { const m = runAct(r, b.dataset.do); layer.innerHTML = ''; render(); toast(m); });
@@ -815,6 +817,7 @@ function popAt(e, html){
   return p;
 }
 function cellMenu(villa, day, e){
+  if (IS_CORP) return;
   if (day < 0) return toast('지난 날짜에는 예약을 등록할 수 없어요', false);
   openCreate({villa, a:day, b:day + 1});
 }
