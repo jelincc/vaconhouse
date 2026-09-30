@@ -150,7 +150,7 @@ function render(){
             <div class="k">예약 경로</div><div class="v">${chDot(r.ch)}</div>`}
             <div class="sg">접수</div>
             <div class="k">예약번호</div><div class="v num">${r.id}</div>
-            <div class="k">신청일</div><div class="v num" style="${r.flags.includes('syncdate') ? 'color:var(--accent-ink)' : ''}">${r.created}${r.flags.includes('syncdate') ? '<small>기록 이상 · 채널 동기화 값</small>' : ''}</div>
+            <div class="k">신청일</div><div class="v num">${r.created}</div>
             <div class="sg">운영 특이사항 ${edit === 'note' ? '' : '<button class="tbtn" data-edit="note">수정</button>'}</div>
             ${edit === 'note' ? `<div class="v" style="grid-column:1/-1"><textarea class="inp" id="fNote" placeholder="청소·입실 시 참고할 내용">${esc(r.note)}</textarea><div class="formfoot"><button class="btn sm" data-edit="">취소</button><button class="btn sm primary" id="saveNote">저장</button></div></div>`
               : `<div class="v" style="grid-column:1/-1">${esc(r.note) || '<span class="mut">없어요.</span>'}</div>`}

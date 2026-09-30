@@ -165,7 +165,6 @@ function build(a, i){
     in:offOf(ci), out:offOf(co), adults, kids, infants, base, pay, created, note, pet:!!ex.pet, reqAt:ex.reqAt || '',
     flags:[], memos: ex.memo ? [{t:ex.memo, m:'jelin · 9.27 16:02'}] : [] };
   ['conflict','notify','dup','sync','clean'].forEach(f => ex[f] && r.flags.push(f));
-  if (created === `${co} 11:00` || created === `${ci} 15:00`) r.flags.push('syncdate');
   r.isNew = created >= '2026-09-27 18:00' && created <= '2026-09-28 10:24' && base !== '취소';
   r.seen = !(r.isNew || ex.unseen);
   r.history = [{t:`예약 접수 · ${CH[ch].lb}`, m:`${created.slice(5).replace('-','.')} · ${ch === '앱' ? '고객' : ch === '관리자' ? '운영자' : '채널 동기화'}`}];
@@ -267,7 +266,6 @@ const ISSUE = {
   sync:     {lb:'연동 오류',    c:'orange', ic:'sync',     sev:4},
   clean:    {lb:'객실 준비 미확인', c:'orange', ic:'clean', sev:4},
   unseen:   {lb:'미확인',       c:'orange', ic:'unseen',   sev:3},
-  syncdate: {lb:'신청일 이상',   c:'grey',   ic:'sync',     sev:1},
 };
 function issues(r){
   if (window.CASE_ALLCLEAR) return [];
@@ -283,7 +281,6 @@ function issues(r){
   if (live && r.flags.includes('sync')) L.push('sync');
   if (live && r.flags.includes('clean')) L.push('clean');
   if (live && !r.seen) L.push('unseen');
-  if (r.flags.includes('syncdate')) L.push('syncdate');
   return L;
 }
 function issueDesc(r, k){
@@ -299,7 +296,6 @@ function issueDesc(r, k){
     case 'sync': return '에어비앤비 쪽 변경 내역이 10:20 동기화에서 반영되지 않았어요.';
     case 'clean': return '내일 입실인데 청소 완료 확인이 아직 없어요.';
     case 'unseen': return '운영자가 아직 확인하지 않은 예약이에요.';
-    case 'syncdate': return `신청일이 ${r.created}로 ${r.created.endsWith('11:00') ? '체크아웃' : '체크인'} 시각과 같아요. 채널 동기화가 값을 덮어쓴 것으로 보여요.`;
   }
   return '';
 }
