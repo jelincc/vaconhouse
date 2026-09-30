@@ -80,30 +80,52 @@ body{background:#fff}
 .stepl span.cur{color:var(--ink);font-weight:700}
 
 /* 선물 내역 */
-.gc{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;width:100%;padding:20px 0;border-bottom:1px solid var(--line)}
+.gsum{display:flex;align-items:baseline;gap:6px;margin:4px 0 14px}
+.gsum b{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.gsum span{font-size:15px;color:var(--ink-3)}
+.gchips{display:flex;gap:6px;overflow-x:auto;margin:0 -20px 8px;padding:0 20px 4px}
+.gchips::-webkit-scrollbar{display:none}
+.gchips button{all:unset;cursor:pointer;flex:none;height:36px;padding:0 14px;border-radius:999px;background:var(--surface-2);font-size:14px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:4px}
+.gchips button span{color:var(--ink-4);font-weight:500}
+.gchips button.on{background:var(--ink);color:#fff}
+.gchips button.on span{color:rgba(255,255,255,.6)}
+.gc{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:14px;width:100%;padding:18px 0;border-bottom:1px solid var(--line)}
 .gc:last-child{border-bottom:0}
-.gc .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.gc .due{font-size:14px;color:var(--ink-2);font-weight:500}
-.gc .due.hot{color:var(--accent-ink);font-weight:600}
-.gc b{font-size:17px;font-weight:700}
-.gc small{font-size:14px;color:var(--ink-3)}
-.gc .when{margin-top:10px}
+.gc .av{width:44px;height:44px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:17px;font-weight:700;color:var(--ink-2);flex:none}
+.gc .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.gc .tx b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.gc .tx small{font-size:14px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gc .rt{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.gc .due{font-size:13px;color:var(--accent-ink);font-weight:600}
+.gc > svg{width:18px;height:18px;color:var(--ink-4);flex:none}
+.gnone{padding:48px 0;text-align:center;color:var(--ink-3);font-size:15px}
 .empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding-bottom:40px}
 .empty b{font-size:18px}
 .empty span{font-size:15px;color:var(--ink-3);line-height:1.5}
 .empty .btn{margin-top:18px;border-radius:999px;height:44px;padding:0 18px;background:var(--ink);color:#fff}
 
 /* 선물 상세 */
-.dt .bd{margin:8px 0 18px}
-.note{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:14px;color:var(--ink-2);text-align:center;line-height:1.55;margin-top:20px}
-.dt h4{margin:28px 0 6px;font-size:17px;font-weight:700}
+.hero{padding:6px 0 20px}
+.hero .bd{margin-bottom:12px}
+.hero h2{margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.35}
+.hero p{margin:6px 0 0;font-size:15px;color:var(--ink-2);line-height:1.5}
+.hero p em{font-style:normal;color:var(--accent-ink);font-weight:700}
+.ticket{position:relative;border-radius:20px;background:#FFF4EC;padding:18px 20px;display:flex;flex-direction:column;gap:4px}
+.ticket.used{background:#EAF7F1}
+.ticket.expired{background:var(--surface-2)}
+.ticket small{font-size:13px;color:var(--ink-3);font-weight:600}
+.ticket b{font-size:19px;font-weight:700;letter-spacing:-.02em}
+.ticket span{font-size:14px;color:var(--ink-2)}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;transform:translateY(-50%)}
+.ticket::before{left:-8px}.ticket::after{right:-8px}
+.dt h4{margin:26px 0 4px;font-size:16px;font-weight:700}
 .kv2{display:flex;flex-direction:column}
-.kv2 div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;font-size:15px}
+.kv2 div{display:flex;justify-content:space-between;gap:12px;padding:12px 0;font-size:15px;border-bottom:1px solid var(--line)}
+.kv2 div:last-child{border-bottom:0}
 .kv2 span{color:var(--ink-3);flex:none}
 .kv2 b{font-weight:500;text-align:right}
-.kv2 em{font-style:normal;color:var(--accent-ink);font-weight:600}
-.dt hr{border:0;border-top:1px solid var(--line);margin:18px 0 0}
-.msg{font-size:15px;line-height:1.6;margin:4px 0 0}
+.bubble{position:relative;background:var(--surface-2);border-radius:4px 18px 18px 18px;padding:14px 16px;font-size:15px;line-height:1.6;margin-top:6px}
+.bubble small{display:block;margin-top:6px;font-size:13px;color:var(--ink-3)}
 
 /* push, toast */
 .push{position:absolute;left:10px;right:10px;top:8px;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-radius:22px;padding:12px 14px;display:flex;gap:12px;box-shadow:0 12px 32px rgba(26,26,30,.18);cursor:pointer;animation:drop .35s ease-out}
@@ -201,32 +223,41 @@ function sMy(){
     <a class="logout" href="#" data-soon="로그아웃">로그아웃</a>`, true);
 }
 
+const mask = p => p.replace(/(\d{4})$/, '****');
+let GF = '전체';
 function sGifts(){
   if (!D.gifts.length) return frame('선물 내역', `<div class="empty"><b>선물 내역이 없어요</b><span>선물하기로 소중한 분에게<br>숙박권을 보내 보세요</span><button class="btn" data-soon="선물하기">선물하러 가기</button></div>`);
   /* 미사용을 만료가 가까운 순으로 먼저, 나머지는 발송일 최신순 */
-  const list = [...D.gifts.filter(g => g.st === 'unused').sort((a, b) => a.sent - b.sent), ...D.gifts.filter(g => g.st !== 'unused').sort((a, b) => b.sent - a.sent)];
-  return frame('선물 내역', list.map(g => `<button class="gc" data-g="${g.id}">
-      <span class="top">${badge(g)}${ticking(g) ? `<span class="due hot">${leftTxt(g)}</span>` : ''}</span>
-      <b>${esc(g.name)}</b>
-      <small>${g.type} 1박 · ${VILLA}</small>
-      <small class="when">${ymd(g.sent)} 발송</small></button>`).join(''));
+  const all = [...D.gifts.filter(g => g.st === 'unused').sort((a, b) => a.sent - b.sent), ...D.gifts.filter(g => g.st !== 'unused').sort((a, b) => b.sent - a.sent)];
+  const F = {'전체':() => true, '미사용':g => g.st === 'unused', '사용완료':g => g.st === 'used', '기간만료':g => g.st === 'expired'};
+  const list = all.filter(F[GF]);
+  return frame('선물 내역', `
+    <div class="gsum"><b>보낸 선물 ${D.gifts.length}건</b><span>미사용 ${D.gifts.filter(F['미사용']).length}건</span></div>
+    <div class="gchips">${Object.keys(F).map(k => `<button data-gf="${k}" class="${GF === k ? 'on' : ''}">${k}<span>${D.gifts.filter(F[k]).length}</span></button>`).join('')}</div>
+    ${list.length ? list.map(g => `<button class="gc" data-g="${g.id}">
+      <span class="av">${esc(g.name[0])}</span>
+      <span class="tx"><b>${esc(g.name)}</b><small>${g.type} 1박 · ${VILLA}</small><small>${ymd(g.sent)} 발송</small></span>
+      <span class="rt">${badge(g)}${ticking(g) ? `<span class="due">${leftTxt(g)}</span>` : ''}</span>${ICON.chev}</button>`).join('')
+      : `<div class="gnone">${GF} 선물이 없어요</div>`}`);
 }
 
 function sDetail(){
   const g = gById(cur().g);
   const row = (k, v) => `<div><span>${k}</span><b>${v}</b></div>`;
+  const head = g.st === 'used' ? [`${esc(g.name)}님이 선물을 사용했어요`, `${ymd(g.usedAt)}에 숙박을 마쳤어요`]
+    : g.st === 'expired' ? ['기간 안에 사용되지 않았어요', `${g.type} 1박은 잔여 숙박일로 돌아왔어요`]
+    : ['아직 사용하지 않았어요', ticking(g) ? `<em>${leftTxt(g)}</em><br>${ymdhm(g.sent + LIMIT)}까지 사용할 수 있어요` : `${esc(g.name)}님이 숙박을 마치면 알려 드릴게요`];
   return frame('선물 상세', `<div class="dt">
-    ${badge(g)}
-    ${g.st === 'expired' ? `<div class="note">기간 내 미사용으로 만료됐어요.<br>${g.type} 1박은 잔여 숙박일로 돌아왔어요.</div>` : ''}
+    <div class="hero">${badge(g)}<h2>${head[0]}</h2><p>${head[1]}</p></div>
+    <div class="ticket ${g.st}"><small>선물한 숙박권</small><b>${g.type} 1박</b><span>${VILLA}</span></div>
     <h4>선물 정보</h4>
     <div class="kv2">
       ${row('받는 분', esc(g.name))}
-      ${row('휴대폰번호', g.phone)}
-      ${row('숙박권', `${g.type} 1박 · ${VILLA}`)}
+      ${row('휴대폰번호', mask(g.phone))}
       ${row('발송 일시', ymdhm(g.sent))}
-      ${g.st === 'used' ? row('사용 일시', ymd(g.usedAt)) : !g.booked ? row('만료 일시', ymdhm(g.sent + LIMIT) + (ticking(g) ? `<br><em>${leftTxt(g)}</em>` : '')) : ''}
+      ${g.st === 'used' ? row('사용 일시', ymd(g.usedAt)) : g.st === 'expired' || !g.booked ? row('만료 일시', ymdhm(g.sent + LIMIT)) : ''}
     </div>
-    ${g.msg ? `<hr><h4>메시지</h4><p class="msg">${esc(g.msg)}</p>` : ''}</div>`);
+    ${g.msg ? `<h4>보낸 메시지</h4><div class="bubble">${esc(g.msg)}<small>${ymd(g.sent)}</small></div>` : ''}</div>`);
 }
 
 /* ---------- 받는 분 쪽 이벤트 (시안 조작) ---------- */
@@ -284,6 +315,7 @@ $('scr').addEventListener('click', e => {
   if (t.closest('[data-back]')) return pop();
   const so = t.closest('[data-soon]'); if (so){ e.preventDefault(); return ptoast(`${so.dataset.soon}는 기존 화면을 그대로 써요`); }
   const go = t.closest('[data-go]'); if (go) return push({s:go.dataset.go});
+  const gf = t.closest('[data-gf]'); if (gf){ GF = gf.dataset.gf; return draw(); }
   const g = t.closest('[data-g]'); if (g) return push({s:'detail', g:g.dataset.g});
 });
 
