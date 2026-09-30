@@ -232,6 +232,7 @@ try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); Object.entries(
 /* 권한: 본사 운영 관리자(hq)와 기업 관리자(corp)는 같은 어드민을 써요. 기업 관리자는 자기 회사 숙박권 예약만 보여요 */
 const ROLE = (() => { try { const p = new URLSearchParams(location.search); if (p.has('role')) localStorage.setItem('vh-role', p.get('role')); return localStorage.getItem('vh-role') || 'hq'; } catch(e){ return 'hq'; } })();
 const IS_CORP = ROLE === 'corp';
+if (IS_CORP && /\/stats(\.html)?$/.test(location.pathname)) location.replace('members');
 if (IS_CORP){ const keep = R.filter(r => r.corp); R.length = 0; keep.forEach(r => { R[r.idx] = r; }); R.find = function(f){ return this.filter(f)[0]; }; }
 function save(r){ try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); p[r.idx] = Object.fromEntries(KEEP.map(k => [k, r[k]])); localStorage.setItem(STORE, JSON.stringify(p)); } catch(e){} }
 function resetDemo(){ try { Object.keys(localStorage).filter(k => /^vh-(res-state|res-extra|corp|mem)/.test(k)).forEach(k => localStorage.removeItem(k)); } catch(e){} }
