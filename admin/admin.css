@@ -280,3 +280,12 @@ body.corp .hq-only,body.corp [data-do],body.corp [data-move],body.corp [data-edi
 .pg-nums button:disabled{opacity:.3;cursor:default}
 .pg-nums button svg{width:18px;height:18px}
 .pg-size{justify-self:end;height:36px;border:0;border-radius:10px;background:var(--surface-2);padding:0 12px;font-size:15px;font-weight:600;color:var(--ink-2);cursor:pointer}
+
+/* 계정: 아이디, 소속과 권한, 로그아웃을 한 줄씩 */
+.side .userbox{flex-direction:column;align-items:stretch;gap:10px;padding:16px 10px 4px}
+.userbox .ub{min-width:0}
+.userbox .ub b,.userbox .ub small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.userbox .ub b{font-size:16px}
+.userbox .ub small{margin-top:2px}
+.side .userbox #logout{align-self:flex-start;font-size:14px;font-weight:600;text-decoration:none;padding:6px 10px;margin-left:-10px;border-radius:8px}
+.side .userbox #logout:hover{background:rgba(255,255,255,.08)}

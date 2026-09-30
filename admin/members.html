@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="admin.css?v=202609301941">
+<link rel="stylesheet" href="admin.css?v=202609301948">
 <style>
 .wrap{max-width:1480px;width:100%;display:flex;flex-direction:column;gap:20px}
 .head h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.03em}
@@ -39,9 +39,9 @@ tbody tr:hover td{background:#FAFBFC}
   <aside class="side"></aside>
   <main class="main"><div class="wrap" id="wrap"></div></main>
 </div>
-<script src="data.js?v=202609301941"></script>
-<script src="../corp/corp-data.js?v=202609301941"></script>
-<script src="cases.js?v=202609301941" defer></script>
+<script src="data.js?v=202609301948"></script>
+<script src="../corp/corp-data.js?v=202609301948"></script>
+<script src="cases.js?v=202609301948" defer></script>
 <script>
 mountSide();
 const S = {q:'', f:'전체', pg:{page:1, size:10}};
@@ -90,7 +90,7 @@ function renderCorp(){
         <td class="num">${e.phone}</td>
         <td>${e.joined ? '가입' : '<span style="color:var(--ink-4)">미가입</span>'}</td>
         <td>${u.length ? `${vById[u[0].villa].name}<span class="sub num">${mdw(u[0].in)}${u.length > 1 ? ` 외 ${u.length - 1}건` : ''}</span>` : '<span style="color:var(--ink-4)">없음</span>'}</td>
-        <td>${!e.joined ? '<span style="color:var(--ink-4)">가입 후 부여 가능</span>' : `<label class="tgl" onclick="event.stopPropagation()"><input type="checkbox" data-perm="${i}" ${e.perm ? 'checked' : ''} aria-label="${esc(e.name)} 이용 권한"></label><span style="margin-left:10px;color:var(--ink-3)">${e.perm ? `${e.since} 부여` : e.off ? `${e.off} 해제` : '미부여'}</span>`}</td></tr>`; }).join('')
+        <td>${!e.joined ? '<span style="color:var(--ink-4)">가입 후 부여 가능</span>' : `<div style="display:flex;align-items:center;gap:10px"><label class="tgl" onclick="event.stopPropagation()"><input type="checkbox" data-perm="${i}" ${e.perm ? 'checked' : ''} aria-label="${esc(e.name)} 이용 권한"></label><span style="color:var(--ink-3)">${e.perm ? `${e.since} 부여` : e.off ? `${e.off} 해제` : '미부여'}</span></div>`}</td></tr>`; }).join('')
         : '<tr><td colspan="5" class="empty">조건에 맞는 직원이 없어요.</td></tr>'}</tbody></table>
       ${pagerHTML(total, S.pg)}
     </div>`;
