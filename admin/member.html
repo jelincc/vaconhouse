@@ -13,47 +13,47 @@
 <link rel="stylesheet" href="admin.css">
 <style>
 .wrap{max-width:1320px;width:100%;display:flex;flex-direction:column;gap:20px}
-.back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:14px;text-decoration:none;align-self:flex-start;margin-left:-4px}
+.back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:15px;text-decoration:none;align-self:flex-start;margin-left:-4px}
 .back svg{width:18px;height:18px}
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .head .who{display:flex;align-items:center;gap:16px}
-.head .av{width:56px;height:56px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:22px;font-weight:700}
-.head h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
-.head p{margin:4px 0 0;font-size:15px;color:var(--ink-2)}
+.head .av{width:56px;height:56px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:24px;font-weight:700}
+.head h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.03em;display:flex;align-items:center;gap:8px}
+.head p{margin:4px 0 0;font-size:16px;color:var(--ink-2)}
 .head .acts{display:flex;gap:8px}
-.head .acts .btn{height:48px;padding:0 22px;border-radius:12px;font-size:15px}
+.head .acts .btn{height:48px;padding:0 22px;border-radius:12px;font-size:16px}
 .facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .fact{padding:18px 22px;border-right:1px solid var(--line)}
 .fact:last-child{border-right:0}
-.fact small{display:block;font-size:14px;color:var(--ink-3);margin-bottom:2px}
-.fact b{font-size:17px;font-weight:700}
-.fact span{display:block;font-size:14px;color:var(--ink-3);margin-top:2px}
+.fact small{display:block;font-size:15px;color:var(--ink-3);margin-bottom:2px}
+.fact b{font-size:18px;font-weight:700}
+.fact span{display:block;font-size:15px;color:var(--ink-3);margin-top:2px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start}
 .col{display:flex;flex-direction:column;gap:16px;min-width:0}
 .card > h3 .tbtn{margin-left:auto}
-.form{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;align-items:center;font-size:14px}
+.form{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;align-items:center;font-size:15px}
 .form label{color:var(--ink-3)}
 .formfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15.5px}
 .row:last-child{border-bottom:0}
-.row small{display:block;font-size:13px;color:var(--ink-3);margin-top:1px}
+.row small{display:block;font-size:14px;color:var(--ink-3);margin-top:1px}
 .segb{display:flex;background:var(--surface-2);border-radius:10px;padding:3px;gap:2px}
-.segb button{border:0;background:transparent;height:32px;padding:0 12px;border-radius:8px;font-weight:600;color:var(--ink-3);font-size:14px}
+.segb button{border:0;background:transparent;height:32px;padding:0 12px;border-radius:8px;font-weight:600;color:var(--ink-3);font-size:15px}
 .segb button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .memo{display:flex;flex-direction:column;gap:8px}
-.memo .it{background:var(--surface-2);border-radius:12px;padding:10px 12px;font-size:14px}
-.memo .it small{display:block;color:var(--ink-3);font-size:13px;margin-top:2px}
+.memo .it{background:var(--surface-2);border-radius:12px;padding:10px 12px;font-size:15px}
+.memo .it small{display:block;color:var(--ink-3);font-size:14px;margin-top:2px}
 .memo .add{display:flex;gap:8px}
 .mscrim{position:fixed;inset:0;background:rgba(26,26,30,.36);z-index:45;display:grid;place-items:center;padding:16px}
 .dlg{background:#fff;border-radius:24px;width:min(440px,100%);box-shadow:var(--shadow);padding:24px}
-.dlg h3{margin:0;font-size:20px;font-weight:700}
-.dlg p{margin:8px 0 18px;font-size:14.5px;color:var(--ink-2)}
+.dlg h3{margin:0;font-size:22px;font-weight:700}
+.dlg p{margin:8px 0 18px;font-size:15.5px;color:var(--ink-2)}
 .dlg .f{display:flex;gap:8px}
 table{width:100%;border-collapse:collapse}
-th{font-size:14px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+th{font-size:15px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:middle}
 tr:last-child td{border-bottom:0}
-td .sub{display:block;font-size:13px;color:var(--ink-3);margin-top:1px}
+td .sub{display:block;font-size:14px;color:var(--ink-3);margin-top:1px}
 tbody tr{cursor:pointer}
 tbody tr:hover td{background:#FAFBFC}
 .panel{border:1px solid var(--line);border-radius:20px;overflow:hidden}
@@ -96,20 +96,20 @@ function render(){
     </div>
     <div class="grid">
       <div class="col">
-        <section class="card"><h3>예약 내역 <span style="font-weight:500;color:var(--ink-3);font-size:14px">${L.length}건</span></h3>
+        <section class="card"><h3>예약 내역 <span style="font-weight:500;color:var(--ink-3);font-size:15px">${L.length}건</span></h3>
           ${L.length ? `<table><thead><tr><th>숙소</th><th>체크인 → 체크아웃</th><th>인원</th><th>예약 경로</th><th>결제</th><th>예약 상태</th></tr></thead><tbody>
             ${L.map(r => `<tr data-r="${r.idx}"><td><b>${vById[r.villa].name}</b><span class="sub">${vById[r.villa].region}</span></td><td class="num">${mdw(r.in)} → ${mdw(r.out)}<span class="sub">${r.out - r.in}박</span></td><td>${r.adults + r.kids + r.infants}명</td><td>${chDot(r.ch)}</td><td>${PAY_LB[r.pay] || r.pay}</td><td>${stHTML(r)}</td></tr>`).join('')}</tbody></table>`
           : `<div class="empty">아직 예약이 없어요.<br><a class="tbtn" href="./#board&create=&m=${m.id}" style="margin-top:8px;color:var(--ink)">이 회원으로 예약 등록 ${ICON.chev}</a></div>`}
         </section>
         <section class="card"><h3>관리자 메모</h3>
           <div class="memo">${m.memos.map(x => `<div class="it">${esc(x.t)}<small>${x.m}</small></div>`).join('')}
-            <div class="add"><input class="inp" id="memo" placeholder="회원 관리용 메모를 남겨요. 예약마다 보이지는 않아요."><button class="btn" id="addMemo">남기기</button></div></div>
+            <div class="add"><input class="inp" id="memo" maxlength="500" placeholder="회원 관리용 메모를 남겨요. 예약마다 보이지는 않아요."><button class="btn" id="addMemo">남기기</button></div></div>
         </section>
       </div>
       <div class="col">
         <section class="card"><h3>기본 정보 ${edit ? '' : '<button class="tbtn" data-edit>수정</button>'}</h3>
           ${edit ? `<div class="form"><label>전화번호</label><input class="inp num" id="fPhone" value="${fmtPhone(m.phone)}"><label>생일</label><input class="inp" type="date" id="fBirth" value="${m.birth}"></div>
-            <span class="err" id="fErr" style="font-size:14px;color:var(--danger-ink)"></span>
+            <span class="err" id="fErr" style="font-size:15px;color:var(--danger-ink)"></span>
             <div class="formfoot"><button class="btn sm" data-edit>취소</button><button class="btn sm primary" id="save">저장</button></div>`
           : `<dl class="kv"><dt>이름</dt><dd>${esc(m.name)}</dd><dt>이메일</dt><dd>${esc(m.email)}</dd><dt>전화번호</dt><dd class="num">${fmtPhone(m.phone)}</dd><dt>생일</dt><dd>${m.birth ? m.birth.replace(/-/g, '.') : '<span class="mut">입력 안 함</span>'}</dd></dl>`}
         </section>
@@ -122,7 +122,7 @@ function render(){
               <label>사용 개시일</label><input class="inp" type="date" id="fStart" value="${m.start}">
               <label>평일 숙박일</label><input class="inp num" type="number" min="0" id="fWk" value="${m.wk}">
               <label>주말 숙박일</label><input class="inp num" type="number" min="0" id="fWe" value="${m.we}">
-            </div><span class="err" id="mErr" style="font-size:13px;color:var(--danger-ink)"></span>
+            </div><span class="err" id="mErr" style="font-size:14px;color:var(--danger-ink)"></span>
             <div class="formfoot"><button class="btn sm" data-medit>취소</button><button class="btn sm primary" id="msave">저장</button></div>`
           : `<dl class="kv" style="margin-top:12px">
               <dt>기본 정책</dt><dd>${plan ? `${plan.name}<span class="mut" style="margin-left:6px">${plan.nights}박 / ${won(plan.price)}</span>` : '<span class="mut">없음</span>'}</dd>
@@ -131,11 +131,11 @@ function render(){
               <dt>구독 기간</dt><dd class="num">${m.start.replace(/-/g, '.')}부터 · 기한 없음</dd>
               <dt>숙박 가능일</dt><dd class="num">평일 ${m.wk} · 주말 ${m.we} · 합산 ${m.wk + m.we}박</dd>
               <dt>남은 숙박일</dt><dd class="num"><b>평일 ${left.wk} · 주말 ${left.we}</b></dd>
-            </dl><p class="mut" style="font-size:13px;margin:10px 0 0">주말은 금·토요일 밤이에요. 사용 개시일 이후 예약만 차감해요.</p>`) : ''}
+            </dl><p class="mut" style="font-size:14px;margin:10px 0 0">주말은 금·토요일 밤이에요. 사용 개시일 이후 예약만 차감해요.</p>`) : ''}
         </section>
         <section class="card"><h3>계정·상태</h3>
           <div class="row"><div>가입 방식<small>${m.join === '카카오' ? '카카오로 로그인해요' : '이메일과 비밀번호로 로그인해요'}</small></div><span>${m.join}</span></div>
-          <div class="row"><div>비밀번호<small>관리자가 직접 정하지 않고, 회원에게 재설정 링크를 보내요</small></div>${m.join === '카카오' ? '<span class="mut" style="font-size:14px">해당 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</div>
+          <div class="row"><div>비밀번호<small>관리자가 직접 정하지 않고, 회원에게 재설정 링크를 보내요</small></div>${m.join === '카카오' ? '<span class="mut" style="font-size:15px">해당 없음</span>' : '<button class="btn sm" data-pw>재설정 링크 보내기</button>'}</div>
           <div class="row"><div>마케팅 푸시 수신<small>회원이 앱에서 바꿀 수 있어요</small></div><label class="tgl"><input type="checkbox" id="push" ${m.push ? 'checked' : ''}></label></div>
           <div class="row"><div>운영 상태<small>${stop ? '앱 로그인과 새 예약이 막혀 있어요' : '앱을 정상적으로 쓸 수 있어요'}</small></div><button class="btn sm" data-status>${stop ? '이용 다시 허용' : '이용 정지'}</button></div>
         </section>

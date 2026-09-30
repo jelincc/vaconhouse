@@ -12,15 +12,15 @@
 <link rel="stylesheet" href="admin.css">
 <style>
 .wrap{max-width:1480px;width:100%;display:flex;flex-direction:column;gap:20px}
-.back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:14px;text-decoration:none;align-self:flex-start;margin-left:-4px}
+.back{display:inline-flex;align-items:center;gap:2px;color:var(--ink-3);font-weight:600;font-size:15px;text-decoration:none;align-self:flex-start;margin-left:-4px}
 .back svg{width:18px;height:18px}
 .back:hover{color:var(--ink)}
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .head .lbls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.head h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.3}
-.head p{margin:6px 0 0;font-size:15px;color:var(--ink-2)}
+.head h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.3}
+.head p{margin:6px 0 0;font-size:16px;color:var(--ink-2)}
 .head .acts{display:flex;gap:8px}
-.head .acts .btn{height:48px;padding:0 22px;border-radius:12px;font-size:15px}
+.head .acts .btn{height:48px;padding:0 22px;border-radius:12px;font-size:16px}
 .calls{display:flex;flex-direction:column;gap:8px}
 .callout .act{margin-left:auto;align-self:center}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
@@ -28,35 +28,35 @@
 .facts{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .fact{padding:18px 22px;border-right:1px solid var(--line)}
 .fact:last-child{border-right:0}
-.fact small{display:block;font-size:14px;color:var(--ink-3);margin-bottom:2px}
-.fact b{font-size:17px;font-weight:700;letter-spacing:-.02em}
-.fact span{display:block;font-size:14px;color:var(--ink-3);margin-top:2px}
+.fact small{display:block;font-size:15px;color:var(--ink-3);margin-bottom:2px}
+.fact b{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.fact span{display:block;font-size:15px;color:var(--ink-3);margin-top:2px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .card > h3 .tbtn{margin-left:auto}
-.money{display:grid;grid-template-columns:1fr auto;gap:10px 16px;font-size:14.5px}
-.money .sum{font-weight:700;font-size:17px}
-.money .m2{color:var(--ink-3);font-size:14px}
-.opt{display:flex;justify-content:space-between;font-size:14.5px;padding:10px 0;border-bottom:1px solid var(--line)}
+.money{display:grid;grid-template-columns:1fr auto;gap:10px 16px;font-size:15.5px}
+.money .sum{font-weight:700;font-size:18px}
+.money .m2{color:var(--ink-3);font-size:15px}
+.opt{display:flex;justify-content:space-between;font-size:15.5px;padding:10px 0;border-bottom:1px solid var(--line)}
 .opt:last-child{border-bottom:0}
-.nt{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;padding:10px 0;border-bottom:1px solid var(--line)}
+.nt{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px;padding:10px 0;border-bottom:1px solid var(--line)}
 .nt:last-child{border-bottom:0}
-.nt small{display:block;font-size:13px;color:var(--ink-3)}
-.form{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;align-items:center;font-size:14px}
+.nt small{display:block;font-size:14px;color:var(--ink-3)}
+.form{display:grid;grid-template-columns:104px 1fr;gap:10px 12px;align-items:center;font-size:15px}
 .form label{color:var(--ink-3)}
 .stepper{display:inline-flex;align-items:center;gap:0;background:var(--surface-2);border-radius:10px;overflow:hidden}
-.stepper button{border:0;background:none;width:36px;height:36px;font-size:18px;color:var(--ink-2)}
+.stepper button{border:0;background:none;width:36px;height:36px;font-size:20px;color:var(--ink-2)}
 .stepper span{min-width:28px;text-align:center;font-weight:600}
 .frow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .frow small{color:var(--ink-3);margin-right:4px}
 .formfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.raw{font-size:13px;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
-.meta{font-size:13px;color:var(--ink-3);display:grid;grid-template-columns:72px 1fr;gap:4px 8px;padding:0 4px}
+.raw{font-size:14px;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
+.meta{font-size:14px;color:var(--ink-3);display:grid;grid-template-columns:72px 1fr;gap:4px 8px;padding:0 4px}
 .stnow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.stnow .big{font-size:20px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.stnow .big{font-size:22px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
 .stnow .big i{width:10px;height:10px;border-radius:50%}
-.hint{font-size:14px;color:var(--ink-3);margin:10px 0 0}
+.hint{font-size:15px;color:var(--ink-3);margin:10px 0 0}
 .life{list-style:none;margin:4px 0 14px;padding:0;display:flex}
-.life li{flex:1;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--ink-4);position:relative}
+.life li{flex:1;display:flex;flex-direction:column;gap:8px;font-size:15px;color:var(--ink-4);position:relative}
 .life li i{width:12px;height:12px;border-radius:50%;background:var(--surface-3);position:relative;z-index:1}
 .life li:not(:last-child)::after{content:"";position:absolute;left:12px;right:0;top:5px;height:2px;background:var(--surface-3)}
 .life li.done{color:var(--ink-2)}
@@ -71,21 +71,21 @@
 .dlg{background:#fff;border-radius:24px;width:min(540px,100%);box-shadow:var(--shadow);display:flex;flex-direction:column;max-height:calc(100vh - 32px)}
 .dlg .h{padding:24px 24px 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .dlg h3{margin:0;font-size:21px;font-weight:700;letter-spacing:-.02em}
-.dlg .h p{margin:6px 0 0;font-size:14px;color:var(--ink-3)}
+.dlg .h p{margin:6px 0 0;font-size:15px;color:var(--ink-3)}
 .dlg .b{padding:14px 24px 6px;overflow:auto;display:flex;flex-direction:column;gap:14px}
 .dlg .f{padding:14px 20px 20px;display:flex;gap:8px}
 .dlg .x{all:unset;cursor:pointer;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:var(--ink-2)}
 .dlg .x svg{width:24px;height:24px}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .fl{display:flex;flex-direction:column;gap:6px;min-width:0}
-.fl > label{font-size:14px;color:var(--ink-3);font-weight:500}
+.fl > label{font-size:15px;color:var(--ink-3);font-weight:500}
 .fl .inp{height:44px}
-.err{font-size:14px;color:var(--danger-ink)}
+.err{font-size:15px;color:var(--danger-ink)}
 .segb{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:2px}
-.segb button{flex:1;border:0;background:transparent;height:36px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:14px}
+.segb button{flex:1;border:0;background:transparent;height:36px;border-radius:9px;font-weight:600;color:var(--ink-3);font-size:15px}
 .segb button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .sugg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.sugg button{border:0;background:#fff;border-radius:999px;height:30px;padding:0 12px;font-size:14px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
+.sugg button{border:0;background:#fff;border-radius:999px;height:30px;padding:0 12px;font-size:15px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
 @media (max-width:1180px){.grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}.pair{grid-template-columns:1fr}}
 </style>
 </head>
@@ -146,6 +146,7 @@ function render(){
             <div class="k">연락처</div><div class="v num">${phoneOk(r) ? fmtPhone(r.phoneRaw) : `<span class="bad">${esc(r.phoneRaw)} · 불완전</span>`}</div>
             <div class="k">인원</div><div class="v">${r.adults + r.kids + r.infants}명<small>성인 ${r.adults}${r.kids ? ` · 아동 ${r.kids}` : ''}${r.infants ? ` · 유아 ${r.infants}` : ''}</small></div>
             <div class="k">반려동물</div><div class="v">${r.pet ? '동반' : '<span class="mut">없음</span>'}</div>
+            <div class="k">추가 옵션</div><div class="v">${p.opts.length ? p.opts.map(o => o[0]).join(', ') : '<span class="mut">없음</span>'}</div>
             <div class="k">계정</div><div class="v">${r.email ? esc(r.email) : '<span class="mut">비회원</span>'}</div>
             <div class="k">예약 경로</div><div class="v">${chDot(r.ch)}</div>`}
             <div class="sg">접수</div>
@@ -185,10 +186,10 @@ function render(){
           ${closed ? '' : '<button class="tbtn dangertxt" data-cancel>예약 취소하기</button>'}
         </section>
         <section class="card"><h3>관리자 메모</h3>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
-          <textarea class="inp" id="memoIn" placeholder="운영팀에 남길 메모. 예약 검색에도 걸려요."></textarea>
-          <div class="formfoot" style="margin-top:8px"><button class="btn sm primary" id="memoAdd">메모 남기기</button></div></section>
-        <section class="card"><h3>취소·변경 이력 <span class="mut" style="font-weight:500;font-size:14px">${r.history.length}건</span></h3>
+          <div class="memos">${r.memos.map(m => `<div class="memo">${esc(m.t)}<small>${m.m}</small></div>`).join('')}</div>
+          <div class="memo-in"><textarea class="inp" id="memoIn" maxlength="500" placeholder="운영팀에 남길 메모를 입력해 주세요"></textarea><span class="cnt" id="memoCnt">0/500</span></div>
+          <div class="memo-foot"><button class="btn sm primary" id="memoAdd" disabled>메모 등록</button></div></section>
+        <section class="card"><h3>취소·변경 이력 <span class="mut" style="font-weight:500;font-size:15px">${r.history.length}건</span></h3>
           <ul class="hist">${r.history.map(h => `<li class="${h.new ? 'new' : ''}"><span class="b"></span><div><div class="t">${esc(h.t)}</div><div class="m">${h.m}</div></div></li>`).join('')}</ul></section>
       </div>
     </div>`;
@@ -216,7 +217,7 @@ $('wrap').addEventListener('click', e => {
   if (t.id === 'saveNote'){ const v = $('fNote').value.trim(); if (v !== r.note){ log(r, `특이사항 수정 · ${v || '삭제'}`); r.note = v; save(r); toast('특이사항을 저장했어요'); } edit = null; render(); return; }
   const stb = t.closest('[data-st]'); if (stb){ const v = stb.dataset.st, before = st(r); r.base = v; log(r, `상태 변경 · ${before} → ${st(r)}`); save(r); render(); return toast(`예약 상태를 ${josa(st(r), '으로', '로')} 바꿨어요`); }
   if (t.id === 'stSave'){ const v = $('stSel').value; if (v !== r.base && !(v === '확정' && st(r) === '예약 확정')){ const before = st(r); r.base = v; log(r, `상태 변경 · ${before} → ${st(r)}`); save(r); toast(`예약 상태를 ${josa(st(r), '으로', '로')} 바꿨어요`); } render(); return; }
-  if (t.id === 'memoAdd'){ const v = $('memoIn').value.trim(); if (!v) return; r.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); log(r, '관리자 메모 추가'); save(r); render(); toast('메모를 남겼어요'); }
+  if (t.id === 'memoAdd'){ const v = $('memoIn').value.trim().slice(0, 500); if (!v) return; r.memos.unshift({t:v, m:`jelin · ${nowStamp()}`}); log(r, '관리자 메모 추가'); save(r); render(); toast('메모를 남겼어요'); }
 });
 
 /* ---------- 일정·숙소 변경 ---------- */
@@ -306,6 +307,12 @@ render();
 if (HP.act === 'move') openMove();
 if (HP.act === 'cancel') openCancel();
 if (HP.act === 'status'){ const s = document.querySelector('[data-st]'); if (s){ s.focus(); s.closest('.card').classList.add('flash'); } }
+document.addEventListener('input', e => {
+  if (e.target.id !== 'memoIn') return;
+  const n = e.target.value.length, c = document.getElementById('memoCnt');
+  c.textContent = `${n}/500`; c.classList.toggle('full', n >= 500);
+  document.getElementById('memoAdd').disabled = !e.target.value.trim();
+});
 </script>
 </body>
 </html>

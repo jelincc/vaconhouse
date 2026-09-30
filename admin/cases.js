@@ -36,8 +36,6 @@
         ['board-create-search', '예약 등록 · 회원 찾기', A('board&create=')],
         ['board-create-guest', '예약 등록 · 비회원 연락처 불완전', A('board&create=v2:7:9'), 1],
         ['board-dupe', '예약 등록 시 이미 예약된 날짜', A('board&off=1&create=v1:4:5'), 1],
-        ['board-blockform', '빈 칸 눌러 판매 막기', A('board&block=v7:10:12'), 1],
-        ['board-channel', '채널 연동 오류 · 관리자 등록 예약 막기', A('board&channels=1'), 1],
         ['board-cal', '월간 달력 (보조 보기)', A('month')],
       ]},
       {t:'회원', items:[
@@ -105,23 +103,23 @@
   .cs{background:#fff;width:min(880px,100%);max-height:84vh;border-radius:28px 28px 0 0;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(26,26,30,.18);font-family:var(--font,sans-serif);color:#1A1A1E}
   .cs-h{padding:22px 24px 12px;display:flex;flex-direction:column;gap:12px}
   .cs-h .top{display:flex;justify-content:space-between;align-items:center}
-  .cs-h h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em}
+  .cs-h h3{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
   .cs-h .x{border:0;background:#F6F7F8;width:40px;height:40px;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:#575F6C}
   .cs-h .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .cs-seg{display:inline-flex;background:#F6F7F8;border-radius:12px;padding:4px;gap:2px}
   .cs-seg button{border:0;background:transparent;height:34px;padding:0 16px;border-radius:9px;font:600 14px inherit;color:#768091;cursor:pointer}
   .cs-seg button.on{background:#fff;color:#1A1A1E;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-  .cs-edge{display:inline-flex;gap:8px;align-items:center;font-size:14px;color:#575F6C;cursor:pointer;margin-left:auto}
+  .cs-edge{display:inline-flex;gap:8px;align-items:center;font-size:15px;color:#575F6C;cursor:pointer;margin-left:auto}
   .cs-edge input{width:18px;height:18px;accent-color:#1A1A1E}
   .cs-b{overflow:auto;padding:4px 24px 28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px;align-content:start}
   .cs-sec{display:flex;flex-direction:column}
-  .cs-sec h4{margin:14px 0 6px;font-size:14px;font-weight:700;color:#575F6C}
-  .cs-it{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;font-size:14px;line-height:1.4}
+  .cs-sec h4{margin:14px 0 6px;font-size:15px;font-weight:700;color:#575F6C}
+  .cs-it{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;font-size:15px;line-height:1.4}
   .cs-it:hover{background:#F6F7F8}
   .cs-it.on{background:#FBF4EF;font-weight:600}
-  .cs-it i{font-style:normal;flex:none;font-size:12px;font-weight:700;border-radius:5px;padding:2px 5px;background:#FAEAE0;color:#D4560A}
+  .cs-it i{font-style:normal;flex:none;font-size:13px;font-weight:700;border-radius:5px;padding:2px 5px;background:#FAEAE0;color:#D4560A}
   .cs-it b{font-weight:inherit;flex:1}
-  .cs-it u{text-decoration:none;color:#949BA8;font-size:13px;flex:none}
+  .cs-it u{text-decoration:none;color:#949BA8;font-size:14px;flex:none}
   @media (max-width:720px){.cs-b{grid-template-columns:1fr}}`;
   const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
   const fab = document.createElement('button'); fab.className = 'cs-fab'; fab.type = 'button';

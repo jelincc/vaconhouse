@@ -286,7 +286,7 @@ function issues(r){
 function issueDesc(r, k){
   const other = f => R.find(x => x !== r && x.flags.includes(f) && x.villa === r.villa);
   switch(k){
-    case 'conflict': { const o = other('conflict'); return o ? `${md(Math.max(r.in, o.in))}에 ${esc(o.name)}님(${CH[o.ch].lb}) 예약과 겹쳐요.${[r.ch, o.ch].includes('관리자') ? ' 관리자 등록 예약이 채널 달력에서 막히지 않아 생긴 충돌이에요.' : ''}` : '같은 숙소 예약과 겹쳐요.'; }
+    case 'conflict': { const o = other('conflict'); return o ? `${md(Math.max(r.in, o.in))}에 ${esc(o.name)}님(${CH[o.ch].lb}) 예약과 겹쳐요.` : '같은 숙소 예약과 겹쳐요.'; }
     case 'notify': return '입실 안내 알림톡이 발송되지 않았어요. 재발송하거나 전화로 안내해 주세요.';
     case 'cancel': { const f = refundOf(r); return `${r.reqAt} 고객이 취소를 요청했어요. 입실 ${r.in}일 전이라 ${f.rate === 1 ? '전액 환불' : f.rate ? '50% 환불' : '환불 없이 취소'} 대상이에요.`; }
     case 'change': return `${r.note}. ${freeFor(r.villa, r.in + 1, r.out + 1, r) ? '바꾸려는 날짜는 비어 있어요.' : '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요.'}`;
@@ -385,8 +385,7 @@ function runAct(r, k){ const msg = ACT[k].run(r); save(r); return msg; }
 
 /* ---------- 판매 막기 · 가용성 · 환불 · 변경 ---------- */
 const BLKEY = 'vh-res-blocks-v1';
-let BLOCKS = [{villa:'v6', in:14, out:16, reason:'보수 공사', note:'보일러 교체', by:'jelin · 9.20'}];
-try { const b = JSON.parse(localStorage.getItem(BLKEY) || 'null'); if (b) BLOCKS = b; } catch(e){}
+const BLOCKS = [];
 const saveBlocks = () => { try { localStorage.setItem(BLKEY, JSON.stringify(BLOCKS)); } catch(e){} };
 const isoOf = o => { const d = dOf(o); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 /* what stands in the way of [a, b) at a villa */
