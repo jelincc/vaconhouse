@@ -106,7 +106,7 @@
   .cs-h{padding:22px 24px 12px;display:flex;flex-direction:column;gap:12px}
   .cs-h .top{display:flex;justify-content:space-between;align-items:center}
   .cs-h h3{margin:0;font-size:20px;font-weight:700;letter-spacing:-.02em}
-  .cs-h .x{border:0;background:#F6F7F8;width:36px;height:36px;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:#575F6C}
+  .cs-h .x{border:0;background:#F6F7F8;width:40px;height:40px;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:#575F6C}
   .cs-h .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .cs-seg{display:inline-flex;background:#F6F7F8;border-radius:12px;padding:4px;gap:2px}
   .cs-seg button{border:0;background:transparent;height:34px;padding:0 16px;border-radius:9px;font:600 14px inherit;color:#768091;cursor:pointer}
@@ -137,7 +137,7 @@
   }
   function draw(box){
     const d = DOCS[docIx];
-    box.innerHTML = `<div class="cs-h"><div class="top"><h3>요구사항 화면별 케이스</h3><button class="x" data-x aria-label="닫기"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
+    box.innerHTML = `<div class="cs-h"><div class="top"><h3>요구사항 화면별 케이스</h3><button class="x" data-x aria-label="닫기"><svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/></svg></button></div>
       <div class="row"><div class="cs-seg">${DOCS.map((x, i) => `<button data-doc="${i}" class="${i === docIx ? 'on' : ''}">${x.doc}</button>`).join('')}</div>
       <label class="cs-edge"><input type="checkbox" data-edge ${onlyEdge ? 'checked' : ''}>엣지 케이스만</label></div></div>
       <div class="cs-b">${d.secs.map(s => { const its = s.items.filter(it => !onlyEdge || it[3]); return its.length ? `<div class="cs-sec"><h4>${s.t}</h4>${its.map(it => `<button class="cs-it ${it[0] === curId ? 'on' : ''}" data-go="${it[0]}">${it[3] ? '<i>엣지</i>' : ''}<b>${it[1]}</b><u>${it[2].split('/')[0] === 'app' ? '직원 앱' : it[2].startsWith('corp') ? '기업 관리자' : it[2].includes('reservation?') ? '예약 상세' : '예약 관리'}</u></button>`).join('')}</div>` : ''; }).join('')}</div>`;

@@ -49,6 +49,7 @@ const ICON = {
   down:     I('<path d="M6 8l4 4 4-4"/>'),
   x:        I('<path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/>'),
   note:     I('<path d="M4 16h3.2L15.6 7.6a1.9 1.9 0 0 0-2.7-2.7L4.5 13.3z"/><path d="M11.6 6.2l2.7 2.7"/>'),
+  warn:     '<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M10 5.6v5.2" stroke="#333D4B" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="14" r="1.15" fill="#333D4B"/></svg>',
   tick:     I('<path d="M5 10.5l3.2 3.2L15 7"/>'),
 };
 
@@ -448,16 +449,15 @@ function mountAlert(){
   try { if (sessionStorage.getItem('vh-alert') === sig) return; sessionStorage.setItem('vh-alert', sig); } catch(e){}
   const red = A.some(a => a.k !== 'sync');
   const el = document.createElement('div'); el.className = 'topalert'; el.setAttribute('role', 'alert');
-  el.innerHTML = `<button class="ta-go"><span class="ta-dot ${red ? '' : 'o'}"></span><span class="ta-t">${alertMsg(A)}</span><span class="ta-l">확인하기 ${ICON.chev}</span></button><button class="ta-x" aria-label="닫기">${ICON.x}</button>`;
+  el.innerHTML = `<div class="ta-m"><span class="ta-i ${red ? '' : 'o'}">${ICON.warn}</span><span class="ta-t">${alertMsg(A)}</span></div><button class="ta-go">확인</button>`;
   document.body.appendChild(el);
   requestAnimationFrame(() => el.classList.add('in'));
   const bye = () => { el.classList.remove('in'); setTimeout(() => el.remove(), 250); };
-  el.querySelector('.ta-x').onclick = bye;
   el.querySelector('.ta-go').onclick = () => {
     const url = new URL(alertTarget(A), location.href);
     bye();
     if (url.pathname === location.pathname && url.search === location.search){ location.hash = url.hash; location.reload(); }
     else location.href = url.href;
   };
-  setTimeout(bye, 12000);
+  setTimeout(bye, 6000);
 }
