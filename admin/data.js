@@ -292,7 +292,7 @@ function issueDesc(r, k){
 
 /* ---------- money ---------- */
 /* 숙소 옵션 (예약 등록에서 여러 개 고를 수 있어요) */
-const OPTS = [{k:'bbq', lb:'바베큐', p:20000}, {k:'pet', lb:'반려동물 동반', p:30000}, {k:'fire', lb:'불멍 세트', p:15000}];
+const OPTS = [{k:'bbq', lb:'바비큐', p:20000}, {k:'pet', lb:'반려동물 동반', p:30000}, {k:'fire', lb:'불멍 세트', p:15000}];
 function price(r){
   const v = vById[r.villa];
   let room = 0;

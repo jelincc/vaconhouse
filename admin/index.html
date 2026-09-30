@@ -651,7 +651,7 @@ function paneList(){
   const C = S.cols;
   return `${fbarHTML()}<div class="panel" id="listPanel">
     <div class="listbar">
-      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">${ICON.x}</button></span>` :
+      ${S.key ? `<span class="fchip">${COND[S.key].lb} ${rows.length}건<button data-clearkey aria-label="조건 해제">${ICON.x}</button></span>${S.key === 'sync' ? '<button class="btn sm line" data-chopen style="margin-left:8px">채널 연동 열기</button>' : ''}` :
         `<div class="seg">${[['upcoming','다가오는 예약'],['past','지난 예약'],['all','전체']].map(([k, lb]) => `<button data-per="${k}" class="${S.period === k ? 'on' : ''}">${lb}</button>`).join('')}</div><span class="mut">${rows.length}건</span>`}
       <div class="dd" style="margin-left:auto"><button class="btn sm line" data-cols>열 설정</button>
         ${S.dd === 'cols' ? `<div class="ddpanel" style="left:auto;right:0;min-width:200px"><div class="grp">보조 정보</div>
@@ -699,6 +699,7 @@ pane.addEventListener('click', e => {
   const sp = t.closest('[data-s]'); if (sp){ S.span = sp.dataset.s; S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; persist(); render(); return; }
   if (t.closest('#prev') || t.closest('#next')){ const dir = t.closest('#prev') ? -1 : 1;
     if (S.tab === 'month'){ const d = dOf(S.moff); S.moff = Math.round((new Date(d.getFullYear(), d.getMonth() + dir, 15) - TODAY) / 864e5); S.openDay = null; } else S.offset += dir * SPAN[S.span].n; render(); return; }
+  if (t.closest('[data-chopen]')){ openChannels(); return; }
   if (t.closest('#todayBtn')){ if (S.tab === 'month') S.moff = 0; else S.offset = S.span === 'm' ? -7 : S.span === 'd1' ? 0 : S.span === 'w1' ? -1 : -2; render(); document.querySelectorAll('.tl-day.today,.mc.today').forEach(el => { el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }); return; }
   const g = t.closest('[data-grp]'); if (g){ const x = g.dataset.grp; S.collapsed.has(x) ? S.collapsed.delete(x) : S.collapsed.add(x); render(); return; }
   if (t.closest('[data-clearkey]')){ S.key = null; render(); return; }
@@ -857,7 +858,7 @@ function openCreate(o){
         : F.guest ? `<div class="guest"><div class="fg"><div class="fl"><label>이름</label><input class="inp" id="gName" value="${esc(F.guest.name)}" placeholder="홍길동"></div><div class="fl"><label>연락처</label><input class="inp num" id="cPhone" value="${esc(F.guest.phone)}" placeholder="010-0000-0000" inputmode="tel"><span class="err" id="cPhoneErr"></span></div></div><div class="gnote"><span>비회원 예약이에요. 회원이라면 목록에서 골라 주세요.</span><button class="gbtn" data-unpick>회원 목록에서 고르기</button></div></div>`
         : `<div class="ltools"><form class="sbox" id="mform" role="search"><input class="search" id="mQ" placeholder="이름, 전화번호, 이메일" value="${esc(F.mq)}" autocomplete="off"><button type="submit" aria-label="검색">${ICON.search}</button></form><span class="mut sm">${mems.length}명</span><button class="lnk sm2" data-guest>비회원으로 입력</button></div>
           <div class="plist"><div class="ph m"><span>회원</span><span>전화번호</span><span>가입</span><span>최근 예약</span></div>
-            ${mems.length ? mems.map(m => { const lr = memberRes(m).filter(ACTIVE).sort((x, y) => y.in - x.in)[0]; return `<button class="pr2 m" data-mem="${m.id}"><span><b>${esc(m.name)}</b><small>${esc(m.email)}</small></span><span class="num">${fmtPhone(m.phone)}</span><span>${m.join}<small class="num">${m.joined.slice(2, 10).replace(/-/g, '.')}</small></span><span>${lr ? `${vById[lr.villa].name}<small class="num">${md(lr.in)}</small>` : '<i>없음</i>'}</span></button>`; }).join('')
+            ${mems.length ? mems.map(m => { const lr = memberRes(m).filter(ACTIVE).sort((x, y) => y.in - x.in)[0]; const stop = m.status !== '이용 가능'; return `<button class="pr2 m" data-mem="${m.id}" ${stop ? 'disabled' : ''}><span><b>${esc(m.name)}${stop ? ' ' + BD('이용 정지', 'red', 'xs') : ''}</b><small>${esc(m.email)}</small></span><span class="num">${fmtPhone(m.phone)}</span><span>${m.join}<small class="num">${m.joined.slice(2, 10).replace(/-/g, '.')}</small></span><span>${lr ? `${vById[lr.villa].name}<small class="num">${md(lr.in)}</small>` : '<i>없음</i>'}</span></button>`; }).join('')
             : `<div class="pempty">일치하는 회원이 없어요. <button class="lnk" data-guest>비회원으로 입력</button></div>`}</div>`}
       </section>
       <section><h4><span>2</span>숙소와 날짜</h4>
