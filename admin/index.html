@@ -514,7 +514,7 @@ function paneToday(){
       </div>
     </section>
     <div class="twin">
-      <section class="card" id="newCard"><h3>신규·처리 대기 <span class="r mut" style="font-size:14px;font-weight:500">어제 18시 이후</span></h3>
+      <section class="card" id="newCard"><h3>신규·처리 대기 <span class="r mut" style="font-size:14px;font-weight:500">마지막 확인(어제 18:00) 이후</span></h3>
         <button class="newbox" data-k="new">
           <div class="big"><b class="num">${fresh.length}건</b><span>신규 예약 ${ICON.chev}</span></div>
           <div class="bar">${chAll.filter(x => x[1]).map(([c, k]) => `<i style="flex:${k};background:${CH[c].c}"></i>`).join('')}</div>
