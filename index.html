@@ -189,13 +189,13 @@ $('f').addEventListener('submit', e => {
       sync();
       return;
     }
-    try { localStorage.setItem('vh-admin-session', uid.value.trim()); localStorage.setItem('vh-role', acct); } catch(e){}
+    try { localStorage.setItem('vh-admin-session', uid.value.trim()); sessionStorage.removeItem('vh-role-tab'); } catch(e){}
     const onClaude = /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname) || location.protocol === 'blob:' || location.origin === 'null';
     if (onClaude){
       const url = 'https://claude.ai/artifact/Kju1TBbegoa8vCD14axR2k';
       try { window.top.location.href = url; } catch(e){ window.open(url, '_top'); }
     } else {
-      location.href = 'admin/';
+      location.href = acct === 'corp' ? 'admin/members' : 'admin/';
     }
   }, 900);
 });
