@@ -293,10 +293,10 @@ function openCancel(){
   box.addEventListener('click', e => {
     const rs = e.target.closest('[data-rs]'); if (rs){ reason = rs.dataset.rs; box.querySelectorAll('[data-rs]').forEach(b => b.classList.toggle('on', b === rs)); return draw(); }
     if (e.target.id === 'xGo'){
-      r.base = '취소'; r.pay = corp || chan ? r.pay : box._amt ? '환불대기' : r.pay;
+      r.base = '취소'; r.pay = corp || chan ? r.pay : box._amt ? '환불완료' : r.pay; /* 결제사 자동 환불 */
       if (corp && !box._back) r.noReturn = true;
       r.flags = r.flags.filter(x => x !== 'conflict');
-      log(r, `관리자 취소 · ${reason}${corp ? (box._back ? ` · 숙박권 ${r.out - r.in}박 반환` : ' · 숙박권 반환 없음') : chan ? ` · ${r.ch}에서 환불` : ` · 환불 ${won(box._amt)}`}`);
+      log(r, `관리자 취소 · ${reason}${corp ? (box._back ? ` · 숙박권 ${r.out - r.in}박 반환` : ' · 숙박권 반환 없음') : chan ? ` · ${r.ch}에서 환불` : ` · 환불 ${won(box._amt)} · 결제사 자동 환불`}`);
       if (q('#xNotify').checked) r.notices.push({t:'예약 취소 알림톡', m:nowStamp(), ok:true});
       save(r); refreshConflicts(); box.remove(); render(); toast('예약을 취소했어요');
     }
