@@ -213,8 +213,8 @@ function sHome(){
   const s = state(), N = nights(), up = MY().filter(r => cst(r) === '예정' || cst(r) === '이용 중').sort((a, b) => a.in - b.in);
   let corp = '';
   const L = leftNow();
-  if (s === '이용 가능') corp = L <= 0 ? `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big">모두 썼어요</div><div class="sub">추가 숙박권은 인사팀에 문의해 주세요. 이미 잡힌 예약은 그대로예요.</div><button class="btn" disabled style="opacity:.35">회사 숙박권으로 예약하기</button></div>`
-    : `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big"><em>${L}박</em> 남았어요</div><div class="sub">${L <= 5 ? '얼마 남지 않았어요. 동료들과 나눠 쓰는 숙박권이에요.' : `${COMPANY.until}까지 · 동료들과 함께 써요`}</div><button class="btn" data-go="villas">회사 숙박권으로 예약하기</button></div>`;
+  if (s === '이용 가능') corp = L <= 0 ? `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big">모두 썼어요</div><div class="sub">추가 숙박권은 인사팀에 문의해 주세요. 이미 잡힌 예약은 그대로예요.</div></div>`
+    : `<div class="corp"><small>${COMPANY.name} 숙박권 · 회사 전체 잔여</small><div class="big"><em>${L}박</em> 남았어요</div><div class="sub">${L <= 5 ? '얼마 남지 않았어요. 동료들과 나눠 쓰는 숙박권이에요.' : `${COMPANY.until}까지 · 예약하면 회사 숙박권부터 사용해요`}</div><button class="btn" data-go="villas">예약하기</button></div>`;
   else if (s === '권한 없음') corp = `<div class="soft"><b>${COMPANY.name} 소속으로 등록됐어요</b><span>인사팀에서 이용 권한을 켜면 회사 숙박권으로 예약할 수 있어요.</span></div>`;
   else corp = `<div class="soft"><b>회사에서 받은 숙박권이 있나요?</b><span>인사팀이 이 계정을 소속으로 등록하면 회사 숙박권으로 예약할 수 있어요. 가입한 이름과 휴대전화번호를 인사팀에 알려 주세요.</span></div>`;
   const recs = VILLAS.slice(0, 5);
