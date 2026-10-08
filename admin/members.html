@@ -71,7 +71,7 @@ function render(){
 }
 
 /* 기업 관리자: 같은 회원 관리 화면을 직원 관리로 써요. 우리 회사 직원만 보여요 */
-const CF = {'전체':() => true, '이용 가능':e => e.joined && e.perm, '권한 없음':e => e.joined && !e.perm, '미가입':e => !e.joined};
+const CF = {'전체':() => true, '이용 가능':e => e.perm, '권한 없음':e => !e.perm};
 const upOf = e => R.filter(r => r.email === e.email && ACTIVE(r) && r.in > 0).sort((a, b) => a.in - b.in);
 const rowId = e => { const m = MEMBERS.find(x => x.email === e.email); return m ? `id=${m.id}` : `email=${encodeURIComponent(e.email)}`; };
 function renderCorp(){
@@ -84,14 +84,13 @@ function renderCorp(){
     <div class="panel">
       <div class="tools"><div class="seg">${Object.keys(CF).map(k => `<button data-f="${k}" class="${f === k ? 'on' : ''}">${k} <span class="num">${EMP.filter(CF[k]).length}</span></button>`).join('')}</div>
         <form class="sbox" id="sform" role="search" style="flex:1;max-width:360px;margin-left:auto"><input class="inp search" id="q" placeholder="이름, 휴대전화번호, 이메일" value="${esc(S.q)}" style="max-width:none"><button type="submit" aria-label="검색">${ICON.search}</button></form></div>
-      <table><thead><tr><th>직원</th><th>휴대전화번호</th><th>앱 가입</th><th>다가오는 예약</th><th>이용 권한</th></tr></thead>
-      <tbody>${L.length ? L.map(e => { const i = EMP.indexOf(e), u = upOf(e); return `<tr ${e.joined ? `data-emp="${rowId(e)}"` : 'style="cursor:default"'}>
+      <table><thead><tr><th>직원</th><th>휴대전화번호</th><th>다가오는 예약</th><th>이용 권한</th></tr></thead>
+      <tbody>${L.length ? L.map(e => { const i = EMP.indexOf(e), u = upOf(e); return `<tr data-emp="${rowId(e)}">
         <td><b>${esc(e.name)}</b><span class="sub">${esc(e.email)}</span></td>
         <td class="num">${e.phone}</td>
-        <td>${e.joined ? '가입' : '<span style="color:var(--ink-4)">미가입</span>'}</td>
         <td>${u.length ? `${vById[u[0].villa].name}<span class="sub num">${mdw(u[0].in)}${u.length > 1 ? ` 외 ${u.length - 1}건` : ''}</span>` : '<span style="color:var(--ink-4)">없음</span>'}</td>
-        <td>${!e.joined ? '<span style="color:var(--ink-4)">가입 후 부여 가능</span>' : `<div style="display:flex;align-items:center;gap:10px"><label class="tgl" onclick="event.stopPropagation()"><input type="checkbox" data-perm="${i}" ${e.perm ? 'checked' : ''} aria-label="${esc(e.name)} 이용 권한"></label><span style="color:var(--ink-3)">${e.perm ? `${e.since} 부여` : e.off ? `${e.off} 해제` : '미부여'}</span></div>`}</td></tr>`; }).join('')
-        : '<tr><td colspan="5" class="empty">조건에 맞는 직원이 없어요.</td></tr>'}</tbody></table>
+        <td>${`<div style="display:flex;align-items:center;gap:10px"><label class="tgl" onclick="event.stopPropagation()"><input type="checkbox" data-perm="${i}" ${e.perm ? 'checked' : ''} aria-label="${esc(e.name)} 이용 권한"></label><span style="color:var(--ink-3)">${e.perm ? `${e.since} 부여` : e.off ? `${e.off} 해제` : '미부여'}</span></div>`}</td></tr>`; }).join('')
+        : '<tr><td colspan="4" class="empty">조건에 맞는 직원이 없어요.</td></tr>'}</tbody></table>
       ${pagerHTML(total, S.pg)}
     </div>`;
 }

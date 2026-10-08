@@ -250,7 +250,7 @@ function openMove(){
       const alt = VILLAS.filter(x => x.id !== F.villa && freeFor(x.id, F.a, F.b, r) && x.cap >= r.adults + r.kids);
       h = `<div class="callout red"><div class="tx"><b>이 날짜엔 옮길 수 없어요</b><span>겹치는 일정: ${c.res.map(x => `${esc(x.name)}님 ${md(x.in)} – ${md(x.out)} (${CH[x.ch].lb})`).concat(c.blk.map(x => `판매 막기 ${md(x.in)} – ${md(x.out)}`)).join(', ')}</span>${alt.length ? `<div class="sugg">${alt.map(x => `<button data-alt="${x.id}">${x.region} ${x.name}</button>`).join('')}</div>` : ''}</div></div>`;
     } else if (over) h = `<div class="err">${josa(v.name, '은', '는')} 최대 ${v.cap}인이라 ${r.adults + r.kids + r.infants}명이 묵을 수 없어요</div>`;
-    else if (!same) h = `<div class="callout" style="background:var(--ok-soft)"><div class="tx"><b>옮길 수 있어요</b><span>${vFull(F.villa)} ${mdw(F.a)} – ${mdw(F.b)} · ${n}박${r.pay === '기업숙박권' ? '' : newP !== oldP ? ` · 금액 ${won(oldP)} → ${won(newP)} (${newP > oldP ? '추가 결제 ' + won(newP - oldP) : '차액 환불 ' + won(oldP - newP)})` : ' · 금액 변동 없음'}</span></div></div>`;
+    else if (!same) h = `<div class="callout" style="background:var(--ok-soft)"><div class="tx"><b>옮길 수 있어요</b><span>${vFull(F.villa)} ${mdw(F.a)} – ${mdw(F.b)} · ${n}박${r.pay === '기업숙박권' ? '' : newP !== oldP ? ` · 금액 ${won(oldP)} → ${won(newP)} (새 금액 ${won(newP)} 결제 후 기존 결제 ${won(oldP)} 전액 환불)` : ' · 금액 변동 없음'}</span></div></div>`;
     const ok = !same && n > 0 && F.a >= 0 && !c.res.length && !c.blk.length && !over;
     q('#mCheck').innerHTML = h; q('#mGo').disabled = !ok; q('#mGo').style.opacity = ok ? 1 : .35;
   }
@@ -281,19 +281,22 @@ function openCancel(){
     <div class="f"><button class="btn xl" data-x>닫기</button><button class="btn xl danger" id="xGo">예약 취소</button></div>`);
   const q = s => box.querySelector(s);
   function draw(){
-    const f = refundOf(r), full = reason !== '고객 요청' && reason !== '기타';
+    /* 숙소 사정·중복 예약만 기한과 관계없이 전액 · 숙박권 전부 반환. 고객 요청·기타는 규정대로 */
+    const f = refundOf(r), full = reason === '숙소 사정' || reason === '중복 예약';
+    const back = full || r.in >= 3;
     const amt = full ? f.paid : f.amount;
-    q('#xRefund').innerHTML = corp ? `<div class="callout"><div class="tx"><b>숙박권 ${r.out - r.in}박이 회사 잔여로 돌아가요</b><span>기업 숙박권 예약은 금액 환불 없이 숙박권만 반환돼요.</span></div></div>`
+    q('#xRefund').innerHTML = corp ? (back ? `<div class="callout"><div class="tx"><b>숙박권 ${r.out - r.in}박이 회사 잔여로 돌아가요</b><span>${full ? `${josa(reason, '으로', '로')} 취소하면 기한과 관계없이 숙박권을 전부 돌려드려요` : `체크인 3일 전(${md(r.in - 3)})까지 취소해 숙박권이 돌아가요`}</span></div></div>` : `<div class="callout orange"><div class="tx"><b>숙박권이 돌아가지 않아요</b><span>체크인 3일 전(${md(r.in - 3)})이 지나 숙박권 ${r.out - r.in}박은 사용한 것으로 계산돼요.</span></div></div>`)
       : chan ? `<div class="callout orange"><div class="tx"><b>환불은 ${r.ch}에서 처리돼요</b><span>${r.ch}에서 먼저 취소해 주세요. 여기서는 취소 기록만 남기고 달력을 열어요.</span></div></div>`
-      : `<div class="callout ${amt ? '' : 'orange'}"><div class="tx"><b>환불 금액 ${won(amt)}${full ? ' · 전액' : f.rate < 1 && f.rate > 0 ? ' · 50%' : f.rate === 0 ? ' · 환불 없음' : ' · 전액'}</b><span>결제 ${won(f.paid)} · 입실 ${f.days}일 전 · ${full ? `${josa(reason, '으로', '로')} 취소하면 규정과 관계없이 전액 환불해요` : POLICY}</span></div></div>`;
-    box._amt = amt;
+      : `<div class="callout ${amt ? '' : 'orange'}"><div class="tx"><b>환불 금액 ${won(amt)}${full ? ' · 전액' : f.rate < 1 && f.rate > 0 ? ' · 50%' : f.rate === 0 ? ' · 환불 없음' : ' · 전액'}</b><span>결제 ${won(f.paid)} · ${full ? `${josa(reason, '으로', '로')} 취소하면 규정과 관계없이 전액 환불해요` : `${md(r.in - 7)}까지 전액, ${md(r.in - 3)}까지 50%, 이후 환불 없음`}</span></div></div>`;
+    box._amt = amt; box._back = back;
   }
   box.addEventListener('click', e => {
     const rs = e.target.closest('[data-rs]'); if (rs){ reason = rs.dataset.rs; box.querySelectorAll('[data-rs]').forEach(b => b.classList.toggle('on', b === rs)); return draw(); }
     if (e.target.id === 'xGo'){
       r.base = '취소'; r.pay = corp || chan ? r.pay : box._amt ? '환불대기' : r.pay;
+      if (corp && !box._back) r.noReturn = true;
       r.flags = r.flags.filter(x => x !== 'conflict');
-      log(r, `관리자 취소 · ${reason}${corp ? ` · 숙박권 ${r.out - r.in}박 반환` : chan ? ` · ${r.ch}에서 환불` : ` · 환불 ${won(box._amt)}`}`);
+      log(r, `관리자 취소 · ${reason}${corp ? (box._back ? ` · 숙박권 ${r.out - r.in}박 반환` : ' · 숙박권 반환 없음') : chan ? ` · ${r.ch}에서 환불` : ` · 환불 ${won(box._amt)}`}`);
       if (q('#xNotify').checked) r.notices.push({t:'예약 취소 알림톡', m:nowStamp(), ok:true});
       save(r); refreshConflicts(); box.remove(); render(); toast('예약을 취소했어요');
     }

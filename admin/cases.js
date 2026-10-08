@@ -68,12 +68,11 @@
     ]},
     {doc:'기업 관리자', secs:[
       {t:'직원 관리', items:[
-        ['c-emp', '소속 직원 목록 · 앱 가입 · 이용 권한', 'admin/members'],
+        ['c-emp', '소속 직원 목록 · 이용 권한', 'admin/members'],
         ['c-detail', '직원 상세 · 이용 권한 부여와 해제', 'admin/member?id=' + ((MEMBERS.find(m => m.email === 'seoyun.lee@noeul.io') || {}).id || '')],
         ['c-add', '앱 가입 계정 찾아 소속으로 등록', 'admin/members#add&q=신'],
         ['c-off', '예약이 있는 직원의 권한 해제', 'admin/members#off=이서윤'],
         ['c-addnone', '찾는 앱 계정이 없을 때', 'admin/members#add&q=홍길동', 1],
-        ['c-unjoined', '앱에 가입하지 않은 직원', 'admin/members#f=미가입', 1],
       ]},
       {t:'예약 관리', items:[
         ['c-list', '회사 숙박권 예약 목록', A('list')],

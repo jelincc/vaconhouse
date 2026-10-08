@@ -393,7 +393,7 @@ function toast(msg, ok = true){
 const ACT = {
   cancelOk:{lb:'취소 승인', cls:'danger', run:r => { r.base = '취소'; r.pay = '환불대기'; log(r, '취소 승인 · 환불 요청'); return '취소를 승인하고 환불을 요청했어요'; }},
   cancelNo:{lb:'거절', run:r => { r.base = '확정'; log(r, '취소 요청 거절'); return '취소 요청을 거절했어요'; }},
-  changeOk:{lb:'변경 승인', run:r => { if (!freeFor(r.villa, r.in + 1, r.out + 1, r)) return '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요'; r.in += 1; r.out += 1; r.base = '확정'; r.note = ''; log(r, `일정 변경 승인 · ${md(r.in)} – ${md(r.out)}`); return '일정을 바꾸고 고객에게 알렸어요'; }},
+  changeOk:{lb:'변경 승인', run:r => { if (!freeFor(r.villa, r.in + 1, r.out + 1, r)) return '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요'; r.in += 1; r.out += 1; r.base = '확정'; r.note = ''; log(r, `일정 변경 승인 · ${md(r.in)} – ${md(r.out)} · 새 금액 결제 후 기존 결제 전액 환불`); return '변경을 승인했어요. 고객이 새 금액을 결제하면 확정돼요'; }},
   changeNo:{lb:'거절', run:r => { r.base = '확정'; log(r, '일정 변경 거절'); return '변경 요청을 거절했어요'; }},
   resend:  {lb:'알림톡 재발송', run:r => { r.flags = r.flags.filter(f => f !== 'notify'); r.notices.push({t:'입실 안내 알림톡 · 재발송', m:nowStamp(), ok:true}); log(r, '입실 안내 알림톡 재발송'); return '알림톡을 다시 보냈어요'; }},
   seen:    {lb:'확인했어요', run:r => { r.seen = true; log(r, '예약 확인'); return '확인 완료로 표시했어요'; }},
