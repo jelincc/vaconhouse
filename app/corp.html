@@ -268,7 +268,7 @@ function sDates(){
   const left = leftNow() + give;
   const ok = rangeOk(c) && n <= left;
   const note = c.a == null ? '체크인 날짜를 골라 주세요' : c.b == null ? '체크아웃 날짜를 골라 주세요'
-    : !rangeOk(c) ? '사이에 이미 예약된 날이 있어요' : n > left ? `회사 잔여 ${left}박보다 길어요`
+    : !rangeOk(c) ? '사이에 이미 예약된 날이 있어요' : n > left ? '남은 숙박권이 부족해요'
     : `${mdw(c.a)} – ${mdw(c.b)} · 숙박권 <b>${n}박</b> · 예약 후 잔여 <b>${left - n}박</b>`;
   return frame(`${v.region} ${v.name}`, `
     <div class="h2" style="margin-bottom:10px">${c.r ? '바꿀 날짜를 골라 주세요' : '언제 머무를까요?'}<small>취소선이 있는 날은 예약할 수 없어요.${BLOCKS.some(x => x.villa === c.v && x.out > 0) ? ` ${BLOCKS.filter(x => x.villa === c.v && x.out > 0).map(x => `${md(x.in)} – ${md(x.out)} ${x.reason}`).join(', ')} 기간이 포함돼요.` : ''}</small></div>

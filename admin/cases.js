@@ -3,7 +3,7 @@
   const ROOT = new URL('..', document.currentScript.src).href;
   const by = f => (R.find(f) || R.filter(Boolean)[0] || {}).idx;
   const id = {
-    normal: by(r => r.name === '임미현'), cancel: by(r => r.base === '취소요청' || r.name === '한지민'), change: by(r => r.name === '오세훈'),
+    normal: by(r => r.name === '임미현'), cancel: by(r => r.name === '한지민'), change: by(r => r.name === '오세훈'),
     conflict: by(r => r.name === '태오'), admin: by(r => r.name === '조석현'), corp: by(r => r.corp && r.name === '오시우' && r.in > 0),
     in3: by(r => r.name === '서준'), in1: by(r => r.name === '정다은'), stay: by(r => r.name === '민지'), past: by(r => r.name === '양병은'),
     missing: by(r => r.name === '하윤'), pay: by(r => r.name === '박지성'), dup: by(r => r.name === '김원기' && r.base !== '취소'),
@@ -51,8 +51,8 @@
       ]},
       {t:'5. 예약 상세', items:[
         ['detail', '예약 요약 · 결제 · 옵션 · 이력 · 메모', D(id.normal)],
-        ['detail-cancelreq', '고객 취소 요청 처리', D(id.cancel)],
-        ['detail-changereq', '고객 일정 변경 요청 처리', D(id.change)],
+        ['detail-cancelreq', '고객이 앱에서 바로 취소한 예약', D(id.cancel)],
+        ['detail-changereq', '고객이 앱에서 바로 일정을 바꾼 예약', D(id.change)],
         ['detail-conflict', '예약 충돌 → 다른 날짜·숙소로 옮기기', D(id.admin, 'act=move')],
         ['detail-channelmove', '채널 예약은 날짜를 채널에서 바꿔야 할 때', D(id.conflict, 'act=move'), 1],
         ['detail-refund100', '관리자 취소 · 전액 환불 (7일 전)', D(id.cancel, 'act=cancel'), 1],

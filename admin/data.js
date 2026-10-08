@@ -11,6 +11,7 @@ const WD = ['일','월','화','수','목','금','토'];
 const dOf = n => { const d = new Date(TODAY); d.setDate(d.getDate() + n); return d; };
 const md = n => { const d = dOf(n); return `${d.getMonth()+1}.${d.getDate()}`; };
 const mdw = n => { const d = dOf(n); return `${d.getMonth()+1}.${d.getDate()} (${WD[d.getDay()]})`; };
+const refundTxt = r => { const d = r.in; return d >= 7 ? '전액 환불' : d >= 3 ? '50% 환불' : '환불 없음'; };
 const offOf = s => Math.round((new Date(+s.slice(0,4), +s.slice(5,7)-1, +s.slice(8,10)) - TODAY) / 864e5);
 /* 받침에 맞는 조사: josa('그로브','은','는') → '그로브는' */
 function josa(w, a, b){
@@ -135,9 +136,9 @@ const RAW = [
   ['v4','하윤(에어비앤비)',null,'010','2026-10-03','2026-10-05',2,0,0,'확정','채널정산','2026-09-28 07:12',''],
   ['v2','김원기','wonki33@naver.com','01064134253','2026-10-04','2026-10-05',2,1,0,'취소','환불완료','2026-09-28 09:53','',{dup:true}],
   ['v2','김원기','wonki33@naver.com','01064134253','2026-10-04','2026-10-05',2,1,0,'확정','결제완료','2026-09-28 09:57','',{dup:true}],
-  ['v7','오세훈','sehun.o@gmail.com','01039926650','2026-10-05','2026-10-06',2,0,0,'변경요청','결제완료','2026-09-15 13:08','10.6 – 10.7로 일정 변경 요청',{reqAt:'어제 21:15'}],
+  ['v7','오세훈','sehun.o@gmail.com','01039926650','2026-10-06','2026-10-07',2,0,0,'확정','결제완료','2026-09-15 13:08','',{reqAt:'어제 21:15', fresh:'change', from:'10.5 – 10.6'}],
   ['v6','최하은(네이버)',null,'010-2208-4419','2026-10-07','2026-10-09',5,0,0,'확정','채널정산','2026-09-23 10:44',''],
-  ['v3','한지민','jimin.han@kakao.com','01044087721','2026-10-09','2026-10-11',2,0,0,'취소요청','결제완료','2026-09-20 11:16','',{reqAt:'오늘 08:41'}],
+  ['v3','한지민','jimin.han@kakao.com','01044087721','2026-10-09','2026-10-11',2,0,0,'취소','환불완료','2026-09-20 11:16','',{reqAt:'오늘 08:41', fresh:'cancel'}],
   ['v1','문가을','gaeul.m@naver.com','01028841103','2026-10-10','2026-10-11',2,2,0,'확정','결제완료','2026-09-25 15:39','바비큐 세트'],
   ['v5','Olivia(에어비앤비)',null,'010-6614-2210','2026-10-10','2026-10-12',2,0,0,'확정','채널정산','2026-09-26 02:17','',{sync:true, unseen:true}],
   ['v6','윤두현','yoonwt@naver.com','01083680500','2026-11-06','2026-11-07',4,0,0,'확정','결제완료','2026-09-27 18:48',''],
@@ -166,15 +167,16 @@ function build(a, i){
   const m = raw.match(/^(.*)\((에어비앤비|네이버)\)$/);
   const ch = m ? m[2] : email ? '앱' : '관리자';
   const r = { idx:i, id:hex(i), villa, raw, name: m ? m[1] : raw, ch, email, phoneRaw:phone,
-    in:offOf(ci), out:offOf(co), adults, kids, infants, base, pay, created, note, pet:!!ex.pet, reqAt:ex.reqAt || '',
+    in:offOf(ci), out:offOf(co), adults, kids, infants, base, pay, created, note, pet:!!ex.pet, reqAt:ex.reqAt || '', fresh:ex.fresh || '', from:ex.from || '',
     flags:[], memos: ex.memo ? [{t:ex.memo, m:'jelin · 9.27 16:02'}] : [] };
   ['conflict','notify','dup','sync','clean'].forEach(f => ex[f] && r.flags.push(f));
   r.isNew = created >= '2026-09-27 18:00' && created <= '2026-09-28 10:24' && base !== '취소';
   r.seen = !(r.isNew || ex.unseen);
   r.history = [{t:`예약 접수 · ${CH[ch].lb}`, m:`${created.slice(5).replace('-','.')} · ${ch === '앱' ? '고객' : ch === '관리자' ? '운영자' : '채널 동기화'}`}];
-  if (base === '취소') r.history.unshift({t:'예약 취소 · 환불 완료', m:`${created.slice(5,10).replace('-','.')} · 고객`});
-  if (base === '취소요청') r.history.unshift({t:'고객 취소 요청', m:`${r.reqAt} · 고객(앱)`, new:true});
-  if (base === '변경요청') r.history.unshift({t:`일정 변경 요청 · ${note}`, m:`${r.reqAt} · 고객(앱)`, new:true});
+  /* 고객이 앱에서 바로 취소·변경 (관리자 승인 없음, 환불은 결제사 자동 환불) */
+  if (ex.fresh === 'cancel') r.history.unshift({t:`고객 취소 · ${refundTxt(r)} · 결제사 자동 환불`, m:`${r.reqAt} · 고객(앱)`, new:true});
+  else if (base === '취소') r.history.unshift({t:'예약 취소 · 환불 완료', m:`${created.slice(5,10).replace('-','.')} · 고객`});
+  if (ex.fresh === 'change') r.history.unshift({t:`일정 변경 · ${ex.from} → ${md(r.in)} – ${md(r.out)} · 새 금액 결제, 기존 결제 전액 환불`, m:`${r.reqAt} · 고객(앱)`, new:true});
   r.notices = [{t:'예약 확정 알림톡', m:created.slice(5,16).replace('-','.'), ok:true}];
   if (r.in >= 0 && r.in <= 1) r.notices.push({t:'입실 안내 알림톡', m:`${md(r.in - 1)} 10:00`, ok:!ex.notify});
   r.corp = !!ex.corp;
@@ -225,8 +227,8 @@ const memberRes = m => R.filter(r => r.memberId === m.id || (r.email && r.email 
 const memberOf = r => MEMBERS.find(m => m.id === r.memberId || (r.email && m.email === r.email));
 
 /* demo state survives page changes (예약 관리 ↔ 예약 상세) */
-const STORE = 'vh-res-state-v4';
-const KEEP = ['villa','base','pay','seen','flags','memos','history','notices','in','out','phoneRaw','note','adults','kids','infants','pet'];
+const STORE = 'vh-res-state-v5';
+const KEEP = ['villa','base','pay','seen','fresh','flags','memos','history','notices','in','out','phoneRaw','note','adults','kids','infants','pet'];
 try { const p = JSON.parse(localStorage.getItem(STORE) || '{}'); Object.entries(p).forEach(([i, o]) => Object.assign(R[+i], o)); } catch(e){}
 
 /* 권한: 본사 운영 관리자(hq)와 기업 관리자(corp)는 같은 어드민을 써요. 기업 관리자는 자기 회사 숙박권 예약만 보여요 */
@@ -251,8 +253,6 @@ const ACTIVE = r => r.base !== '취소';
 function st(r){
   if (r.base === '취소') return '예약 취소';
   if (r.base === '노쇼') return '노쇼';
-  if (r.base === '취소요청') return '취소 요청';
-  if (r.base === '변경요청') return '변경 요청';
   if (r.base === '이용완료' || r.out < 0) return '이용 완료';
   if (r.in <= 0) return '이용 중';
   return '예약 확정';
@@ -261,8 +261,6 @@ function st(r){
 const ST_DOT = {'예약 확정':'#0DBC7C','이용 중':'#1A1A1E','이용 완료':'#D5D8DC','예약 취소':'#D5D8DC','노쇼':'#949BA8'};
 function stHTML(r){
   const s = st(r);
-  if (s === '취소 요청') return BD('취소 요청','red');
-  if (s === '변경 요청') return BD('변경 요청','orange');
   if (s === '노쇼') return BD('노쇼','grey');
   return `<span class="stt ${s==='이용 완료'||s==='예약 취소'?'mute':''}"><i style="background:${ST_DOT[s]}"></i>${s}${s==='이용 중' && r.out===0 ? ' · 오늘 퇴실' : ''}</span>`;
 }
@@ -274,8 +272,8 @@ const BD = (t, c, x = '') => `<span class="bd ${c} ${x}">${t}</span>`;
 const ISSUE = {
   conflict: {lb:'예약 충돌',    c:'red',    ic:'conflict', sev:9},
   notify:   {lb:'알림 발송 실패', c:'red',  ic:'bell',     sev:8},
-  cancel:   {lb:'취소 요청',    c:'red',    ic:'cancel',   sev:7},
-  change:   {lb:'변경 요청',    c:'orange', ic:'calendar', sev:6},
+  cancel:   {lb:'신규 취소',    c:'orange', ic:'cancel',   sev:3},
+  change:   {lb:'신규 변경',    c:'orange', ic:'calendar', sev:3},
   pay:      {lb:'결제 미완료',   c:'orange', ic:'card',     sev:5},
   missing:  {lb:'정보 누락',    c:'orange', ic:'info',     sev:5},
   dup:      {lb:'중복 가능성',   c:'orange', ic:'copy',     sev:4},
@@ -289,8 +287,8 @@ function issues(r){
   const live = ACTIVE(r) && st(r) !== '이용 완료';
   if (live && r.flags.includes('conflict')) L.push('conflict');
   if (live && r.flags.includes('notify')) L.push('notify');
-  if (r.base === '취소요청') L.push('cancel');
-  if (r.base === '변경요청') L.push('change');
+  if (r.fresh === 'cancel') L.push('cancel');
+  if (r.fresh === 'change') L.push('change');
   if (live && r.pay === '결제대기') L.push('pay');
   if (live && !phoneOk(r)) L.push('missing');
   if (r.flags.includes('dup') && ACTIVE(r)) L.push('dup');
@@ -304,8 +302,8 @@ function issueDesc(r, k){
   switch(k){
     case 'conflict': { const o = other('conflict'); return o ? `${md(Math.max(r.in, o.in))}에 ${esc(o.name)}님(${CH[o.ch].lb}) 예약과 겹쳐요.` : '같은 숙소 예약과 겹쳐요.'; }
     case 'notify': return '입실 안내 알림톡이 발송되지 않았어요. 재발송하거나 전화로 안내해 주세요.';
-    case 'cancel': { const f = refundOf(r); return `${r.reqAt} 고객이 취소를 요청했어요. 입실 ${r.in}일 전이라 ${f.rate === 1 ? '전액 환불' : f.rate ? '50% 환불' : '환불 없이 취소'} 대상이에요.`; }
-    case 'change': return `${r.note}. ${freeFor(r.villa, r.in + 1, r.out + 1, r) ? '바꾸려는 날짜는 비어 있어요.' : '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요.'}`;
+    case 'cancel': return `${r.reqAt} 고객이 앱에서 취소했어요. 입실 ${r.in}일 전이라 ${refundTxt(r)}, 결제사 자동 환불로 처리됐어요. 청소 일정만 확인해 주세요.`;
+    case 'change': return `${r.reqAt} 고객이 앱에서 ${r.from}을 ${md(r.in)} – ${md(r.out)}로 바꿨어요. 새 금액을 결제했고 기존 결제는 전액 환불됐어요.`;
     case 'pay': return r.note || '결제가 끝나지 않았어요.';
     case 'missing': return `연락처가 ${esc(r.phoneRaw)}까지만 저장돼 있어 알림을 보낼 수 없어요.${r.ch === '에어비앤비' || r.ch === '네이버' ? ` ${r.ch} 예약 상세에서 번호를 확인해 주세요.` : ''}`;
     case 'dup': { const o = R.find(x => x !== r && x.flags.includes('dup')); return `같은 예약자·같은 일정 예약이 ${o.created.slice(11)}에 ${o.base === '취소' ? '취소' : '접수'}됐어요. 이중 결제나 환불 누락이 없는지 확인해 주세요.`; }
@@ -391,10 +389,7 @@ function toast(msg, ok = true){
 
 /* ---------- actions (shared by drawer and detail) ---------- */
 const ACT = {
-  cancelOk:{lb:'취소 승인', cls:'danger', run:r => { r.base = '취소'; r.pay = '환불대기'; log(r, '취소 승인 · 환불 요청'); return '취소를 승인하고 환불을 요청했어요'; }},
-  cancelNo:{lb:'거절', run:r => { r.base = '확정'; log(r, '취소 요청 거절'); return '취소 요청을 거절했어요'; }},
-  changeOk:{lb:'변경 승인', run:r => { if (!freeFor(r.villa, r.in + 1, r.out + 1, r)) return '바꾸려는 날짜에 다른 예약이 있어 승인할 수 없어요'; r.in += 1; r.out += 1; r.base = '확정'; r.note = ''; log(r, `일정 변경 승인 · ${md(r.in)} – ${md(r.out)} · 새 금액 결제 후 기존 결제 전액 환불`); return '변경을 승인했어요. 고객이 새 금액을 결제하면 확정돼요'; }},
-  changeNo:{lb:'거절', run:r => { r.base = '확정'; log(r, '일정 변경 거절'); return '변경 요청을 거절했어요'; }},
+  freshOk: {lb:'확인했어요', run:r => { log(r, r.fresh === 'cancel' ? '고객 취소 확인' : '고객 일정 변경 확인'); r.fresh = ''; return '확인 완료로 표시했어요'; }},
   resend:  {lb:'알림톡 재발송', run:r => { r.flags = r.flags.filter(f => f !== 'notify'); r.notices.push({t:'입실 안내 알림톡 · 재발송', m:nowStamp(), ok:true}); log(r, '입실 안내 알림톡 재발송'); return '알림톡을 다시 보냈어요'; }},
   seen:    {lb:'확인했어요', run:r => { r.seen = true; log(r, '예약 확인'); return '확인 완료로 표시했어요'; }},
   paid:    {lb:'입금 확인', run:r => { r.pay = '결제완료'; log(r, '입금 확인'); return '입금을 확인했어요'; }},
@@ -408,8 +403,6 @@ const ACT = {
 function nextStep(r){
   const is = issues(r);
   if (is.includes('conflict')) return [null,'conflictOk'];
-  if (is.includes('cancel')) return ['cancelNo','cancelOk'];
-  if (is.includes('change')) return ['changeNo','changeOk'];
   if (is.includes('notify')) return [null,'resend'];
   if (is.includes('sync')) return [null,'resync'];
   if (is.includes('pay')) return [null,'paid'];
@@ -417,6 +410,7 @@ function nextStep(r){
   if (is.includes('dup')) return [null,'dupOk'];
   if (st(r) === '이용 중' && r.out === 0) return [null,'checkout'];
   if (is.includes('unseen')) return [null,'seen'];
+  if (is.includes('cancel') || is.includes('change')) return [null,'freshOk'];
   return [null,null];
 }
 function runAct(r, k){ const msg = ACT[k].run(r); save(r); return msg; }
@@ -459,7 +453,7 @@ function createAdmin(o){
 
 /* ---------- 상단 토스트: 실패·긴급 건 안내 ---------- */
 function alertKinds(){
-  const K = [['conflict','예약 충돌'], ['notify','알림 발송 실패'], ['cancel','신규 취소 요청'], ['sync','채널 연동 오류']];
+  const K = [['conflict','예약 충돌'], ['notify','알림 발송 실패'], ['sync','채널 연동 오류']];
   return K.map(([k, lb]) => ({k, lb, L: R.filter(r => issues(r).includes(k))})).filter(x => x.L.length);
 }
 function alertMsg(A){
